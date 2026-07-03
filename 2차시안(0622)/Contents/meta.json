@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "project": "Career Bridge",
+  "baseDate": "2026-06-22",
+  "locale": "ko-KR",
+  "description": "목업 화면용 더미 데이터. 실제 DB/API 연동 없음.",
+  "globalStats": {
+    "totalMembers": 1284,
+    "dailySignups": 18,
+    "dailyWithdrawals": 3,
+    "activeCompanies": 37,
+    "activeInstitutions": 12,
+    "internationalStudents": 842,
+    "pendingTasks": 35,
+    "ocrSuccessRate": 97.9,
+    "certificationSla": 98.2
+  }
+}

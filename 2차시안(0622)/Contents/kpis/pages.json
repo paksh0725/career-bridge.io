@@ -1,0 +1,105 @@
+{
+  "admin/admin.html": {
+    "sidebar": { "managerId": "adm-001", "memo": "오전 중 인증 승인 23건 처리 예정." },
+    "docMeta": { "baseDate": "2026-06-22", "author": "한정 관리자", "team": "플랫폼 운영팀", "badgePending": "처리대기 35건" },
+    "kpis": [
+      { "label": "처리 대기", "value": "23건" },
+      { "label": "인증 SLA", "value": "98.2%" },
+      { "label": "평균 처리", "value": "4.8h" },
+      { "label": "보안 이벤트", "value": "3건" },
+      { "label": "OCR 실패율", "value": "2.1%" },
+      { "label": "민감정보 접근", "value": "412건" },
+      { "label": "문서 다운로드", "value": "1,284건" }
+    ],
+    "queues": [
+      { "count": 23, "label": "DID · SBT 인증 승인 대기", "link": "admin-security.html" },
+      { "count": 7, "label": "커뮤니티 신고글 처리", "link": "admin-content.html" },
+      { "count": 5, "label": "채용공고 · 게시글 승인", "link": "admin-content.html" }
+    ],
+    "securityEvents": [
+      { "type": "warn", "title": "비정상 로그인 시도 감지 — 계정 li.wei@***", "sub": "동일 IP 5회 연속 실패 · 자동 잠금 처리", "time": "10분 전" },
+      { "type": "info", "title": "학력 인증 철회 처리 완료 — Nguyen Van A", "sub": "발급기관 요청에 따른 SBT 폐기", "time": "2시간 전" },
+      { "type": "info", "title": "관리자 권한 변경 — 콘텐츠관리자 1명 추가", "sub": "시스템·권한 관리에서 처리", "time": "5시간 전" },
+      { "type": "bad", "title": "발급기관 화이트리스트 거부 — OO스타트업", "sub": "사업자 정보 미확인으로 보류", "time": "어제" }
+    ],
+  "recentLogs": [
+      { "no": 1, "time": "09:12", "category": "인증", "target": "Nguyen Van A", "action": "TOPIK 6급 SBT 발급 승인", "status": "완료", "manager": "김OO" },
+      { "no": 2, "time": "08:54", "category": "보안", "target": "li.wei@***", "action": "비정상 로그인 5회 · 계정 잠금", "status": "자동", "manager": "시스템" },
+      { "no": 3, "time": "08:30", "category": "콘텐츠", "target": "채용공고 #118", "action": "삼성전자 공고 승인", "status": "완료", "manager": "이OO" },
+      { "no": 4, "time": "어제 16:20", "category": "파트너", "target": "정저우 신규 유학원", "action": "86곳 연계 협의 등록", "status": "검토중", "manager": "박OO" }
+    ]
+  },
+  "admin/admin-kpi.html": {
+    "kpis": [
+      { "label": "MRR", "value": "48.2M" },
+      { "label": "ARR (추정)", "value": "578M" },
+      { "label": "유료 전환율", "value": "12.4%" },
+      { "label": "활성 기업", "value": "37개" },
+      { "label": "활성 기관", "value": "12개" },
+      { "label": "리텐션 (12M)", "value": "91%" },
+      { "label": "이탈률", "value": "4.2%" },
+      { "label": "LTV/CAC", "value": "3.8" }
+    ]
+  },
+  "company/company.html": {
+    "sidebar": { "managerId": "mgr-co-001", "memo": "오전 중 TOPIK 4급 이상 후보 12명 일괄 메시지 발송 예정." },
+    "docMeta": { "baseDate": "2026-06-22", "manager": "이수진 과장", "team": "삼성전자 인사팀" },
+    "kpis": [
+      { "label": "Talent Pool", "value": "48명" },
+      { "label": "Reply Rate", "value": "33%" },
+      { "label": "면접 전환", "value": "18%" },
+      { "label": "Time-to-Hire", "value": "28일" },
+      { "label": "채용 진행중", "value": "3건" }
+    ],
+    "shortlist": [
+      { "name": "Wang Xiaoming", "schoolMajor": "경희대·경영", "matchScore": 92, "status": "1차 발송", "statusType": "info" },
+      { "name": "Chen Jiayi", "schoolMajor": "고려대·미디어", "matchScore": 87, "status": "면접 예정", "statusType": "success" },
+      { "name": "Nguyen Thi Lan", "schoolMajor": "연세대·IT", "matchScore": 88, "status": "연락 완료", "statusType": "info" },
+      { "name": "Tran Van Duc", "schoolMajor": "한외대·한국어", "matchScore": 89, "status": "답변 수신", "statusType": "success" }
+    ],
+    "pipeline": [
+      { "stage": "관심 후보", "count": 48 },
+      { "stage": "연락 완료", "count": 32 },
+      { "stage": "답변 수신", "count": 19 },
+      { "stage": "면접 예정", "count": 12 },
+      { "stage": "오퍼 검토", "count": 4 },
+      { "stage": "채용 완료", "count": 2 }
+    ]
+  },
+  "institution/institution.html": {
+    "sidebar": { "managerId": "mgr-in-002", "memo": "6월 28일 취업박람회 초청 발송 완료." },
+    "docMeta": { "baseDate": "2026-06-22", "manager": "정유진 담당자", "team": "코트라 해외취업팀" },
+    "kpis": [
+      { "label": "전체 유학생", "value": "284명" },
+      { "label": "지원 필요", "value": "37명" },
+      { "label": "상담 예약", "value": "12건" },
+      { "label": "문서 미완료", "value": "23명" },
+      { "label": "박람회 초청", "value": "86명" }
+    ],
+    "alertQueue": [
+      { "studentId": "stu-001", "name": "왕샤오밍", "reason": "상담 예정", "priority": "확인 필요" },
+      { "studentId": "stu-010", "name": "압둘라예프 티무르", "reason": "문서 미제출", "priority": "긴급" },
+      { "studentId": "stu-003", "name": "뭉흐에르덴", "reason": "비자 만료 D-45", "priority": "긴급" },
+      { "studentId": "stu-005", "name": "라즈 파텔", "reason": "한국어 역량 부족", "priority": "상담 예정" }
+    ]
+  },
+  "student/student.html": {
+    "primaryStudentId": "stu-001",
+    "statCards": [
+      { "num": 3, "label": "등록 문서" },
+      { "num": 5, "label": "이력 항목" },
+      { "num": 2, "label": "받은 메시지" },
+      { "num": "87%", "label": "프로필 완성도" }
+    ],
+    "profileCompletion": {
+      "total": 87,
+      "items": [
+        { "label": "기본 정보", "percent": 100 },
+        { "label": "이력", "percent": 90 },
+        { "label": "문서", "percent": 75 },
+        { "label": "공개 설정", "percent": 80 },
+        { "label": "번역 프로필", "percent": 70 }
+      ]
+    }
+  }
+}

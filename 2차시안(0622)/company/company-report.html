@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 채용 성과</title>
+<style>
+/* 공통: work-tool.css + portal-components.css · 레거시 블록 정리 */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI','Malgun Gothic',sans-serif; background:#EFF6FF; min-height:100vh; }
+.tab-bar { display:flex; gap:3px; margin-bottom:22px; background:white; padding:5px; border-radius:12px; border:1px solid #BFDBFE; width:fit-content; }
+.tab-btn { padding:9px 18px; border-radius:8px; border:none; background:transparent; font-size:12px; font-weight:600; color:#2563EB; cursor:pointer; transition:all 0.14s; }
+.tab-btn.active { background:#2563EB; color:white; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.filter-box { background:white; border-radius:14px; padding:18px 20px; border:1px solid #BFDBFE; margin-bottom:18px; }
+.filter-title { font-size:12px; font-weight:700; color:#1E3A5F; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px; }
+.filter-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:12px; }
+.filter-row2 { display:grid; grid-template-columns:repeat(3,1fr) auto; gap:10px; align-items:flex-end; }
+.fg label { display:block; font-size:11px; font-weight:700; color:#2563EB; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+.fg select { width:100%; padding:9px 11px; border:1.5px solid #BFDBFE; border-radius:8px; font-size:13px; color:#1E3A5F; background:#F8FBFF; outline:none; }
+.search-btn { padding:9px 22px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.search-btn:hover { background:#1D4ED8; }
+.stats-bar { display:grid; grid-template-columns:repeat(5,1fr); gap:11px; margin-bottom:18px; }
+.stat-card { background:white; border-radius:11px; padding:13px 15px; border:1px solid #BFDBFE; text-align:center; }
+.stat-card .num { font-size:22px; font-weight:800; color:#2563EB; }
+.stat-card .lbl { font-size:11px; color:#6B8CC4; margin-top:2px; }
+.bulk-bar { background:#2563EB; border-radius:11px; padding:13px 18px; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.bulk-bar span { font-size:13px; font-weight:600; color:white; }
+.bulk-actions { display:flex; gap:7px; }
+.bulk-btn { padding:7px 14px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); border-radius:7px; color:white; font-size:12px; font-weight:600; cursor:pointer; }
+.bulk-btn:hover { background:rgba(255,255,255,0.25); }
+.results-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:13px; }
+.results-count { font-size:13px; font-weight:700; color:#1E3A5F; }
+.results-count span { color:#2563EB; }
+.students-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.student-card { background:white; border-radius:14px; padding:18px; border:1.5px solid #BFDBFE; cursor:pointer; transition:all 0.14s; position:relative; }
+.student-card:hover { border-color:#2563EB; transform:translateY(-1px); box-shadow:0 4px 14px rgba(37,99,235,0.09); }
+.student-card.selected { border-color:#2563EB; background:#F0F5FF; }
+.sc-check { position:absolute; top:12px; right:12px; width:20px; height:20px; border:1.5px solid #BFDBFE; border-radius:5px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:11px; color:#2563EB; font-weight:700; }
+.student-card.selected .sc-check { background:#2563EB; border-color:#2563EB; color:white; }
+.sc-avatar { width:44px; height:44px; border-radius:11px; background:#DBEAFE; border:1px solid #BFDBFE; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#2563EB; margin-bottom:11px; }
+.sc-name { font-size:14px; font-weight:700; color:#1E3A5F; }
+.sc-sub { font-size:11px; color:#6B8CC4; margin-top:2px; margin-bottom:10px; }
+.sc-tags { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+.sc-tag { padding:2px 8px; background:#DBEAFE; border-radius:10px; font-size:10px; font-weight:600; color:#2563EB; }
+.sc-tag.accent { background:#BFDBFE; color:#1D4ED8; }
+.sc-foot { display:flex; gap:6px; }
+.sc-btn { flex:1; padding:7px; border-radius:7px; font-size:11px; font-weight:600; cursor:pointer; text-align:center; border:none; }
+.sc-btn.primary { background:#2563EB; color:white; }
+.sc-btn.secondary { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; }
+.insight-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.insight-card { background:white; border-radius:14px; padding:20px; border:1px solid #BFDBFE; }
+.insight-card h3 { font-size:13px; font-weight:700; color:#1E3A5F; margin-bottom:16px; }
+.chart-wrap { display:flex; gap:10px; align-items:flex-end; height:160px; overflow:visible; }
+.bar-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.bar { width:100%; border-radius:5px 5px 0 0; background:#2563EB; min-height:8px; }
+.bar.b2{background:#3B82F6;} .bar.b3{background:#60A5FA;} .bar.b4{background:#93C5FD;} .bar.b5{background:#BFDBFE;} .bar.b6{background:#DBEAFE;}
+.bar-lbl { font-size:10px; color:#6B8CC4; text-align:center; }
+.bar-val { font-size:10px; font-weight:700; color:#2563EB; }
+.rank-item { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:12px; border-bottom:1px solid #EFF6FF; }
+.rank-item:last-child { border-bottom:none; }
+.rank-item .rn { color:#1E3A5F; font-weight:500; }
+.rank-item .rc { font-size:11px; font-weight:700; color:#2563EB; background:#DBEAFE; padding:2px 7px; border-radius:8px; }
+.stat-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:9px; }
+.s3-item { background:#EFF6FF; border-radius:10px; padding:14px; text-align:center; border:1px solid #BFDBFE; }
+.s3-item .s3n { font-size:22px; font-weight:800; color:#2563EB; }
+.s3-item .s3l { font-size:11px; color:#2563EB; font-weight:600; margin-top:3px; }
+.banner { background:#2563EB; border-radius:12px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:18px; cursor:pointer; }
+.b-label { font-size:10px; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.b-title { font-size:13px; font-weight:700; color:white; }
+.b-sub { font-size:11px; color:rgba(255,255,255,0.65); margin-top:3px; }
+.banner-more { font-size:12px; padding:7px 14px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:7px; color:white; white-space:nowrap; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(30,58,95,0.18); backdrop-filter:blur(3px); z-index:1000; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal { background:white; border-radius:18px; width:90%; max-width:580px; max-height:86vh; overflow-y:auto; box-shadow:0 8px 36px rgba(37,99,235,0.13); border:1px solid #BFDBFE; animation:mIn 0.22s ease; }
+.comm-cat-bar{ display:flex; gap:3px; margin-bottom:18px; background:white; padding:5px; border-radius:12px; border:1px solid #BFDBFE; width:fit-content; }
+.comm-cat-btn{ padding:9px 18px; border-radius:8px; border:none; background:transparent; font-size:12px; font-weight:600; color:#4A78C4; cursor:pointer; transition:all .14s; }
+.comm-cat-btn.active{ background:#2563EB; color:white; }
+.comm-layout{ display:grid; grid-template-columns:1fr 280px; gap:18px; align-items:start; margin-top:18px; }
+.comm-post{ display:flex; align-items:center; gap:14px; background:white; border:1px solid #BFDBFE; border-radius:12px; padding:14px 18px; margin-bottom:10px; cursor:pointer; transition:.15s; }
+.comm-post:hover{ border-color:#2563EB; }
+.comm-post-tag{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; white-space:nowrap; flex-shrink:0; }
+.comm-post-tag.job{ background:#DBEAFE; color:#2563EB; }
+.comm-post-tag.qna{ background:#FCE7F3; color:#BE185D; }
+.comm-post-title{ font-size:13px; font-weight:600; color:#1E3A5F; margin-top:6px; }
+.comm-post-meta{ font-size:11px; color:#6B8CAE; margin-top:3px; }
+.poll-card{ background:white; border:1px solid #BFDBFE; border-radius:14px; padding:16px 20px; margin-bottom:12px; }
+.poll-q{ font-size:13px; font-weight:700; color:#1E3A5F; margin-bottom:8px; cursor:pointer; }
+.poll-badge{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; margin-right:6px; }
+.poll-badge.univ{ background:#DBEAFE; color:#2563EB; }
+.poll-badge.company{ background:#D1FAE5; color:#047857; }
+.poll-badge.student{ background:#FEF3C7; color:#B45309; }
+.poll-meta{ font-size:11px; color:#6B8CAE; margin-top:8px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+.poll-vote-btn{ background:#2563EB; color:white; border:none; padding:7px 16px; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer; }
+.poll-bar-row{ margin-bottom:12px; }
+.poll-bar-label{ display:flex; justify-content:space-between; font-size:12px; color:#1E3A5F; font-weight:600; margin-bottom:5px; }
+.poll-bar-track{ background:#EFF6FF; border-radius:8px; height:10px; overflow:hidden; }
+.poll-bar-fill{ background:#2563EB; height:100%; border-radius:8px; }
+.poll-bar-row.selectable{ cursor:pointer; padding:6px 8px; margin:0 -8px 12px -8px; border-radius:8px; transition:.15s; }
+.poll-bar-row.selectable:hover{ background:#F5F9FF; }
+.poll-bar-row.selected{ background:#EFF6FF; box-shadow:inset 0 0 0 1.5px #2563EB; }
+.btn-confirm:disabled{ opacity:.5; cursor:default; }
+@media(max-width:900px){ .comm-layout{ grid-template-columns:1fr; } }
+@keyframes mIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.modal-head-blue { background:#2563EB; padding:22px 26px; border-radius:18px 18px 0 0; color:white; display:flex; justify-content:space-between; align-items:flex-start; }
+.modal-head-blue h3 { font-size:18px; font-weight:800; }
+.modal-head-blue p { font-size:12px; opacity:0.7; margin-top:4px; }
+.modal-head { padding:20px 24px; border-bottom:1px solid #EFF6FF; display:flex; justify-content:space-between; align-items:flex-start; }
+.modal-head h3 { font-size:16px; font-weight:700; color:#1E3A5F; }
+.modal-head p { font-size:12px; color:#6B8CC4; margin-top:3px; }
+.close-btn { width:28px; height:28px; border:1px solid rgba(255,255,255,0.25); border-radius:7px; background:rgba(255,255,255,0.1); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.close-btn svg { width:14px; height:14px; fill:white; }
+.close-btn-dark { width:28px; height:28px; border:1px solid #BFDBFE; border-radius:7px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.close-btn-dark svg { width:14px; height:14px; fill:#2563EB; }
+.modal-body { padding:20px 24px; }
+.detail-sec { margin-bottom:18px; }
+.detail-sec h4 { font-size:11px; font-weight:700; color:#2563EB; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px; }
+.detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.d-item { background:#F5F9FF; border-radius:9px; padding:9px 12px; border:1px solid #BFDBFE; }
+.d-item .dk { font-size:10px; color:#6B8CC4; }
+.d-item .dv { font-size:12px; font-weight:700; color:#1E3A5F; margin-top:2px; }
+.lang-row { margin-bottom:8px; }
+.lang-lbl { display:flex; justify-content:space-between; font-size:12px; color:#2563EB; margin-bottom:4px; }
+.lang-lbl b { color:#1D4ED8; }
+.progress { background:#DBEAFE; border-radius:5px; height:5px; }
+.pf { height:100%; background:#2563EB; border-radius:5px; }
+.history-mini { display:flex; flex-direction:column; gap:7px; }
+.hm-item { display:flex; gap:10px; align-items:center; background:#F5F9FF; border-radius:9px; padding:9px 12px; border:1px solid #BFDBFE; }
+.hm-badge { width:32px; height:32px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.hm-badge.edu{background:#DBEAFE;color:#2563EB;} .hm-badge.work{background:#BFDBFE;color:#1D4ED8;} .hm-badge.cert{background:#EFF6FF;color:#3B82F6;}
+.hm-title { font-size:12px; font-weight:600; color:#1E3A5F; }
+.hm-sub { font-size:10px; color:#6B8CC4; }
+.hm-period { font-size:10px; font-weight:600; color:#2563EB; margin-left:auto; white-space:nowrap; }
+.action-btns { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:18px; }
+.act-btn { padding:12px; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; border:none; }
+.act-btn.primary{background:#2563EB;color:white;} .act-btn.secondary{background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;}
+.fg { margin-bottom:12px; }
+.fg label { display:block; font-size:11px; font-weight:700; color:#2563EB; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+.fg input,.fg select,.fg textarea { width:100%; padding:9px 12px; border:1.5px solid #BFDBFE; border-radius:8px; font-size:13px; color:#1E3A5F; background:#F8FBFF; outline:none; font-family:inherit; }
+.fg textarea { resize:vertical; min-height:80px; }
+.modal-foot { display:flex; gap:8px; padding:16px 24px; border-top:1px solid #EFF6FF; }
+.btn-cancel { flex:1; padding:10px; border:1.5px solid #BFDBFE; border-radius:8px; background:white; color:#6B8CC4; font-size:13px; cursor:pointer; }
+.btn-confirm { flex:2; padding:10px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-confirm:hover { background:#1D4ED8; }
+
+.hero-inner, .section-inner, .users-grid, .stats-grid { max-width:1200px; }
+  .main .content, .content { max-width:1280px; }
+  .hero h1 { font-size:44px; }
+  .section-title, .cta-section h2 { font-size:30px; }
+}
+
+/* Demo interaction states */
+.demo-toast { position:fixed; right:24px; bottom:24px; z-index:3000; background:#1E3A5F; color:white; border-radius:10px; padding:12px 16px; font-size:13px; font-weight:700; box-shadow:0 10px 30px rgba(30,58,95,0.18); opacity:0; transform:translateY(10px); pointer-events:none; transition:all 0.2s ease; }
+.demo-toast.show { opacity:1; transform:translateY(0); }
+.demo-state-note { margin-top:10px; padding:10px 12px; border-radius:9px; background:#DBEAFE; color:#1D4ED8; border:1px solid #BFDBFE; font-size:12px; font-weight:700; display:none; }
+.demo-state-note.show { display:block; }
+.demo-mode-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:#DBEAFE; color:#2563EB; font-size:11px; font-weight:800; margin-left:8px; vertical-align:middle; }
+.demo-status { display:inline-flex; padding:3px 8px; border-radius:999px; background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; font-size:10px; font-weight:800; }
+
+.section-title, .cta-section h2 { font-size:24px !important; }
+  .content, .hero, .section, .users-section, .stats-section, .cta-section { padding-left:16px !important; padding-right:16px !important; }
+  .card { padding:24px !important; }
+  .sidebar nav { display:block; }
+  .nav-item { margin-bottom:4px; }
+}
+
+/* Presentation and large display optimization */
+@media (min-width: 1600px) {
+  .main .content, .content {
+    max-width:min(1680px, calc(100vw - 320px)) !important;
+    width:100% !important;
+    margin-left:0 !important;
+    margin-right:auto !important;
+    padding-left:32px !important;
+    padding-right:40px !important;
+  }
+  .topbar { padding-left:32px !important; padding-right:40px !important; }
+  .filter-box, .company-filter, .profile-card, .privacy-box,
+  .info-card, .history-item, .doc-card, .company-card, .student-card,
+  .stat-card, .insight-card, .translator, .profile-trans, .history-card,
+  .quick-card { box-shadow:0 14px 34px rgba(86,132,176,0.12) !important; }
+  .students-grid, .company-grid { gap:18px !important; }
+  .student-card, .company-card, .doc-card, .quick-card { padding:22px !important; }
+  .filter-box, .company-filter { padding:22px 24px !important; }
+  .stat-card { padding:17px 18px !important; }
+  .stat-card .num { font-size:28px !important; }
+  .stat-card .lbl { font-size:12px !important; }
+  .sc-name, .cc-name, .doc-name, .qc-title { font-size:15px !important; }
+  .sc-sub, .cc-type, .doc-meta, .qc-desc { font-size:12px !important; }
+  .sc-tag, .cc-tag, .doc-status, .demo-status { font-size:11px !important; }
+  .sc-btn, .cc-btn, .search-btn, .add-btn, .btn-confirm, .btn-cancel,
+  .chat-action, .compose-btn, .trans-btn, .pt-btn { min-height:34px; }
+  .fg label, .cf-group label { font-size:12px !important; }
+  .fg input, .fg select, .fg textarea, .cf-group select { font-size:14px !important; min-height:38px; }
+  .tab-btn { font-size:13px !important; padding:10px 20px !important; }
+  .tb-title { font-size:18px !important; }
+}
+
+@media (min-width: 1900px) {
+  .sidebar { width:220px !important; }
+  .topbar { left:220px !important; height:64px !important; }
+  .main { margin-left:220px !important; padding-top:64px !important; }
+  .msg-layout { margin-left:220px !important; margin-top:64px !important; height:calc(100vh - 64px) !important; grid-template-columns:360px minmax(0, 1fr) !important; }
+  .main .content, .content {
+    max-width:min(1780px, calc(100vw - 260px)) !important;
+    padding-left:28px !important;
+    padding-right:44px !important;
+  }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; }
+  .filter-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) auto !important; }
+  .stats-bar { grid-template-columns:repeat(5, minmax(0, 1fr)) !important; }
+  .stats-row { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .info-grid, .insight-row, .trans-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .student-card, .company-card { min-height:170px; }
+  .profile-card { padding:34px !important; }
+  .profile-avatar { width:82px !important; height:82px !important; }
+  .profile-info h2 { font-size:24px !important; }
+  .chat-messages { padding:24px 30px !important; }
+  .bubble { font-size:14px !important; }
+}
+
+@media (min-width: 2400px) {
+  .main .content, .content { max-width:1900px !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .student-card, .company-card, .doc-card { padding:24px !important; }
+  .sc-name, .cc-name { font-size:16px !important; }
+  .sc-sub, .cc-type { font-size:12px !important; }
+}
+
+/* Material 3 inspired tonal color system */
+:root {
+  --m3-primary:#5D8FBA;
+  --m3-on-primary:#FFFFFF;
+  --m3-primary-container:#E4F1FA;
+  --m3-on-primary-container:#214762;
+  --m3-secondary:#718799;
+  --m3-on-secondary:#FFFFFF;
+  --m3-secondary-container:#ECF3F8;
+  --m3-on-secondary-container:#2E4A5D;
+  --m3-tertiary:#6B6F91;
+  --m3-on-tertiary:#FFFFFF;
+  --m3-tertiary-container:#E7E8F6;
+  --m3-on-tertiary-container:#272B49;
+  --m3-error:#BA1A1A;
+  --m3-on-error:#FFFFFF;
+  --m3-error-container:#FFDAD6;
+  --m3-on-error-container:#410002;
+  --m3-background:#FBFDFF;
+  --m3-on-background:#182A38;
+  --m3-surface:#FFFFFF;
+  --m3-surface-dim:#F3F7FA;
+  --m3-surface-container-low:#FAFCFE;
+  --m3-surface-container:#F5F9FC;
+  --m3-surface-container-high:#EEF5FA;
+  --m3-on-surface:#182A38;
+  --m3-on-surface-variant:#5D6E7C;
+  --m3-outline:#CEDBE5;
+  --m3-outline-variant:#E5EDF3;
+  --m3-shadow:0 8px 24px rgba(38, 72, 102, 0.10);
+  --m3-shadow-strong:0 14px 36px rgba(38, 72, 102, 0.14);
+}
+
+body { background:var(--m3-background) !important; color:var(--m3-on-background) !important; }
+.hero, .cta-section, .sidebar, .banner, .modal-head-blue, .comp-detail-header,
+.profile-card, .bs-1, .bs-2, .bs-3, .bs-4, .bs-5, .bs-6 {
+  background:var(--m3-primary) !important;
+  background-image:none !important;
+}
+.hero { background:var(--m3-background) !important; }
+.cta-section, .banner, .modal-head-blue, .comp-detail-header, .profile-card,
+.msg-layout {
+  margin-left: var(--cb-sidebar-w) !important;
+  margin-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  height: calc(100vh - var(--cb-topbar-h)) !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.bottom-ad-showcase,
+.banner,
+.cta-section:not(.brand-cta-section) {
+  background:#4f7fc8 !important;
+  border: 1px solid var(--cb-line-soft) !important;
+  color: var(--cb-text-main) !important;
+  box-shadow: 0 18px 46px rgba(57, 103, 142, 0.10) !important;
+}
+.bottom-ad-showcase *,
+.banner *,
+.cta-section:not(.brand-cta-section) * {
+  color: inherit;
+}
+.bottom-ad-eyebrow,
+.bottom-ad-tag,
+.banner .badge,
+.cta-section:not(.brand-cta-section) .badge {
+  background: #DDEFFA !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #C5DFEF !important;
+}
+.bottom-ad-title,
+.bottom-ad-showcase h2,
+.bottom-ad-showcase h3,
+.banner h2,
+.banner h3,
+.cta-section:not(.brand-cta-section) h2,
+.cta-section:not(.brand-cta-section) h3 {
+  color: var(--cb-text-main) !important;
+}
+.bottom-ad-desc,
+.bottom-ad-showcase p,
+.banner p,
+.cta-section:not(.brand-cta-section) p {
+  color: var(--cb-text-sub) !important;
+}
+.bottom-ad-btn.primary,
+.bottom-ad-showcase .primary,
+.banner .primary,
+.cta-section:not(.brand-cta-section) .primary,
+.cta-section:not(.brand-cta-section) .cta-btn-white {
+  background: var(--cb-point-strong) !important;
+  color: #FFFFFF !important;
+  border-color: var(--cb-point-strong) !important;
+}
+.bottom-ad-btn.secondary,
+.bottom-ad-showcase .secondary,
+.banner .secondary,
+.cta-section:not(.brand-cta-section) .secondary,
+.cta-section:not(.brand-cta-section) .cta-btn-outline {
+  background: #FFFFFF !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #BCD9EE !important;
+}
+@media (max-width: 1180px), (orientation: portrait) {
+  .sidebar {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cb-line-soft) !important;
+    box-shadow: none !important;
+  }
+  .topbar {
+    position: sticky !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 58px !important;
+  }
+  .main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+  }
+  .main .content,
+  .content {
+    max-width: 100% !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .msg-layout {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .main .content,
+  .content {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* Final readable badge correction */
+.p-tag,
+.sc-tag,
+.cc-tag,
+.doc-status,
+.demo-status,
+.demo-mode-pill,
+.user-type-badge,
+.qc-type,
+.qc-lang,
+.mock-tag,
+.th-langs,
+.b-mini-tag,
+.b-badge,
+.banner-more,
+.translation-badge,
+.profile-card .p-tag {
+  background: #DDEFFA !important;
+  color: #2E638F !important;
+  border: 1px solid #C2DBEF !important;
+  box-shadow: none !important;
+}
+.p-tag.accent,
+.sc-tag.accent,
+.doc-status.verified,
+.demo-status.strong,
+.user-type-badge.c {
+  background: #CFE6F7 !important;
+  color: #214E74 !important;
+  border-color: #B8D6EA !important;
+}
+.profile-card .p-tag,
+.comp-detail-header .p-tag,
+.modal .p-tag {
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+.bubble.me .translation-badge {
+  background: rgba(255,255,255,0.92) !important;
+  color: #2E638F !important;
+  border-color: rgba(255,255,255,0.72) !important;
+}
+
+/* Insight color variety */
+.insight-card {
+  overflow:hidden !important;
+}
+.insight-card:nth-child(1) { --insight-accent:#4F83B8; --insight-soft:#EAF4FB; }
+.insight-card:nth-child(2) { --insight-accent:#3F8F78; --insight-soft:#E9F6F2; }
+.insight-card:nth-child(3) { --insight-accent:#9A7B36; --insight-soft:#F8F1DF; }
+.insight-card:nth-child(4) { --insight-accent:#7B6CB8; --insight-soft:#F0EDFA; }
+.insight-card h3 {
+  color:#14293A !important;
+}
+.insight-card .bar {
+  background:var(--insight-accent, #4F83B8) !important;
+}
+.insight-card .bar-item:nth-child(1) .bar { background:#4F83B8 !important; }
+.insight-card .bar-item:nth-child(2) .bar { background:#3F8F78 !important; }
+.insight-card .bar-item:nth-child(3) .bar { background:#9A7B36 !important; }
+.insight-card .bar-item:nth-child(4) .bar { background:#7B6CB8 !important; }
+.insight-card .bar-item:nth-child(5) .bar { background:#C05F6A !important; }
+.insight-card .bar-item:nth-child(6) .bar { background:#6E8797 !important; }
+.insight-card .bar-val {
+  color:var(--insight-accent, #4F83B8) !important;
+  font-weight:900 !important;
+}
+.insight-card .bar-item:nth-child(1) .bar-val { color:#4F83B8 !important; }
+.insight-card .bar-item:nth-child(2) .bar-val { color:#3F8F78 !important; }
+.insight-card .bar-item:nth-child(3) .bar-val { color:#9A7B36 !important; }
+.insight-card .bar-item:nth-child(4) .bar-val { color:#7B6CB8 !important; }
+.insight-card .bar-item:nth-child(5) .bar-val { color:#C05F6A !important; }
+.insight-card .bar-item:nth-child(6) .bar-val { color:#6E8797 !important; }
+.insight-card .s3-item {
+  background:var(--insight-soft, #EAF4FB) !important;
+  border-color:rgba(79,131,184,0.22) !important;
+}
+.insight-card .s3-item:nth-child(1) { background:#EAF4FB !important; border-color:#C8DFEF !important; }
+.insight-card .s3-item:nth-child(2) { background:#E9F6F2 !important; border-color:#C6E5DA !important; }
+.insight-card .s3-item:nth-child(3) { background:#F8F1DF !important; border-color:#E8D8A9 !important; }
+.insight-card .s3-item:nth-child(1) .s3n { color:#4F83B8 !important; }
+.insight-card .s3-item:nth-child(2) .s3n { color:#3F8F78 !important; }
+.insight-card .s3-item:nth-child(3) .s3n { color:#9A7B36 !important; }
+.insight-card .rank-item .rc {
+  background:var(--insight-soft, #EAF4FB) !important;
+  color:var(--insight-accent, #4F83B8) !important;
+  border:1px solid rgba(79,131,184,0.16) !important;
+}
+.insight-card .rank-item:nth-child(1) .rc { background:#EAF4FB !important; color:#4F83B8 !important; }
+.insight-card .rank-item:nth-child(2) .rc { background:#E9F6F2 !important; color:#3F8F78 !important; }
+.insight-card .rank-item:nth-child(3) .rc { background:#F8F1DF !important; color:#9A7B36 !important; }
+.insight-card .rank-item:nth-child(4) .rc { background:#F0EDFA !important; color:#7B6CB8 !important; }
+.insight-card .rank-item:nth-child(5) .rc { background:#FAEAEC !important; color:#C05F6A !important; }
+.insight-card .progress-fill,
+.insight-card .pf {
+  background:#4f7fc8 !important;
+}
+
+/* Company page visual identity */
+.portal-company .content {
+  max-width:min(1540px, calc(100vw - var(--cb-sidebar-w) - 56px)) !important;
+}
+.portal-company .filter-box {
+  border-left:5px solid #4F83B8 !important;
+}
+.portal-company .stats-bar {
+  grid-template-columns:1.25fr repeat(4, 1fr) !important;
+}
+.portal-company .student-card {
+  border-top:4px solid #4F83B8 !important;
+  min-height:190px !important;
+}
+.portal-company .student-card:nth-child(3n+2) { border-top-color:#3F8F78 !important; }
+.portal-company .student-card:nth-child(3n) { border-top-color:#9A7B36 !important; }
+.portal-company .banner {
+  border-left:5px solid #376C9C !important;
+}
+@media (max-width:1180px), (orientation:portrait) {
+  .company-role-hero { grid-template-columns:1fr !important; padding:22px !important; }
+  .pipeline-strip { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .portal-company .stats-bar { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width:620px) {
+  .pipeline-strip { grid-template-columns:1fr; }
+}
+</style>
+<link rel="stylesheet" href="../work-tool.css">
+<link rel="stylesheet" href="../portal-components.css">
+<script src="../work-tool.js" defer></script>
+<script src="../work-tool-actions.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+</head>
+<body class="portal-company work-tool">
+<main class="wt-window">
+  <header class="wt-titlebar">
+    <div>Career Bridge · 기업 포털</div>
+    <div class="lang-sw wt-titlebar-lang" aria-label="언어 선택"><span class="active" data-lang="ko">KO</span><span data-lang="en">EN</span><span data-lang="zh">ZH</span></div>
+  </header>
+  <section class="wt-toolbar wt-toolbar-core" aria-label="빠른 도구">
+    <button type="button" class="wt-action-btn" onclick="wtApprove()">승인처리</button>
+    <button type="button" class="wt-action-btn" onclick="wtAddOrg()">기관추가</button>
+    <button type="button" class="wt-tool-btn" onclick="wtExport()">내보내기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtPreview()">미리보기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtViewDetail()">자세히 보기</button>
+  </section>
+  <section class="wt-workspace">
+    <aside class="wt-left-panel">
+      <div class="wt-panel-title">업무 바로가기</div>
+                  <div class="wt-tree">
+        <div class="wt-tree-item" onclick="window.location.href='company.html'">▣ 대시보드</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-search.html'">　├ 인재 검색</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-talent.html'">　├ AI 추천·비교</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-recruit.html'">　├ 채용·면접</div>
+        <div class="wt-tree-item active" onclick="window.location.href='company-report.html'">　├ 채용 성과</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-insight.html'">　├ 인사이트 분석</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-community.html'">　├ 커뮤니티</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-messages.html'">　├ 메시지 관리</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-translation.html'">　└ 번역 서비스</div>
+      </div>
+      <form class="wt-quick-form" onsubmit="return false">
+        <div class="wt-field"><label>기업명</label><input type="text" value="삼성전자" readonly></div>
+        <div class="wt-field"><label>담당자</label><input type="text" value="이수진 과장" readonly></div>
+        <div class="wt-field"><label>처리 상태</label><select><option selected>채용 진행중</option><option>검토중</option><option>보류</option></select></div>
+        <div class="wt-field"><label>업무 메모</label><textarea readonly>오전 중 TOPIK 4급 이상 후보 12명 일괄 메시지 발송 예정.</textarea></div>
+        <button type="button" class="wt-action-btn" onclick="window.location.href='../index.html'">로그아웃</button>
+      </form>
+    </aside>
+    <section class="wt-doc">
+      <div class="wt-document-head">
+        <div>
+          <div class="wt-document-title" id="pageTitle">채용 성과</div>
+          <div class="wt-doc-sub">기준일: 2026-06-22 / 담당: 이수진 과장 · 삼성전자 인사팀</div>
+        </div>
+        <div class="wt-doc-meta">
+          <span class="wt-badge">자동저장 ON</span>
+          <span class="wt-badge" id="resultBadge">후보 12명</span>
+          </div>
+      </div>
+      <div class="wt-doc-body">
+        <div class="wt-doc-inner">
+  <div class="wt-section-layout wt-stack-layout">
+    <div class="wt-panel-summary">
+      <div class="section-lead"><h2>채용 성과 리포트</h2><p>Talent Pool · 전환율 · Time-to-Hire (목업)</p></div>
+      <div class="wt-mock-kpi-list">
+        <div class="wt-mock-kpi-item"><strong>Talent Pool</strong><em>1,248</em></div>
+        <div class="wt-mock-kpi-item"><strong>Match Score 평균</strong><em>78.4</em></div>
+        <div class="wt-mock-kpi-item"><strong>Shortlist Rate</strong><em>24%</em></div>
+        <div class="wt-mock-kpi-item"><strong>Contact Rate</strong><em>41%</em></div>
+        <div class="wt-mock-kpi-item"><strong>Reply Rate</strong><em>33%</em></div>
+        <div class="wt-mock-kpi-item"><strong>Interview CVR</strong><em>18%</em></div>
+        <div class="wt-mock-kpi-item"><strong>Offer CVR</strong><em>6.2%</em></div>
+        <div class="wt-mock-kpi-item"><strong>Time-to-Shortlist</strong><em>4.2일</em></div>
+        <div class="wt-mock-kpi-item"><strong>Time-to-Hire</strong><em>28일</em></div>
+        <div class="wt-mock-kpi-item"><strong>Cost / Qualified Lead</strong><em>₩42,000</em></div>
+      </div>
+    </div>
+
+    <div class="wt-sheet-zone">
+    <div class="wt-sheet-scroll wt-mock-sheet-stack">
+    <div class="wt-mock-block wt-mock-chart-block">
+      <h3>Reply Rate 추이</h3>
+      <div class="line-chart-host" role="img" aria-label="Reply Rate"
+        data-labels='["1월","2월","3월","4월","5월","6월"]'
+        data-series='[{"name":"Reply","values":[24,26,28,30,31,33],"color":"#4f7fc8"}]'
+        data-suffix="%"></div>
+    </div>
+    <div class="wt-mock-block wt-mock-chart-block">
+      <h3>Interview Conversion 추이</h3>
+      <div class="line-chart-host" role="img" aria-label="Interview CVR"
+        data-labels='["1월","2월","3월","4월","5월","6월"]'
+        data-series='[{"name":"Interview","values":[12,13,14,15,16,18],"color":"#3f8f78"}]'
+        data-suffix="%"></div>
+    </div>
+    <div class="wt-mock-block wt-mock-chart-block">
+      <h3>Time-to-Hire (일)</h3>
+      <div class="line-chart-host" role="img" aria-label="Time to Hire"
+        data-labels='["1월","2월","3월","4월","5월","6월"]'
+        data-series='[{"name":"일수","values":[36,34,32,31,29,28],"color":"#9a7b36"}]'
+        data-suffix="일"></div>
+    </div>
+    <div class="wt-mock-block">
+      <h3>월별 채용 성과 요약</h3>
+      <p class="wt-mock-desc">공고 · 연락 · 면접 · 채용 완료 집계 (목업)</p>
+      <div class="wt-mock-table-wrap">
+        <table class="wt-mock-table">
+          <thead><tr><th>월</th><th>공고</th><th>연락</th><th>답변</th><th>면접</th><th>오퍼</th><th>채용</th><th>Reply Rate</th><th>Time-to-Hire</th></tr></thead>
+          <tbody>
+            <tr><td>2026-06</td><td>3</td><td>48</td><td>19</td><td>8</td><td>3</td><td>2</td><td class="wt-mock-score">33%</td><td>28일</td></tr>
+            <tr><td>2026-05</td><td>2</td><td>41</td><td>16</td><td>7</td><td>2</td><td>1</td><td class="wt-mock-score">31%</td><td>29일</td></tr>
+            <tr><td>2026-04</td><td>4</td><td>52</td><td>21</td><td>9</td><td>4</td><td>2</td><td class="wt-mock-score">30%</td><td>31일</td></tr>
+            <tr><td>2026-03</td><td>3</td><td>38</td><td>14</td><td>6</td><td>2</td><td>1</td><td class="wt-mock-score">28%</td><td>32일</td></tr>
+            <tr><td>2026-02</td><td>2</td><td>35</td><td>12</td><td>5</td><td>2</td><td>1</td><td class="wt-mock-score">26%</td><td>34일</td></tr>
+            <tr><td>2026-01</td><td>3</td><td>44</td><td>17</td><td>7</td><td>3</td><td>2</td><td class="wt-mock-score">24%</td><td>36일</td></tr>
+            <tr><td>2025-12</td><td>2</td><td>29</td><td>10</td><td>4</td><td>1</td><td>1</td><td class="wt-mock-score">22%</td><td>38일</td></tr>
+            <tr><td>2025-11</td><td>4</td><td>46</td><td>18</td><td>8</td><td>3</td><td>2</td><td class="wt-mock-score">25%</td><td>35일</td></tr>
+            <tr><td>2025-10</td><td>3</td><td>40</td><td>15</td><td>6</td><td>2</td><td>1</td><td class="wt-mock-score">23%</td><td>37일</td></tr>
+            <tr><td>2025-09</td><td>2</td><td>33</td><td>11</td><td>5</td><td>2</td><td>1</td><td class="wt-mock-score">21%</td><td>39일</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="wt-mock-block">
+      <h3>직무별 채용 전환</h3>
+      <div class="wt-mock-table-wrap">
+        <table class="wt-mock-table">
+          <thead><tr><th>직무</th><th>후보 Pool</th><th>Shortlist</th><th>면접</th><th>채용</th><th>전환율</th></tr></thead>
+          <tbody>
+            <tr><td>글로벌 마케팅</td><td>186</td><td>42</td><td>12</td><td>3</td><td class="wt-mock-score">7.2%</td></tr>
+            <tr><td>무역 실무</td><td>142</td><td>36</td><td>10</td><td>2</td><td class="wt-mock-score">5.8%</td></tr>
+            <tr><td>해외영업</td><td>98</td><td>22</td><td>6</td><td>1</td><td class="wt-mock-score">4.1%</td></tr>
+            <tr><td>데이터 분석</td><td>76</td><td>18</td><td>5</td><td>1</td><td class="wt-mock-score">3.9%</td></tr>
+            <tr><td>콘텐츠 기획</td><td>64</td><td>14</td><td>4</td><td>0</td><td class="wt-mock-score">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+    </div>
+
+  </div>
+
+        </div>
+      </div>
+    </section>
+  </section>
+  <footer class="wt-statusbar">
+    <span>준비</span>
+    <span id="coStatusTab">채용 성과</span>
+    <span>마지막 저장: 09:12</span>
+  </footer>
+</main>
+
+<script>
+function wtApprove(){window.demoToast&&window.demoToast('승인 처리했습니다.');}
+function wtAddOrg(){window.demoToast&&window.demoToast('등록 폼을 엽니다.');}
+function wtExport(){window.demoToast&&window.demoToast('내보내기를 시작합니다.');}
+function wtPreview(){window.demoToast&&window.demoToast('미리보기를 엽니다.');}
+function wtViewDetail(){window.demoToast&&window.demoToast('항목을 선택한 뒤 자세히 보기를 이용하세요.');}
+function openModal(id){var el=document.getElementById(id);if(el)el.classList.add('show');}
+function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('show');});});
+</script>
+</body></html>

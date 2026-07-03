@@ -1,0 +1,35 @@
+  <div class="wt-section-layout wt-stack-layout">
+    <div class="wt-panel-summary">
+      <div class="section-lead"><h2>문서 OCR 검수</h2><p>추출 결과 · 신뢰도 · 수동 확인 — 승인/반려 목업</p></div>
+      <div class="wt-mock-kpi-list">
+        <div class="wt-mock-kpi-item"><strong>검수 대기</strong><em>14건</em></div>
+        <div class="wt-mock-kpi-item"><strong>수동 확인 필요</strong><em>6건</em></div>
+        <div class="wt-mock-kpi-item"><strong>평균 OCR 신뢰도</strong><em>93.8%</em></div>
+        <div class="wt-mock-kpi-item"><strong>위변조 의심</strong><em>1건</em></div>
+      </div>
+    </div>
+    <div class="wt-sheet-zone">
+      <div class="wt-sheet-zone-head"><strong>검수 큐</strong><span>기관 승인 권한</span></div>
+      <div class="wt-mock-table-wrap wt-sheet-scroll">
+        <table class="wt-mock-table">
+          <thead><tr><th>학생</th><th>문서</th><th>추출 요약</th><th>신뢰도</th><th>확인</th><th>액션</th></tr></thead>
+          <tbody>
+            <tr><td>Wang Xiaoming</td><td>재학증명서.pdf</td><td>경희대 · 경영학 · 4학년</td><td class="wt-mock-score">96.2%</td><td><span class="wt-mock-badge ok">자동</span></td><td class="wt-mock-actions"><button class="primary" onclick="openModal('ocrModal')">검수</button></td></tr>
+            <tr><td>Aliya K.</td><td>성적증명서.pdf</td><td>학점 3.72 · 2025-02 발급</td><td class="wt-mock-score">88.1%</td><td><span class="wt-mock-badge warn">수동</span></td><td class="wt-mock-actions"><button class="primary" onclick="openModal('ocrModal')">검수</button></td></tr>
+            <tr><td>Li Wei</td><td>이력서.pdf</td><td>마케팅 · 무역 · TOPIK 5</td><td class="wt-mock-score">94.5%</td><td><span class="wt-mock-badge ok">자동</span></td><td class="wt-mock-actions"><button onclick="window.demoToast&&window.demoToast('승인 (목업)')">승인</button></td></tr>
+            <tr><td>Unknown scan</td><td>추천서.jpg</td><td>발급일 인식 실패</td><td class="wt-mock-score">62.3%</td><td><span class="wt-mock-badge urgent">의심</span></td><td class="wt-mock-actions"><button class="primary" onclick="openModal('ocrModal')">검수</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="wt-mock-block">
+      <h3>OCR 추출 필드 (샘플)</h3>
+      <div class="wt-mock-kpi-list wt-kpi-sheet">
+        <div class="wt-mock-kpi-item"><strong>이름</strong><span>왕샤오밍 / Wang Xiaoming</span></div>
+        <div class="wt-mock-kpi-item"><strong>학교·전공</strong><span>경희대학교 경영학과</span></div>
+        <div class="wt-mock-kpi-item"><strong>학점</strong><span>3.68 / 4.5</span></div>
+        <div class="wt-mock-kpi-item"><strong>발급일</strong><span>2026-03-02</span></div>
+      </div>
+    </div>
+    <div class="wt-mock-note"><span class="wt-mock-badge enc">암호화 저장</span> 원본 문서는 저장 시 AES-256 적용 (목업 표시)</div>
+  </div>

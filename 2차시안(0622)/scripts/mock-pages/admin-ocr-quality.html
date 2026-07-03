@@ -1,0 +1,33 @@
+  <div class="wt-section-layout wt-stack-layout">
+    <div class="wt-panel-summary">
+      <div class="section-lead"><h2>AI · OCR 품질</h2><p>인식률 · 검수 큐 · AI 매칭 품질 (목업)</p></div>
+      <div class="wt-mock-kpi-list">
+        <div class="wt-mock-kpi-item"><strong>OCR 성공률</strong><em>97.9%</em></div>
+        <div class="wt-mock-kpi-item"><strong>평균 신뢰도</strong><em>93.4%</em></div>
+        <div class="wt-mock-kpi-item"><strong>수동 검수 큐</strong><em>38건</em></div>
+        <div class="wt-mock-kpi-item"><strong>위변조 탐지</strong><em>2건</em></div>
+        <div class="wt-mock-kpi-item"><strong>AI 매칭 정확도</strong><em>86.2%</em></div>
+        <div class="wt-mock-kpi-item"><strong>번역 품질 점수</strong><em>4.6/5</em></div>
+      </div>
+    </div>
+    <div class="wt-mock-block">
+      <h3>관리자 OCR 검수 큐</h3>
+      <div class="wt-mock-table-wrap wt-sheet-scroll">
+        <table class="wt-mock-table">
+          <thead><tr><th>문서</th><th>유형</th><th>신뢰도</th><th>상태</th><th>검수</th></tr></thead>
+          <tbody>
+            <tr><td>resume_8842.pdf</td><td>이력서</td><td>91.2%</td><td><span class="wt-mock-badge warn">수동</span></td><td class="wt-mock-actions"><button onclick="window.demoToast&&window.demoToast('검수 (목업)')">검수</button></td></tr>
+            <tr><td>transcript_3310.pdf</td><td>성적증명</td><td>88.7%</td><td><span class="wt-mock-badge warn">수동</span></td><td class="wt-mock-actions"><button onclick="window.demoToast&&window.demoToast('검수 (목업)')">검수</button></td></tr>
+            <tr><td>cert_unknown.jpg</td><td>자격증</td><td>58.1%</td><td><span class="wt-mock-badge urgent">의심</span></td><td class="wt-mock-actions"><button class="primary" onclick="window.demoToast&&window.demoToast('차단 (목업)')">차단</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="wt-mock-block wt-mock-chart-block">
+      <h3>OCR 인식률 추이</h3>
+      <div class="line-chart-host" role="img" aria-label="OCR 인식률"
+        data-labels='["1월","2월","3월","4월","5월","6월"]'
+        data-series='[{"name":"인식률","values":[95.2,95.8,96.4,97,97.5,97.9],"color":"#4f7fc8"}]'
+        data-suffix="%"></div>
+    </div>
+  </div>

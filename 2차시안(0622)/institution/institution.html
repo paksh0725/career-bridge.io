@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 기관 담당자 포털</title>
+<style>
+/* 공통: work-tool.css + portal-components.css · 레거시 블록 정리 */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI','Malgun Gothic',sans-serif; background:#EFF6FF; min-height:100vh; }
+.tab-bar { display:flex; gap:3px; margin-bottom:22px; background:white; padding:5px; border-radius:12px; border:1px solid #BFDBFE; width:fit-content; }
+.tab-btn { padding:9px 18px; border-radius:8px; border:none; background:transparent; font-size:12px; font-weight:600; color:#2563EB; cursor:pointer; transition:all 0.14s; }
+.tab-btn.active { background:#2563EB; color:white; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.filter-box { background:white; border-radius:14px; padding:18px 20px; border:1px solid #BFDBFE; margin-bottom:18px; }
+.filter-title { font-size:12px; font-weight:700; color:#1E3A5F; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px; }
+.filter-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:12px; }
+.filter-row2 { display:grid; grid-template-columns:repeat(3,1fr) auto; gap:10px; align-items:flex-end; }
+.fg label { display:block; font-size:11px; font-weight:700; color:#2563EB; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+.fg select { width:100%; padding:9px 11px; border:1.5px solid #BFDBFE; border-radius:8px; font-size:13px; color:#1E3A5F; background:#F8FBFF; outline:none; }
+.search-btn { padding:9px 22px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.search-btn:hover { background:#1D4ED8; }
+.stats-bar { display:grid; grid-template-columns:repeat(5,1fr); gap:11px; margin-bottom:18px; }
+.stat-card { background:white; border-radius:11px; padding:13px 15px; border:1px solid #BFDBFE; text-align:center; }
+.stat-card .num { font-size:22px; font-weight:800; color:#2563EB; }
+.stat-card .lbl { font-size:11px; color:#6B8CC4; margin-top:2px; }
+.bulk-bar { background:#2563EB; border-radius:11px; padding:13px 18px; display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.bulk-bar span { font-size:13px; font-weight:600; color:white; }
+.bulk-actions { display:flex; gap:7px; }
+.bulk-btn { padding:7px 14px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); border-radius:7px; color:white; font-size:12px; font-weight:600; cursor:pointer; }
+.bulk-btn:hover { background:rgba(255,255,255,0.25); }
+.results-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:13px; }
+.results-count { font-size:13px; font-weight:700; color:#1E3A5F; }
+.results-count span { color:#2563EB; }
+.students-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.student-card { background:white; border-radius:14px; padding:18px; border:1.5px solid #BFDBFE; cursor:pointer; transition:all 0.14s; position:relative; }
+.student-card:hover { border-color:#2563EB; transform:translateY(-1px); box-shadow:0 4px 14px rgba(37,99,235,0.09); }
+.student-card.selected { border-color:#2563EB; background:#F0F5FF; }
+.sc-check { position:absolute; top:12px; right:12px; width:20px; height:20px; border:1.5px solid #BFDBFE; border-radius:5px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:11px; color:#2563EB; font-weight:700; }
+.student-card.selected .sc-check { background:#2563EB; border-color:#2563EB; color:white; }
+.sc-avatar { width:44px; height:44px; border-radius:11px; background:#DBEAFE; border:1px solid #BFDBFE; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#2563EB; margin-bottom:11px; }
+.sc-name { font-size:14px; font-weight:700; color:#1E3A5F; }
+.sc-sub { font-size:11px; color:#6B8CC4; margin-top:2px; margin-bottom:10px; }
+.sc-tags { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+.sc-tag { padding:2px 8px; background:#DBEAFE; border-radius:10px; font-size:10px; font-weight:600; color:#2563EB; }
+.sc-tag.accent { background:#BFDBFE; color:#1D4ED8; }
+.sc-foot { display:flex; gap:6px; }
+.sc-btn { flex:1; padding:7px; border-radius:7px; font-size:11px; font-weight:600; cursor:pointer; text-align:center; border:none; }
+.sc-btn.primary { background:#2563EB; color:white; }
+.sc-btn.secondary { background:#EFF6FF; color:#2563EB; border:1px solid #BFDBFE; }
+.insight-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.insight-card { background:white; border-radius:14px; padding:20px; border:1px solid #BFDBFE; }
+.insight-card h3 { font-size:13px; font-weight:700; color:#1E3A5F; margin-bottom:16px; }
+.chart-wrap { display:flex; gap:10px; align-items:flex-end; height:160px; overflow:visible; }
+.bar-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.bar { width:100%; border-radius:5px 5px 0 0; background:#2563EB; min-height:8px; }
+.bar.b2{background:#3B82F6;} .bar.b3{background:#60A5FA;} .bar.b4{background:#93C5FD;} .bar.b5{background:#BFDBFE;} .bar.b6{background:#DBEAFE;}
+.bar-lbl { font-size:10px; color:#6B8CC4; text-align:center; }
+.bar-val { font-size:10px; font-weight:700; color:#2563EB; }
+.rank-item { display:flex; justify-content:space-between; align-items:center; padding:5px 0; font-size:12px; border-bottom:1px solid #EFF6FF; }
+.rank-item:last-child { border-bottom:none; }
+.rank-item .rn { color:#1E3A5F; font-weight:500; }
+.rank-item .rc { font-size:11px; font-weight:700; color:#2563EB; background:#DBEAFE; padding:2px 7px; border-radius:8px; }
+.stat-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:9px; }
+.s3-item { background:#EFF6FF; border-radius:10px; padding:14px; text-align:center; border:1px solid #BFDBFE; }
+.s3-item .s3n { font-size:22px; font-weight:800; color:#2563EB; }
+.s3-item .s3l { font-size:11px; color:#2563EB; font-weight:600; margin-top:3px; }
+.banner { background:#2563EB; border-radius:12px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:18px; cursor:pointer; }
+.b-label { font-size:10px; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.b-title { font-size:13px; font-weight:700; color:white; }
+.b-sub { font-size:11px; color:rgba(255,255,255,0.65); margin-top:3px; }
+.banner-more { font-size:12px; padding:7px 14px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:7px; color:white; white-space:nowrap; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(30,58,95,0.18); backdrop-filter:blur(3px); z-index:1000; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal { background:white; border-radius:18px; width:90%; max-width:580px; max-height:86vh; overflow-y:auto; box-shadow:0 8px 36px rgba(37,99,235,0.13); border:1px solid #BFDBFE; animation:mIn 0.22s ease; }
+.comm-cat-bar{ display:flex; gap:3px; margin-bottom:18px; background:white; padding:5px; border-radius:12px; border:1px solid #BFDBFE; width:fit-content; }
+.comm-cat-btn{ padding:9px 18px; border-radius:8px; border:none; background:transparent; font-size:12px; font-weight:600; color:#4A78C4; cursor:pointer; transition:all .14s; }
+.comm-cat-btn.active{ background:#2563EB; color:white; }
+.comm-layout{ display:grid; grid-template-columns:1fr 280px; gap:18px; align-items:start; margin-top:18px; }
+.comm-post{ display:flex; align-items:center; gap:14px; background:white; border:1px solid #BFDBFE; border-radius:12px; padding:14px 18px; margin-bottom:10px; cursor:pointer; transition:.15s; }
+.comm-post:hover{ border-color:#2563EB; }
+.comm-post-tag{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; white-space:nowrap; flex-shrink:0; }
+.comm-post-tag.job{ background:#DBEAFE; color:#2563EB; }
+.comm-post-tag.qna{ background:#FCE7F3; color:#BE185D; }
+.comm-post-title{ font-size:13px; font-weight:600; color:#1E3A5F; margin-top:6px; }
+.comm-post-meta{ font-size:11px; color:#6B8CAE; margin-top:3px; }
+.poll-card{ background:white; border:1px solid #BFDBFE; border-radius:14px; padding:16px 20px; margin-bottom:12px; }
+.poll-q{ font-size:13px; font-weight:700; color:#1E3A5F; margin-bottom:8px; cursor:pointer; }
+.poll-badge{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; margin-right:6px; }
+.poll-badge.univ{ background:#DBEAFE; color:#2563EB; }
+.poll-badge.company{ background:#D1FAE5; color:#047857; }
+.poll-badge.student{ background:#FEF3C7; color:#B45309; }
+.poll-meta{ font-size:11px; color:#6B8CAE; margin-top:8px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+.poll-vote-btn{ background:#2563EB; color:white; border:none; padding:7px 16px; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer; }
+.poll-bar-row{ margin-bottom:12px; }
+.poll-bar-label{ display:flex; justify-content:space-between; font-size:12px; color:#1E3A5F; font-weight:600; margin-bottom:5px; }
+.poll-bar-track{ background:#EFF6FF; border-radius:8px; height:10px; overflow:hidden; }
+.poll-bar-fill{ background:#2563EB; height:100%; border-radius:8px; }
+.poll-bar-row.selectable{ cursor:pointer; padding:6px 8px; margin:0 -8px 12px -8px; border-radius:8px; transition:.15s; }
+.poll-bar-row.selectable:hover{ background:#F5F9FF; }
+.poll-bar-row.selected{ background:#EFF6FF; box-shadow:inset 0 0 0 1.5px #2563EB; }
+.btn-confirm:disabled{ opacity:.5; cursor:default; }
+@media(max-width:900px){ .comm-layout{ grid-template-columns:1fr; } }
+@keyframes mIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.modal-head-blue { background:#2563EB; padding:22px 26px; border-radius:18px 18px 0 0; color:white; display:flex; justify-content:space-between; align-items:flex-start; }
+.modal-head-blue h3 { font-size:18px; font-weight:800; }
+.modal-head-blue p { font-size:12px; opacity:0.7; margin-top:4px; }
+.modal-head { padding:20px 24px; border-bottom:1px solid #EFF6FF; display:flex; justify-content:space-between; align-items:flex-start; }
+.modal-head h3 { font-size:16px; font-weight:700; color:#1E3A5F; }
+.modal-head p { font-size:12px; color:#6B8CC4; margin-top:3px; }
+.close-btn { width:28px; height:28px; border:1px solid rgba(255,255,255,0.25); border-radius:7px; background:rgba(255,255,255,0.1); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.close-btn svg { width:14px; height:14px; fill:white; }
+.close-btn-dark { width:28px; height:28px; border:1px solid #BFDBFE; border-radius:7px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.close-btn-dark svg { width:14px; height:14px; fill:#2563EB; }
+.modal-body { padding:20px 24px; }
+.detail-sec { margin-bottom:18px; }
+.detail-sec h4 { font-size:11px; font-weight:700; color:#2563EB; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:10px; }
+.detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.d-item { background:#F5F9FF; border-radius:9px; padding:9px 12px; border:1px solid #BFDBFE; }
+.d-item .dk { font-size:10px; color:#6B8CC4; }
+.d-item .dv { font-size:12px; font-weight:700; color:#1E3A5F; margin-top:2px; }
+.lang-row { margin-bottom:8px; }
+.lang-lbl { display:flex; justify-content:space-between; font-size:12px; color:#2563EB; margin-bottom:4px; }
+.lang-lbl b { color:#1D4ED8; }
+.progress { background:#DBEAFE; border-radius:5px; height:5px; }
+.pf { height:100%; background:#2563EB; border-radius:5px; }
+.history-mini { display:flex; flex-direction:column; gap:7px; }
+.hm-item { display:flex; gap:10px; align-items:center; background:#F5F9FF; border-radius:9px; padding:9px 12px; border:1px solid #BFDBFE; }
+.hm-badge { width:32px; height:32px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.hm-badge.edu{background:#DBEAFE;color:#2563EB;} .hm-badge.work{background:#BFDBFE;color:#1D4ED8;} .hm-badge.cert{background:#EFF6FF;color:#3B82F6;}
+.hm-title { font-size:12px; font-weight:600; color:#1E3A5F; }
+.hm-sub { font-size:10px; color:#6B8CC4; }
+.hm-period { font-size:10px; font-weight:600; color:#2563EB; margin-left:auto; white-space:nowrap; }
+.action-btns { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:18px; }
+.act-btn { padding:12px; border-radius:9px; font-size:13px; font-weight:700; cursor:pointer; border:none; }
+.act-btn.primary{background:#2563EB;color:white;} .act-btn.secondary{background:#EFF6FF;color:#2563EB;border:1.5px solid #BFDBFE;}
+.fg { margin-bottom:12px; }
+.fg label { display:block; font-size:11px; font-weight:700; color:#2563EB; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+.fg input,.fg select,.fg textarea { width:100%; padding:9px 12px; border:1.5px solid #BFDBFE; border-radius:8px; font-size:13px; color:#1E3A5F; background:#F8FBFF; outline:none; font-family:inherit; }
+.fg textarea { resize:vertical; min-height:80px; }
+.modal-foot { display:flex; gap:8px; padding:16px 24px; border-top:1px solid #EFF6FF; }
+.btn-cancel { flex:1; padding:10px; border:1.5px solid #BFDBFE; border-radius:8px; background:white; color:#6B8CC4; font-size:13px; cursor:pointer; }
+.btn-confirm { flex:2; padding:10px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-confirm:hover { background:#1D4ED8; }
+
+.hero-inner, .section-inner, .users-grid, .stats-grid { max-width:1200px; }
+  .main .content, .content { max-width:1280px; }
+  .hero h1 { font-size:44px; }
+  .section-title, .cta-section h2 { font-size:30px; }
+}
+
+/* Demo interaction states */
+.demo-toast { position:fixed; right:24px; bottom:24px; z-index:3000; background:#1E3A5F; color:white; border-radius:10px; padding:12px 16px; font-size:13px; font-weight:700; box-shadow:0 10px 30px rgba(30,58,95,0.18); opacity:0; transform:translateY(10px); pointer-events:none; transition:all 0.2s ease; }
+.demo-toast.show { opacity:1; transform:translateY(0); }
+.demo-state-note { margin-top:10px; padding:10px 12px; border-radius:9px; background:#DBEAFE; color:#1D4ED8; border:1px solid #BFDBFE; font-size:12px; font-weight:700; display:none; }
+.demo-state-note.show { display:block; }
+.demo-mode-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:#DBEAFE; color:#2563EB; font-size:11px; font-weight:800; margin-left:8px; vertical-align:middle; }
+.demo-status { display:inline-flex; padding:3px 8px; border-radius:999px; background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; font-size:10px; font-weight:800; }
+
+.section-title, .cta-section h2 { font-size:24px !important; }
+  .content, .hero, .section, .users-section, .stats-section, .cta-section { padding-left:16px !important; padding-right:16px !important; }
+  .card { padding:24px !important; }
+  .sidebar nav { display:block; }
+  .nav-item { margin-bottom:4px; }
+}
+
+/* Presentation and large display optimization */
+@media (min-width: 1600px) {
+  .main .content, .content {
+    max-width:min(1680px, calc(100vw - 320px)) !important;
+    width:100% !important;
+    margin-left:0 !important;
+    margin-right:auto !important;
+    padding-left:32px !important;
+    padding-right:40px !important;
+  }
+  .topbar { padding-left:32px !important; padding-right:40px !important; }
+  .filter-box, .company-filter, .profile-card, .privacy-box,
+  .info-card, .history-item, .doc-card, .company-card, .student-card,
+  .stat-card, .insight-card, .translator, .profile-trans, .history-card,
+  .quick-card { box-shadow:0 14px 34px rgba(86,132,176,0.12) !important; }
+  .students-grid, .company-grid { gap:18px !important; }
+  .student-card, .company-card, .doc-card, .quick-card { padding:22px !important; }
+  .filter-box, .company-filter { padding:22px 24px !important; }
+  .stat-card { padding:17px 18px !important; }
+  .stat-card .num { font-size:28px !important; }
+  .stat-card .lbl { font-size:12px !important; }
+  .sc-name, .cc-name, .doc-name, .qc-title { font-size:15px !important; }
+  .sc-sub, .cc-type, .doc-meta, .qc-desc { font-size:12px !important; }
+  .sc-tag, .cc-tag, .doc-status, .demo-status { font-size:11px !important; }
+  .sc-btn, .cc-btn, .search-btn, .add-btn, .btn-confirm, .btn-cancel,
+  .chat-action, .compose-btn, .trans-btn, .pt-btn { min-height:34px; }
+  .fg label, .cf-group label { font-size:12px !important; }
+  .fg input, .fg select, .fg textarea, .cf-group select { font-size:14px !important; min-height:38px; }
+  .tab-btn { font-size:13px !important; padding:10px 20px !important; }
+  .tb-title { font-size:18px !important; }
+}
+
+@media (min-width: 1900px) {
+  .sidebar { width:220px !important; }
+  .topbar { left:220px !important; height:64px !important; }
+  .main { margin-left:220px !important; padding-top:64px !important; }
+  .msg-layout { margin-left:220px !important; margin-top:64px !important; height:calc(100vh - 64px) !important; grid-template-columns:360px minmax(0, 1fr) !important; }
+  .main .content, .content {
+    max-width:min(1780px, calc(100vw - 260px)) !important;
+    padding-left:28px !important;
+    padding-right:44px !important;
+  }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; }
+  .filter-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) auto !important; }
+  .stats-bar { grid-template-columns:repeat(5, minmax(0, 1fr)) !important; }
+  .stats-row { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .info-grid, .insight-row, .trans-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .student-card, .company-card { min-height:170px; }
+  .profile-card { padding:34px !important; }
+  .profile-avatar { width:82px !important; height:82px !important; }
+  .profile-info h2 { font-size:24px !important; }
+  .chat-messages { padding:24px 30px !important; }
+  .bubble { font-size:14px !important; }
+}
+
+@media (min-width: 2400px) {
+  .main .content, .content { max-width:1900px !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .student-card, .company-card, .doc-card { padding:24px !important; }
+  .sc-name, .cc-name { font-size:16px !important; }
+  .sc-sub, .cc-type { font-size:12px !important; }
+}
+
+/* Material 3 inspired tonal color system */
+:root {
+  --m3-primary:#5D8FBA;
+  --m3-on-primary:#FFFFFF;
+  --m3-primary-container:#E4F1FA;
+  --m3-on-primary-container:#214762;
+  --m3-secondary:#718799;
+  --m3-on-secondary:#FFFFFF;
+  --m3-secondary-container:#ECF3F8;
+  --m3-on-secondary-container:#2E4A5D;
+  --m3-tertiary:#6B6F91;
+  --m3-on-tertiary:#FFFFFF;
+  --m3-tertiary-container:#E7E8F6;
+  --m3-on-tertiary-container:#272B49;
+  --m3-error:#BA1A1A;
+  --m3-on-error:#FFFFFF;
+  --m3-error-container:#FFDAD6;
+  --m3-on-error-container:#410002;
+  --m3-background:#FBFDFF;
+  --m3-on-background:#182A38;
+  --m3-surface:#FFFFFF;
+  --m3-surface-dim:#F3F7FA;
+  --m3-surface-container-low:#FAFCFE;
+  --m3-surface-container:#F5F9FC;
+  --m3-surface-container-high:#EEF5FA;
+  --m3-on-surface:#182A38;
+  --m3-on-surface-variant:#5D6E7C;
+  --m3-outline:#CEDBE5;
+  --m3-outline-variant:#E5EDF3;
+  --m3-shadow:0 8px 24px rgba(38, 72, 102, 0.10);
+  --m3-shadow-strong:0 14px 36px rgba(38, 72, 102, 0.14);
+}
+
+body { background:var(--m3-background) !important; color:var(--m3-on-background) !important; }
+.hero, .cta-section, .sidebar, .banner, .modal-head-blue, .comp-detail-header,
+.profile-card, .bs-1, .bs-2, .bs-3, .bs-4, .bs-5, .bs-6 {
+  background:var(--m3-primary) !important;
+  background-image:none !important;
+}
+.hero { background:var(--m3-background) !important; }
+.cta-section, .banner, .modal-head-blue, .comp-detail-header, .profile-card,
+.msg-layout {
+  margin-left: var(--cb-sidebar-w) !important;
+  margin-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  height: calc(100vh - var(--cb-topbar-h)) !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.bottom-ad-showcase,
+.banner,
+.cta-section:not(.brand-cta-section) {
+  background:#4f7fc8 !important;
+  border: 1px solid var(--cb-line-soft) !important;
+  color: var(--cb-text-main) !important;
+  box-shadow: 0 18px 46px rgba(57, 103, 142, 0.10) !important;
+}
+.bottom-ad-showcase *,
+.banner *,
+.cta-section:not(.brand-cta-section) * {
+  color: inherit;
+}
+.bottom-ad-eyebrow,
+.bottom-ad-tag,
+.banner .badge,
+.cta-section:not(.brand-cta-section) .badge {
+  background: #DDEFFA !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #C5DFEF !important;
+}
+.bottom-ad-title,
+.bottom-ad-showcase h2,
+.bottom-ad-showcase h3,
+.banner h2,
+.banner h3,
+.cta-section:not(.brand-cta-section) h2,
+.cta-section:not(.brand-cta-section) h3 {
+  color: var(--cb-text-main) !important;
+}
+.bottom-ad-desc,
+.bottom-ad-showcase p,
+.banner p,
+.cta-section:not(.brand-cta-section) p {
+  color: var(--cb-text-sub) !important;
+}
+.bottom-ad-btn.primary,
+.bottom-ad-showcase .primary,
+.banner .primary,
+.cta-section:not(.brand-cta-section) .primary,
+.cta-section:not(.brand-cta-section) .cta-btn-white {
+  background: var(--cb-point-strong) !important;
+  color: #FFFFFF !important;
+  border-color: var(--cb-point-strong) !important;
+}
+.bottom-ad-btn.secondary,
+.bottom-ad-showcase .secondary,
+.banner .secondary,
+.cta-section:not(.brand-cta-section) .secondary,
+.cta-section:not(.brand-cta-section) .cta-btn-outline {
+  background: #FFFFFF !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #BCD9EE !important;
+}
+@media (max-width: 1180px), (orientation: portrait) {
+  .sidebar {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cb-line-soft) !important;
+    box-shadow: none !important;
+  }
+  .topbar {
+    position: sticky !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 58px !important;
+  }
+  .main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+  }
+  .main .content,
+  .content {
+    max-width: 100% !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .msg-layout {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .main .content,
+  .content {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* Final readable badge correction */
+.p-tag,
+.sc-tag,
+.cc-tag,
+.doc-status,
+.demo-status,
+.demo-mode-pill,
+.user-type-badge,
+.qc-type,
+.qc-lang,
+.mock-tag,
+.th-langs,
+.b-mini-tag,
+.b-badge,
+.banner-more,
+.translation-badge,
+.profile-card .p-tag {
+  background: #DDEFFA !important;
+  color: #2E638F !important;
+  border: 1px solid #C2DBEF !important;
+  box-shadow: none !important;
+}
+.p-tag.accent,
+.sc-tag.accent,
+.doc-status.verified,
+.demo-status.strong,
+.user-type-badge.c {
+  background: #CFE6F7 !important;
+  color: #214E74 !important;
+  border-color: #B8D6EA !important;
+}
+.profile-card .p-tag,
+.comp-detail-header .p-tag,
+.modal .p-tag {
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+.bubble.me .translation-badge {
+  background: rgba(255,255,255,0.92) !important;
+  color: #2E638F !important;
+  border-color: rgba(255,255,255,0.72) !important;
+}
+
+/* Insight color variety */
+.insight-card {
+  overflow:hidden !important;
+}
+.insight-card:nth-child(1) { --insight-accent:#4F83B8; --insight-soft:#EAF4FB; }
+.insight-card:nth-child(2) { --insight-accent:#3F8F78; --insight-soft:#E9F6F2; }
+.insight-card:nth-child(3) { --insight-accent:#9A7B36; --insight-soft:#F8F1DF; }
+.insight-card:nth-child(4) { --insight-accent:#7B6CB8; --insight-soft:#F0EDFA; }
+.insight-card h3 {
+  color:#14293A !important;
+}
+.insight-card .bar {
+  background:var(--insight-accent, #4F83B8) !important;
+}
+.insight-card .bar-item:nth-child(1) .bar { background:#4F83B8 !important; }
+.insight-card .bar-item:nth-child(2) .bar { background:#3F8F78 !important; }
+.insight-card .bar-item:nth-child(3) .bar { background:#9A7B36 !important; }
+.insight-card .bar-item:nth-child(4) .bar { background:#7B6CB8 !important; }
+.insight-card .bar-item:nth-child(5) .bar { background:#C05F6A !important; }
+.insight-card .bar-item:nth-child(6) .bar { background:#6E8797 !important; }
+.insight-card .bar-val {
+  color:var(--insight-accent, #4F83B8) !important;
+  font-weight:900 !important;
+}
+.insight-card .bar-item:nth-child(1) .bar-val { color:#4F83B8 !important; }
+.insight-card .bar-item:nth-child(2) .bar-val { color:#3F8F78 !important; }
+.insight-card .bar-item:nth-child(3) .bar-val { color:#9A7B36 !important; }
+.insight-card .bar-item:nth-child(4) .bar-val { color:#7B6CB8 !important; }
+.insight-card .bar-item:nth-child(5) .bar-val { color:#C05F6A !important; }
+.insight-card .bar-item:nth-child(6) .bar-val { color:#6E8797 !important; }
+.insight-card .s3-item {
+  background:var(--insight-soft, #EAF4FB) !important;
+  border-color:rgba(79,131,184,0.22) !important;
+}
+.insight-card .s3-item:nth-child(1) { background:#EAF4FB !important; border-color:#C8DFEF !important; }
+.insight-card .s3-item:nth-child(2) { background:#E9F6F2 !important; border-color:#C6E5DA !important; }
+.insight-card .s3-item:nth-child(3) { background:#F8F1DF !important; border-color:#E8D8A9 !important; }
+.insight-card .s3-item:nth-child(1) .s3n { color:#4F83B8 !important; }
+.insight-card .s3-item:nth-child(2) .s3n { color:#3F8F78 !important; }
+.insight-card .s3-item:nth-child(3) .s3n { color:#9A7B36 !important; }
+.insight-card .rank-item .rc {
+  background:var(--insight-soft, #EAF4FB) !important;
+  color:var(--insight-accent, #4F83B8) !important;
+  border:1px solid rgba(79,131,184,0.16) !important;
+}
+.insight-card .rank-item:nth-child(1) .rc { background:#EAF4FB !important; color:#4F83B8 !important; }
+.insight-card .rank-item:nth-child(2) .rc { background:#E9F6F2 !important; color:#3F8F78 !important; }
+.insight-card .rank-item:nth-child(3) .rc { background:#F8F1DF !important; color:#9A7B36 !important; }
+.insight-card .rank-item:nth-child(4) .rc { background:#F0EDFA !important; color:#7B6CB8 !important; }
+.insight-card .rank-item:nth-child(5) .rc { background:#FAEAEC !important; color:#C05F6A !important; }
+.insight-card .progress-fill,
+.insight-card .pf {
+  background:#4f7fc8 !important;
+}
+
+/* Institution page visual identity */
+.portal-institution .content {
+  max-width:min(1380px, calc(100vw - var(--cb-sidebar-w) - 56px)) !important;
+}
+.institution-role-hero {
+  display:grid;
+  grid-template-columns:minmax(300px, .9fr) minmax(420px, 1fr);
+  gap:20px;
+  padding:26px 30px;
+  margin:0 0 18px;
+  border-radius:18px;
+  background:#4f7fc8 !important;
+  border:1px solid #DCEBE4 !important;
+  box-shadow:0 16px 36px rgba(56, 111, 88, 0.08) !important;
+}
+.institution-role-hero .role-kicker {
+  background:#E9F6F2 !important;
+  color:#3F8F78 !important;
+}
+.support-dot {
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#5F94C3;
+  box-shadow:0 0 0 5px rgba(95,148,195,.12);
+}
+.support-dot.urgent { background:#C05F6A; box-shadow:0 0 0 5px rgba(192,95,106,.13); }
+.support-dot.care { background:#9A7B36; box-shadow:0 0 0 5px rgba(154,123,54,.14); }
+.support-dot.guide { background:#7B6CB8; box-shadow:0 0 0 5px rgba(123,108,184,.13); }
+.support-dot.done { background:#3F8F78; box-shadow:0 0 0 5px rgba(63,143,120,.13); }
+.support-item strong { color:#14293A; font-size:14px; }
+.support-item em { color:#3F8F78; font-style:normal; font-weight:900; font-size:20px; }
+.portal-institution .filter-box {
+  border-left:5px solid #3F8F78 !important;
+  background:#FBFDFC !important;
+}
+.portal-institution .stats-bar {
+  grid-template-columns:repeat(5, minmax(120px, 1fr)) !important;
+}
+.portal-institution .students-grid {
+  grid-template-columns:1fr !important;
+}
+.portal-institution .student-card {
+  min-height:0 !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0, 1fr) auto !important;
+  align-items:center !important;
+  column-gap:16px !important;
+  border-left:5px solid #3F8F78 !important;
+  border-top:0 !important;
+  padding:16px 18px !important;
+}
+.portal-institution .student-card:nth-child(4n+2) { border-left-color:#9A7B36 !important; }
+.portal-institution .student-card:nth-child(4n+3) { border-left-color:#7B6CB8 !important; }
+.portal-institution .student-card:nth-child(4n) { border-left-color:#C05F6A !important; }
+.portal-institution .student-card .sc-tags,
+.portal-institution .student-card .sc-actions {
+  justify-content:flex-start !important;
+}
+.portal-institution .banner {
+  border-left:5px solid #3F8F78 !important;
+  background:#FBFDFC !important;
+}
+@media (max-width:1180px), (orientation:portrait) {
+  .institution-role-hero { grid-template-columns:1fr !important; padding:22px !important; }
+  .portal-institution .stats-bar { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width:720px) {
+  .support-board { grid-template-columns:1fr; }
+  .portal-institution .students-grid { grid-template-columns:1fr !important; }
+  .portal-institution .student-card { grid-template-columns:1fr !important; align-items:flex-start !important; }
+}
+</style>
+<link rel="stylesheet" href="../work-tool.css">
+<link rel="stylesheet" href="../portal-components.css">
+<script src="../work-tool.js" defer></script>
+<script src="../work-tool-actions.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+</head>
+<body class="portal-institution work-tool">
+<main class="wt-window">
+  <header class="wt-titlebar">
+    <div>Career Bridge · 기관 포털</div>
+    <div class="lang-sw wt-titlebar-lang" aria-label="언어 선택"><span class="active" data-lang="ko">KO</span><span data-lang="en">EN</span><span data-lang="zh">ZH</span></div>
+  </header>
+  <section class="wt-toolbar wt-toolbar-core" aria-label="빠른 도구">
+    <button type="button" class="wt-action-btn" onclick="wtApprove()">승인처리</button>
+    <button type="button" class="wt-action-btn" onclick="wtAddOrg()">기관추가</button>
+    <button type="button" class="wt-tool-btn" onclick="wtExport()">내보내기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtPreview()">미리보기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtViewDetail()">자세히 보기</button>
+  </section>
+  <section class="wt-workspace">
+    <aside class="wt-left-panel">
+      <div class="wt-panel-title">업무 바로가기</div>
+                  <div class="wt-tree">
+        <div class="wt-tree-item active" onclick="window.location.href='institution.html'">▣ 대시보드</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-students.html'">　├ 학생 조회</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-care.html'">　├ 관리 큐</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-counsel.html'">　├ 상담 이력</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-ocr-review.html'">　├ OCR 검수</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-report.html'">　├ 성과 리포트</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-insight.html'">　├ 지원 현황 분석</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-community.html'">　├ 커뮤니티</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-messages.html'">　├ 메시지 관리</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-translation.html'">　└ 번역 서비스</div>
+      </div>
+      <form class="wt-quick-form" onsubmit="return false">
+        <div class="wt-field"><label>기관명</label><input type="text" value="코트라 해외취업팀" readonly></div>
+        <div class="wt-field"><label>담당자</label><input type="text" value="정유진 담당자" readonly></div>
+        <div class="wt-field"><label>처리 상태</label><select><option selected>지원 진행중</option><option>안내 발송</option><option>보류</option></select></div>
+        <div class="wt-field"><label>업무 메모</label><textarea readonly>오후 중 지원 대상 8명 안내 발송 예정.</textarea></div>
+        <button type="button" class="wt-action-btn" onclick="window.location.href='../index.html'">로그아웃</button>
+      </form>
+    </aside>
+    <section class="wt-doc">
+      <div class="wt-document-head">
+        <div>
+          <div class="wt-document-title" id="pageTitle">대시보드</div>
+          <div class="wt-doc-sub">기준일: 2026-06-22 / 담당: 정유진 · 코트라 해외취업팀</div>
+        </div>
+        <div class="wt-doc-meta">
+          <span class="wt-badge">자동저장 ON</span>
+          <span class="wt-badge">지원 대상 관리</span>
+          </div>
+      </div>
+      <div class="wt-doc-body">
+        <div class="wt-doc-inner">
+<div class="wt-slim-notice" aria-label="업무 안내">
+  <span class="wt-slim-label">Student Support</span>
+  <span class="wt-slim-text">문서·상담·비자 만료 임박 학생 우선 관리</span>
+  <button type="button" class="wt-slim-btn" onclick="window.location.href='inst-students.html'">학생 조회</button>
+</div>
+<div class="wt-section-layout wt-stack-layout wt-portal-dashboard">
+  <div class="wt-panel-summary">
+    <div class="section-lead"><h2>기관 지원 대시보드</h2><p>기준일 2026-06-22 · 코트라 해외취업팀</p></div>
+    <div class="wt-mock-kpi-list">
+      <div class="wt-mock-kpi-item"><strong>취업지원 대상</strong><em>147명</em></div>
+      <div class="wt-mock-kpi-item"><strong>상담 전환율</strong><em>79%</em></div>
+      <div class="wt-mock-kpi-item"><strong>상담 완료율</strong><em>83%</em></div>
+      <div class="wt-mock-kpi-item"><strong>문서 제출률</strong><em>76%</em></div>
+      <div class="wt-mock-kpi-item"><strong>인증 완료율</strong><em>91%</em></div>
+      <div class="wt-mock-kpi-item"><strong>비자 D-30</strong><em>8명</em></div>
+      <div class="wt-mock-kpi-item"><strong>비자 D-60</strong><em>19명</em></div>
+      <div class="wt-mock-kpi-item"><strong>TOPIK 4급+</strong><em>58%</em></div>
+      <div class="wt-mock-kpi-item"><strong>정주 희망률</strong><em>62%</em></div>
+    </div>
+    <div class="wt-mock-block wt-mock-chart-block">
+      <h3>상담 완료율 추이</h3>
+      <div class="line-chart-host" role="img" aria-label="상담 완료율"
+        data-labels='["1월","2월","3월","4월","5월","6월"]'
+        data-series='[{"name":"완료율","values":[68,71,74,79,81,83],"color":"#4f7fc8"}]'
+        data-suffix="%"></div>
+    </div>
+    <div class="wt-mock-block">
+      <h3>관리 필요 현황</h3>
+      <div class="wt-mock-kpi-list">
+        <div class="wt-mock-kpi-item"><strong>서류 보완</strong><em>18명</em></div>
+        <div class="wt-mock-kpi-item"><strong>상담 예정</strong><em>9명</em></div>
+        <div class="wt-mock-kpi-item"><strong>프로그램 안내</strong><em>24명</em></div>
+        <div class="wt-mock-kpi-item"><strong>관리 완료</strong><em>61명</em></div>
+      </div>
+    </div>
+  </div>
+  <div class="wt-sheet-zone">
+    <div class="wt-sheet-zone-head"><strong>우선 처리 학생</strong><span>비자·문서·상담</span></div>
+    <div class="wt-mock-table-wrap wt-sheet-scroll">
+      <table class="wt-mock-table sheet data-grid">
+        <thead><tr><th>학생</th><th>학교/전공</th><th>사유</th><th>상태</th><th>액션</th></tr></thead>
+        <tbody>
+          <tr><td>Nguyen Van A</td><td>경희대·국제통상</td><td>비자 D-28</td><td><span class="wt-mock-badge urgent">긴급</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-care.html'">관리</button></td></tr>
+          <tr><td>Aliya K.</td><td>한양대·화학</td><td>성적증명 미제출</td><td><span class="wt-mock-badge warn">확인</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-messages.html'">안내</button></td></tr>
+          <tr><td>Tran Thi B</td><td>고려대·경제</td><td>상담 미완료</td><td><span class="wt-mock-badge info">예정</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-counsel.html'">상담</button></td></tr>
+          <tr><td>Li Wei</td><td>성균관·경영</td><td>이력서 미등록</td><td><span class="wt-mock-badge warn">확인</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-students.html'">조회</button></td></tr>
+          <tr><td>Wang Lei</td><td>연세대·IT</td><td>TOPIK 3급</td><td><span class="wt-mock-badge warn">지도</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-students.html'">조회</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="adm-sheet-scroll wt-sheet-scroll">
+    <div class="section-lead"><h2>업무 메뉴</h2><p>항목별 페이지로 이동</p></div>
+    <div class="wt-portal-menu-extra" style="margin-bottom:12px;display:flex;flex-direction:column;gap:8px;">
+      <a class="wt-portal-link" href="inst-care.html"><strong>관리 큐</strong><span>비자·문서·상담 우선순위</span></a>
+      <a class="wt-portal-link" href="inst-counsel.html"><strong>상담 이력</strong><span>취업·비자·생활 상담</span></a>
+      <a class="wt-portal-link" href="inst-ocr-review.html"><strong>OCR 검수</strong><span>문서 추출·승인</span></a>
+      <a class="wt-portal-link" href="inst-report.html"><strong>성과 리포트</strong><span>상담·문서 지표</span></a>
+    </div>
+    <div class="wt-portal-menu" aria-label="업무 메뉴">
+      <a class="wt-portal-link" href="inst-students.html"><strong>학생 조회</strong><span>국적·전공·TOPIK 검색</span></a>
+      <a class="wt-portal-link" href="inst-insight.html"><strong>지원 현황 분석</strong><span>추이 차트</span></a>
+      <a class="wt-portal-link" href="inst-community.html"><strong>커뮤니티</strong><span>취업정보·Q&amp;A</span></a>
+      <a class="wt-portal-link" href="inst-messages.html"><strong>메시지 관리</strong><span>안내·상담 메시지</span></a>
+      <a class="wt-portal-link" href="inst-translation.html"><strong>번역 서비스</strong><span>다국어 안내</span></a>
+    </div>
+  </div>
+</div>
+
+        
+        </div>
+      </div>
+    </section>
+  </section>
+  <footer class="wt-statusbar">
+    <span>준비</span>
+    <span id="instStatusTab">대시보드</span>
+    <span>마지막 저장: 09:12</span>
+  </footer>
+</main>
+
+<!-- Student Detail Modal -->
+<div class="modal-overlay" id="studentDetailModal">
+  <div class="modal">
+    <div class="modal-head-blue">
+      <div><h3 id="modal-name">Wang Xiaoming (왕샤오밍)</h3><p id="modal-sub">경희대학교 · 경영학과 4학년 · 중국</p></div>
+      <button class="close-btn" onclick="closeModal('studentDetailModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-sec">
+        <h4>기본 정보</h4>
+        <div class="detail-grid">
+          <div class="d-item"><div class="dk">국적</div><div class="dv">중국 (CN)</div></div>
+          <div class="d-item"><div class="dk">학교</div><div class="dv">경희대학교</div></div>
+          <div class="d-item"><div class="dk">전공</div><div class="dv">경영학과</div></div>
+          <div class="d-item"><div class="dk">학력</div><div class="dv">학사 4학년 (졸업 예정)</div></div>
+          <div class="d-item"><div class="dk">한국 정주</div><div class="dv">희망</div></div>
+          <div class="d-item"><div class="dk">취업 준비</div><div class="dv">2025년 하반기</div></div>
+        </div>
+      </div>
+      <div class="detail-sec">
+        <h4>언어 능력</h4>
+        <div class="lang-row"><div class="lang-lbl"><span>한국어</span><b>TOPIK 5급</b></div><div class="progress"><div class="pf" style="width:85%"></div></div></div>
+        <div class="lang-row"><div class="lang-lbl"><span>중국어</span><b>원어민</b></div><div class="progress"><div class="pf" style="width:100%"></div></div></div>
+        <div class="lang-row"><div class="lang-lbl"><span>영어</span><b>TOEIC 820</b></div><div class="progress"><div class="pf" style="width:72%"></div></div></div>
+      </div>
+      <div class="detail-sec">
+        <h4>주요 이력</h4>
+        <div class="history-mini">
+          <div class="hm-item"><div class="hm-badge edu">학력</div><div><div class="hm-title">경희대학교 경영학과</div><div class="hm-sub">학사 재학</div></div><div class="hm-period">2021.03~현재</div></div>
+          <div class="hm-item"><div class="hm-badge work">경력</div><div><div class="hm-title">삼성물산 인턴십</div><div class="hm-sub">글로벌사업부 무역 보조</div></div><div class="hm-period">2023.07~08</div></div>
+          <div class="hm-item"><div class="hm-badge cert">자격</div><div><div class="hm-title">TOPIK 5급</div><div class="hm-sub">한국어능력시험 고급</div></div><div class="hm-period">2023.04</div></div>
+        </div>
+      </div>
+      <div class="action-btns">
+        <button class="act-btn primary" onclick="closeModal('studentDetailModal');openModal('msgModal')">기관 안내 보내기</button>
+        <button class="act-btn secondary" onclick="closeModal('studentDetailModal')">이력서 요청</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Write Post Modal -->
+<div class="modal-overlay" id="writePostModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3>글 작성</h3><p>커뮤니티에 새 글을 등록합니다</p></div><button class="close-btn" onclick="closeModal('writePostModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-body">
+      <div class="fg"><label>카테고리</label><select id="postCatSelect"><option value="job">취업정보 공유</option><option value="qna">Q&amp;A</option></select></div>
+      <div class="fg"><label>제목</label><input type="text" id="postTitleInput" placeholder="제목을 입력하세요"></div>
+      <div class="fg"><label>내용</label><textarea id="postContentInput" rows="5" placeholder="내용을 입력하세요"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('writePostModal')">취소</button>
+      <button class="btn-confirm" onclick="submitPost()">등록하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Poll Vote Modal -->
+<div class="modal-overlay" id="pollModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3 id="pollModalTitle">투표</h3><p id="pollModalSub"></p></div><button class="close-btn" onclick="closeModal('pollModal')">&times;</button></div>
+    <div class="modal-body" id="pollModalBody"></div>
+    <div class="modal-foot"><button class="btn-confirm" id="pollVoteBtn" style="width:100%;" onclick="castVote()">투표하기</button></div>
+  </div>
+</div>
+
+<!-- Message Modal -->
+<div class="modal-overlay" id="msgModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3>기관 안내 보내기</h3><p id="msgTo">수신자에게</p></div><button class="close-btn-dark" onclick="closeModal('msgModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-body">
+      <div class="fg"><label>수신자</label><input id="msgRecipient" readonly></div>
+      <div class="fg"><label>제목</label><input value="외국인 유학생 지원 프로그램 안내"></div>
+      <div class="fg"><label>내용</label><textarea>안녕하세요. 코트라 해외취업팀 정유진 담당자입니다. 외국인 유학생 취업박람회 및 지원 프로그램 안내를 드립니다.</textarea></div>
+      <div class="fg"><label>발송 언어</label><select><option>한국어</option><option>영어</option><option>중국어 (AI 번역)</option></select></div>
+    </div>
+    <div class="modal-foot"><button class="btn-cancel" onclick="closeModal('msgModal')">취소</button><button class="btn-confirm" onclick="sendMsg()">발송하기</button></div>
+  </div>
+</div>
+
+<!-- Bulk Message Modal -->
+<div class="modal-overlay" id="bulkMsgModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3>지원 대상 등록</h3><p id="bulkSubtitle">선택된 유학생에게 발송</p></div><button class="close-btn-dark" onclick="closeModal('bulkMsgModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-body">
+      <div class="fg"><label>제목</label><input value="외국인 유학생 지원 프로그램 안내"></div>
+      <div class="fg"><label>내용</label><textarea>안녕하세요. 삼성전자 인사팀 이수진 과장입니다. 외국인 유학생 대상 취업 지원 프로그램을 안내드립니다.</textarea></div>
+      <div class="fg"><label>발송 언어</label><select><option>한국어</option><option>영어</option><option>중국어</option><option>다국어 자동 번역</option></select></div>
+    </div>
+    <div class="modal-foot"><button class="btn-cancel" onclick="closeModal('bulkMsgModal')">취소</button><button class="btn-confirm" onclick="sendBulkMsg()">일괄 발송</button></div>
+  </div>
+</div>
+
+<script>
+const students = [
+  {name:'Wang Xiaoming',nameKo:'왕샤오밍',school:'경희대학교',major:'경영학과',nation:'중국',topik:'TOPIK 5급',tags:['취업 준비','한국 정주','마케팅'],init:'WX'},
+  {name:'Nguyen Thi Lan',nameKo:'응웬티란',school:'연세대학교',major:'컴퓨터공학',nation:'베트남',topik:'TOPIK 4급',tags:['취업 준비','개발','AI'],init:'NL'},
+  {name:'Munkh-Erdene',nameKo:'뭉흐에르덴',school:'고려대학교',major:'국제통상',nation:'몽골',topik:'TOPIK 3급',tags:['인턴 희망','무역'],init:'ME'},
+  {name:'Dilnoza Yusupova',nameKo:'딜노자 유수포바',school:'한양대학교',major:'경제학',nation:'우즈베키스탄',topik:'TOPIK 5급',tags:['취업 준비','한국 정주','금융'],init:'DY'},
+  {name:'Raj Patel',nameKo:'라즈 파텔',school:'성균관대학교',major:'화학공학',nation:'인도',topik:'TOPIK 3급',tags:['연구직','인턴 희망'],init:'RP'},
+  {name:'Li Yanfei',nameKo:'리옌페이',school:'경희대학교',major:'경영학과',nation:'중국',topik:'TOPIK 4급',tags:['취업 준비','마케팅'],init:'LY'},
+  {name:'Tran Van Duc',nameKo:'트란반득',school:'한국외국어대학교',major:'한국어학과',nation:'베트남',topik:'TOPIK 6급',tags:['통역','번역','한국 정주'],init:'TD'},
+  {name:'Otgonbayar',nameKo:'오트곤바야르',school:'서강대학교',major:'경영학',nation:'몽골',topik:'TOPIK 4급',tags:['취업 준비','재무'],init:'OB'},
+  {name:'Huang Mei',nameKo:'황메이',school:'이화여자대학교',major:'디자인학과',nation:'중국',topik:'TOPIK 5급',tags:['디자인','취업 준비'],init:'HM'},
+  {name:'Abdullayev Timur',nameKo:'압둘라예프 티무르',school:'한양대학교',major:'전기공학',nation:'우즈베키스탄',topik:'TOPIK 3급',tags:['공학','인턴 희망'],init:'AT'},
+  {name:'Pham Thu Hien',nameKo:'팜투히엔',school:'연세대학교',major:'국제학과',nation:'베트남',topik:'TOPIK 4급',tags:['국제기구','취업 준비'],init:'PH'},
+  {name:'Chen Jiayi',nameKo:'천지아이',school:'고려대학교',major:'미디어학과',nation:'중국',topik:'TOPIK 5급',tags:['미디어','콘텐츠','취업 준비'],init:'CJ'},
+];
+let selectedCards = new Set();
+function renderStudents(list) {
+  const grid = document.getElementById('studentsGrid');
+  document.getElementById('resultCnt').textContent = list.length + '명';
+  grid.innerHTML = list.map((s,i) => {
+    const realIndex = students.indexOf(s);
+    const cardIndex = realIndex > -1 ? realIndex : i;
+    return `
+    <tr class="data-row${selectedCards.has(cardIndex)?' selected':''}" id="sc-${cardIndex}" onclick="openDetailModal(${cardIndex})">
+      <td class="row-check" onclick="event.stopPropagation();toggleCard(${cardIndex})">
+        <span class="grid-check${selectedCards.has(cardIndex)?' on':''}">${selectedCards.has(cardIndex)?'✓':''}</span>
+      </td>
+      <td class="tcell-strong">${s.nameKo}</td>
+      <td>${s.nation}</td>
+      <td>${s.school}</td>
+      <td>${s.major}</td>
+      <td><span class="grid-pill accent">${s.topik}</span></td>
+      <td><span class="grid-pill warn">${s.tags.slice(0,2).join(' · ')}</span></td>
+      <td class="grid-actions">
+        <button class="grid-btn" onclick="event.stopPropagation();openDetailModal(${cardIndex})">관리 상세</button>
+        <button class="grid-btn primary" onclick="event.stopPropagation();openMsgModal(${cardIndex})">안내 발송</button>
+      </td>
+    </tr>`;
+  }).join('');
+  grid.querySelectorAll('.data-row').forEach((row, idx) => { row.classList.add('search-hit'); row.style.animationDelay = (idx * 35) + 'ms'; });
+}
+function toggleCard(i) {
+  selectedCards.has(i)?selectedCards.delete(i):selectedCards.add(i);
+  renderStudents(students);
+  const bb=document.getElementById('bulkBar');
+  if(selectedCards.size>0){bb.style.display='flex';document.getElementById('selectedCount').textContent=selectedCards.size+'명 선택됨';document.getElementById('bulkSubtitle').textContent='선택된 '+selectedCards.size+'명에게 발송';}
+  else bb.style.display='none';
+}
+function clearSelection(){selectedCards.clear();document.getElementById('bulkBar').style.display='none';renderStudents(students);}
+function openDetailModal(i){const s=students[i];document.getElementById('modal-name').textContent=s.name+' ('+s.nameKo+')';document.getElementById('modal-sub').textContent=s.school+' · '+s.major+' · '+s.nation;openModal('studentDetailModal');}
+function openMsgModal(i){const s=students[i];document.getElementById('msgRecipient').value=s.name+' ('+s.nameKo+')';document.getElementById('msgTo').textContent=s.nameKo+' 에게';openModal('msgModal');}
+function doSearch(){
+  const btn = document.querySelector('#panel-search .search-btn');
+  const grid = document.getElementById('studentsSheetWrap');
+  const note = document.getElementById('talentSearchNote');
+  const values = Array.from(document.querySelectorAll('#panel-search .filter-box select')).map(s => s.value);
+  const nation = values[0] || '전체 국적';
+  const school = values[1] || '전체 학교';
+  const major = values[2] || '전체 전공';
+  const topik = values[3] || '전체';
+  if (btn) { btn.classList.add('is-loading'); btn.textContent = '검색 중'; }
+  if (grid) grid.classList.add('search-refreshing');
+  if (note) { note.classList.add('show'); note.textContent = '선택 조건 기준 유학생 프로필 조회 중'; }
+  setTimeout(() => {
+    let result = students.filter(s => {
+      const matchNation = nation.indexOf('전체') > -1 || s.nation === nation;
+      const matchSchool = school.indexOf('전체') > -1 || s.school === school;
+      const matchMajor = major.indexOf('전체') > -1 || s.major.indexOf(major.replace('전체 ','')) > -1;
+      const matchTopik = topik === '전체' || s.topik.indexOf(topik.replace(' 이상','')) > -1 || (topik.indexOf('4급') > -1 && ['TOPIK 4급','TOPIK 5급','TOPIK 6급'].includes(s.topik)) || (topik.indexOf('5급') > -1 && ['TOPIK 5급','TOPIK 6급'].includes(s.topik));
+      return matchNation && matchSchool && matchMajor && matchTopik;
+    });
+    if (result.length < 3) result = students.filter(s => s.tags.includes('취업 준비') || s.tags.includes('인턴 희망')).slice(0, 5);
+    result = result.slice(0, 8);
+    selectedCards.clear();
+    const bulk = document.getElementById('bulkBar');
+    if (bulk) bulk.style.display = 'none';
+    renderStudents(result);
+    if (grid) grid.classList.remove('search-refreshing');
+    if (btn) { btn.classList.remove('is-loading'); btn.textContent = '조회하기'; }
+    if (note) note.textContent = `${nation}, ${school}, ${major}, ${topik} 조건이 적용되어 ${result.length}명의 후보가 표시되었습니다.`;
+  }, 520);
+}
+const tabTitles={search:'학생 조회',insight:'지원 현황 분석',community:'커뮤니티'};
+const tabFormulas={search:'=기관포털.학생조회()',insight:'=기관포털.지원현황()',community:'=기관포털.커뮤니티()'};
+function switchTab(tab){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  const tabBtn=document.getElementById('tab-'+tab); if(tabBtn) tabBtn.classList.add('active');
+  document.getElementById('pageTitle').textContent=tabTitles[tab]||'';
+  document.querySelectorAll('.wt-tree-item[data-key]').forEach(n=>n.classList.toggle('active', n.dataset.key===tab));
+  const st=document.getElementById('instStatusTab'); if(st) st.textContent=tabTitles[tab]||'';
+  const f=document.getElementById('wtFormulaInput'); if(f) f.value=tabFormulas[tab]||tabFormulas.search;
+  if(tab==='community')renderCommList();
+  if(window.refreshLineCharts){
+    var panel=document.getElementById('panel-'+tab);
+    if(panel) refreshLineCharts(panel);
+  }
+}
+function wtApprove(){
+  if(selectedCards.size>0){ window.demoToast&&window.demoToast(selectedCards.size+'명 지원 대상을 승인 처리했습니다.'); return; }
+  window.demoToast&&window.demoToast('표에서 학생을 선택한 뒤 승인처리를 진행하세요.');
+}
+function wtAddOrg(){ openModal('bulkMsgModal'); }
+function wtExport(){ window.demoToast&&window.demoToast('조회 결과를 CSV로 내보냅니다.'); }
+function wtPreview(){ window.demoToast&&window.demoToast('현재 목록 인쇄 미리보기를 엽니다.'); }
+function wtViewDetail(){
+  const idx=selectedCards.size?Array.from(selectedCards)[0]:0;
+  if(typeof openDetailModal==='function') openDetailModal(idx);
+}
+function setNav(el,tab){document.querySelectorAll('.wt-tree-item[data-key]').forEach(n=>n.classList.remove('active'));if(el&&el.classList)el.classList.add('active');if(tab==='search'||tab==='insight'||tab==='community')switchTab(tab);}
+const COMM_POSTS=[
+  {cat:'job',tag:'취업정보',title:'OPT 인턴십 후기 공유합니다',by:'Li Wei · 연세대',country:'중국',school:'연세대학교',views:482,cmt:24},
+  {cat:'qna',tag:'Q&A',title:'비자 연장 절차 아시는 분 계신가요?',by:'Nguyen Van A · 경희대',country:'베트남',school:'경희대학교',views:356,cmt:18},
+  {cat:'job',tag:'취업정보',title:'경희대 국제처 채용설명회 후기',by:'Aliya · 한양대',country:'우즈베키스탄',school:'한양대학교',views:298,cmt:11},
+  {cat:'qna',tag:'Q&A',title:'기숙사 vs 자취, 1학년 추천해주세요',by:'Tran Thi B · 고려대',country:'베트남',school:'고려대학교',views:201,cmt:9},
+  {cat:'job',tag:'취업정보',title:'삼성전자 서류 합격 자기소개서 팁',by:'Wang Lei · 연세대',country:'중국',school:'연세대학교',views:188,cmt:14}
+];
+const COMM_POLLS=[
+  {q:'2026학년도 기숙사 만족도 조사',badge:'univ',badgeLabel:'대학 공식',org:'경희대학교 국제교류처',cnt:128,dday:5,opts:[{l:'매우 만족',v:42},{l:'만족',v:51},{l:'보통',v:23},{l:'불만족',v:12}]},
+  {q:'신입생 환영회 선호 요일',badge:'student',badgeLabel:'학생 대표',org:'유학생 과대',cnt:45,dday:2,opts:[{l:'금요일',v:21},{l:'토요일',v:17},{l:'일요일',v:7}]},
+  {q:'인턴십 만족도 질문',badge:'company',badgeLabel:'기업 공식',org:'삼성전자 인사팀',cnt:72,dday:10,opts:[{l:'매우 만족',v:30},{l:'만족',v:28},{l:'보통',v:10},{l:'불만족',v:4}]}
+];
+function submitPost(){
+  const cat=document.getElementById('postCatSelect').value;
+  const title=document.getElementById('postTitleInput').value.trim();
+  if(!title){ window.demoToast&&window.demoToast('제목을 입력해주세요.'); return; }
+  COMM_POSTS.unshift({cat, tag:cat==='job'?'취업정보':'Q&A', title, by:'코트라 해외취업팀 · 기관', country:'', school:'', views:0, cmt:0});
+  document.getElementById('postTitleInput').value='';
+  document.getElementById('postContentInput').value='';
+  closeModal('writePostModal');
+  renderCommList();
+  window.demoToast&&window.demoToast('게시글이 등록되었습니다.');
+}
+function commFilter(cat){
+  document.querySelectorAll('.comm-cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));
+  renderCommList(cat);
+}
+function renderCommList(cat){
+  const f=cat||(document.querySelector('.comm-cat-btn.active')?document.querySelector('.comm-cat-btn.active').dataset.cat:'all');
+  if(f==='poll'){document.getElementById('commList').style.display='none';document.getElementById('commPollList').style.display='block';renderPolls();return;}
+  document.getElementById('commList').style.display='block';document.getElementById('commPollList').style.display='none';
+  const country=document.getElementById('commCountry').value,school=document.getElementById('commSchool').value;
+  const list=COMM_POSTS.filter(p=>(f==='all'||p.cat===f)&&(!country||p.country===country)&&(!school||p.school===school));
+  document.getElementById('commList').innerHTML=`<div class="comm-table-wrap"><table class="comm-table"><thead><tr><th>분류</th><th>제목</th><th>작성자</th><th>조회</th><th>댓글</th></tr></thead><tbody>${list.map(p=>`
+    <tr onclick="window.demoToast&&window.demoToast('게시글 상세 보기 시연.')">
+      <td><span class="comm-post-tag ${p.cat}">${p.tag}</span></td>
+      <td class="tcell-strong">${p.title}</td>
+      <td>${p.by}</td>
+      <td>${p.views}</td>
+      <td>${p.cmt}</td>
+    </tr>`).join('')}</tbody></table></div>`||'<div style="padding:30px;text-align:center;color:#6B8CAE;font-size:13px;">조건에 맞는 게시글이 없습니다.</div>';
+}
+function renderPolls(){
+  document.getElementById('commPollList').innerHTML=COMM_POLLS.map((p,i)=>`
+    <div class="poll-card">
+      <div class="poll-q" onclick="openPoll(${i})">${p.q}</div>
+      <span class="poll-badge ${p.badge}">${p.badgeLabel}</span><span style="font-size:11px;color:#6B8CAE;">${p.org}</span>
+      <div class="poll-meta"><span>참여 ${p.cnt}명</span><span>D-${p.dday}</span><button class="poll-vote-btn" onclick="openPoll(${i})">투표하기</button></div>
+    </div>`).join('');
+}
+let pollOpenIdx=null, pollSelectedIdx=null;
+function openPoll(i){
+  pollOpenIdx=i; pollSelectedIdx=null;
+  const p=COMM_POLLS[i];
+  document.getElementById('pollModalTitle').textContent=p.q;
+  document.getElementById('pollModalSub').innerHTML=`<span class="poll-badge ${p.badge}">${p.badgeLabel}</span>${p.org} · 참여 ${p.cnt}명 · D-${p.dday}`;
+  renderPollModalBody();
+  openModal('pollModal');
+}
+function selectPollOption(i){
+  if(COMM_POLLS[pollOpenIdx].voted) return;
+  pollSelectedIdx=i;
+  renderPollModalBody();
+}
+function renderPollModalBody(){
+  const p=COMM_POLLS[pollOpenIdx];
+  const total=p.opts.reduce((s,o)=>s+o.v,0);
+  document.getElementById('pollModalBody').innerHTML=p.opts.map((o,i)=>{
+    const pct=Math.round(o.v/total*100);
+    const cls='poll-bar-row'+(p.voted?'':' selectable')+(pollSelectedIdx===i?' selected':'');
+    const click=p.voted?'':` onclick="selectPollOption(${i})"`;
+    return `<div class="${cls}"${click}><div class="poll-bar-label"><span>${o.l}</span><span>${pct}% (${o.v}명)</span></div><div class="poll-bar-track"><div class="poll-bar-fill" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+  const btn=document.getElementById('pollVoteBtn');
+  btn.textContent=p.voted?'투표 완료':'투표하기';
+  btn.disabled=!!p.voted;
+}
+function castVote(){
+  const p=COMM_POLLS[pollOpenIdx];
+  if(p.voted){ closeModal('pollModal'); return; }
+  if(pollSelectedIdx===null){ window.demoToast&&window.demoToast('선택지를 먼저 선택해주세요.'); return; }
+  p.opts[pollSelectedIdx].v++; p.cnt++; p.voted=true;
+  document.getElementById('pollModalSub').innerHTML=`<span class="poll-badge ${p.badge}">${p.badgeLabel}</span>${p.org} · 참여 ${p.cnt}명 · D-${p.dday}`;
+  renderPollModalBody();
+  renderPolls();
+  window.demoToast&&window.demoToast('투표가 반영되었습니다. (데모)');
+}
+function openModal(id){document.getElementById(id).classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+function sendMsg(){closeModal('msgModal');setTimeout(()=>alert('메시지 발송 완료.'),100);}
+function sendBulkMsg(){const n=selectedCards.size;closeModal('bulkMsgModal');setTimeout(()=>{alert(n+'명에게 메시지 발송 완료.');clearSelection();},100);}
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show');}));
+renderStudents(students);
+var initTab=new URLSearchParams(location.search).get('tab');
+
+function goToPoll(){ window.location.href='inst-community.html'; }
+(function(){
+  const track=document.getElementById('adTrack'); if(!track) return;
+  const slides=Array.from(track.children); const total=slides.length; if(total<2) return;
+  track.appendChild(slides[0].cloneNode(true));
+  const dotsEl=document.getElementById('adDots'); let idx=0, animating=false;
+  for(let i=0;i<total;i++){ const d=document.createElement('div'); d.className='ad-dot'+(i===0?' active':''); d.onclick=()=>{ if(!animating) goAd(i); }; dotsEl.appendChild(d); }
+  function setDots(i){ dotsEl.querySelectorAll('.ad-dot').forEach((d,k)=>d.classList.toggle('active',k===i)); }
+  function goAd(n){
+    if(animating) return;
+    track.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';
+    if(n>=total){
+      animating=true;
+      track.style.transform='translateX(-'+(total*100)+'%)';
+      setDots(0);
+      setTimeout(()=>{ track.style.transition='none'; track.style.transform='translateX(0)'; idx=0; void track.offsetWidth; animating=false; },520);
+    } else {
+      idx=n; track.style.transform='translateX(-'+(idx*100)+'%)'; setDots(idx);
+    }
+  }
+  setInterval(()=>goAd(idx+1), 4500);
+})();
+</script>
+
+<script>
+(function(){
+  if (window.__careerBridgeDemoPatch) return;
+  window.__careerBridgeDemoPatch = true;
+
+  function toast(message) {
+    var el = document.getElementById('demoToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'demoToast';
+      el.className = 'demo-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(window.__demoToastTimer);
+    window.__demoToastTimer = setTimeout(function(){ el.classList.remove('show'); }, 1800);
+  }
+
+  function ensureNote(parent, id, text) {
+    if (!parent) return;
+    var note = document.getElementById(id);
+    if (!note) {
+      note = document.createElement('div');
+      note.id = id;
+      note.className = 'demo-state-note';
+      parent.appendChild(note);
+    }
+    note.textContent = text;
+    note.classList.add('show');
+  }
+
+  window.demoToast = toast;
+
+  var page = location.pathname.split('/').pop() || 'index.html';
+
+  if (page === 'login.html') {
+    document.querySelectorAll('button, .login-btn, .role-card').forEach(function(el){
+      var text = (el.textContent || '').trim();
+      if (!el.dataset.demoBound && text) {
+        el.dataset.demoBound = '1';
+        el.addEventListener('click', function(){ toast('선택한 사용자 유형의 시연 화면 이동.'); });
+      }
+    });
+  }
+
+  if (page === 'institution.html') {
+    var qs = new URLSearchParams(location.search);
+    var role = qs.get('role') || 'institution';
+    var title = document.getElementById('pageTitle');
+    if (title && !title.querySelector('.demo-mode-pill')) {
+      var pill = document.createElement('span');
+      pill.className = 'demo-mode-pill';
+      pill.textContent = role === 'company' ? '기업 담당자 모드' : '기관 담당자 모드';
+      title.appendChild(pill);
+    }
+    if (role !== 'company') {
+      document.querySelectorAll('.sc-btn.secondary, .act-btn.primary, .bulk-btn').forEach(function(btn){
+        if ((btn.textContent || '').indexOf('메시지') >= 0 || (btn.textContent || '').indexOf('硫') >= 0) {
+          btn.style.opacity = '0.45';
+          btn.title = '학교 담당자 시연의 정보 조회 중심 흐름.';
+          btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toast('학교 담당자 모드의 학생 정보 조회 흐름 시연.'); }, true);
+        }
+      });
+    }
+    var oldSearch = window.doSearch;
+    window.doSearch = function(){
+      if (typeof oldSearch === 'function') oldSearch();
+      var box = document.querySelector('.filter-box');
+      ensureNote(box, 'searchDemoNote', '필터 조건 적용 후 추천 학생 목록 갱신 상태. 실제 검색 DB 미연결 시연 화면.');
+      toast('조회 결과가 갱신되었습니다.');
+    };
+    var oldDetail = window.openDetailModal;
+    window.openDetailModal = function(i){
+      if (typeof oldDetail === 'function') oldDetail(i);
+      setTimeout(function(){
+        var body = document.querySelector('#studentDetailModal .modal-body');
+        if (body && !document.getElementById('demoDetailExtra')) {
+          var div = document.createElement('div');
+          div.id = 'demoDetailExtra';
+          div.className = 'detail-sec';
+          div.innerHTML = '<h4>관심 분야 / 취업 계획 / 문서</h4><div class="history-mini"><div class="hm-item"><div class="hm-badge cert">관심</div><div><div class="hm-title">글로벌 마케팅, 무역, 콘텐츠 현지화</div><div class="hm-sub">기업 담당자 검토용 핵심 관심 분야</div></div><span class="demo-status">공개</span></div><div class="hm-item"><div class="hm-badge work">계획</div><div><div class="hm-title">2025년 하반기 국내 취업 희망</div><div class="hm-sub">E-7 비자 전환 및 장기 정주 의사 있음</div></div><span class="demo-status">검토</span></div><div class="hm-item"><div class="hm-badge edu">문서</div><div><div class="hm-title">이력서, 자기소개서, 추천서 등록 완료</div><div class="hm-sub">실제 파일 업로드 없이 등록 상태만 표현</div></div><span class="demo-status">3건</span></div></div>';
+          var actions = body.querySelector('.action-btns');
+          body.insertBefore(div, actions || null);
+        }
+      }, 0);
+    };
+    var oldSend = window.sendMsg;
+    window.sendMsg = function(){ if (typeof oldSend === 'function') oldSend(); toast('메시지 발송 완료 상태가 반영되었습니다.'); };
+    var oldBulk = window.sendBulkMsg;
+    window.sendBulkMsg = function(){ if (typeof oldBulk === 'function') oldBulk(); toast('선택 학생에게 일괄 메시지를 발송한 상태입니다.'); };
+  }
+
+  if (page === 'student.html') {
+    document.querySelectorAll('.btn-confirm').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        var txt = (btn.textContent || '').trim();
+        if (txt) toast('등록/저장 완료 상태 반영.');
+      });
+    });
+    document.querySelectorAll('.toggle-opt').forEach(function(opt){
+      if (opt.dataset.demoBound) return;
+      opt.dataset.demoBound = '1';
+      opt.addEventListener('click', function(){ toast('공개 범위 변경 완료.'); });
+    });
+    var oldCompanyMsg = window.openStudentMsgModal;
+    window.openStudentMsgModal = function(company){ if (typeof oldCompanyMsg === 'function') oldCompanyMsg(company); toast('기업 담당자 대상 메시지 작성.'); };
+  }
+
+  if (page === 'messages.html' || page === 'inst-messages.html' || page === 'company-messages.html') {
+    var oldMsg = window.sendMsg;
+    window.sendMsg = function(){
+      if (typeof oldMsg === 'function') oldMsg();
+      toast('메시지 발송 완료. 받은/보낸 메시지 시연 상태.');
+    };
+    document.querySelectorAll('.i-tab').forEach(function(tab){
+      if (tab.dataset.demoBound) return;
+      tab.dataset.demoBound = '1';
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.i-tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+        toast((tab.textContent || '메시지함').trim() + ' 목록으로 전환되었습니다.');
+      });
+    });
+  }
+
+  if (page === 'inst-translation.html') {
+    document.querySelectorAll('.lang-sw span, .lang-select-btn').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.lang-sw span').forEach(function(s){ s.classList.remove('active'); });
+        if (btn.parentElement && btn.parentElement.classList.contains('lang-sw')) btn.classList.add('active');
+        toast('미리 준비된 다국어 화면으로 전환된 상태입니다.');
+      });
+    });
+  }
+})();
+</script>
+
+<!-- Institution/company role separation patch -->
+<script>
+(function(){
+  if (window.__institutionRoleSeparation) return;
+  window.__institutionRoleSeparation = true;
+
+  var institutionStudents = [
+    {name:'Wang Xiaoming',nameKo:'왕샤오밍',school:'경희대학교',major:'경영학과',nation:'중국',topik:'TOPIK 5급',plan:'취업 희망',doc:'문서 완료',support:'상담 예정',init:'WX'},
+    {name:'Nguyen Thi Lan',nameKo:'응웬티란',school:'연세대학교',major:'컴퓨터공학',nation:'베트남',topik:'TOPIK 4급',plan:'진학 검토',doc:'추천서 미등록',support:'서류 보완',init:'NL'},
+    {name:'Munkh-Erdene',nameKo:'뭉흐에르덴',school:'고려대학교',major:'국제통상',nation:'몽골',topik:'TOPIK 3급',plan:'인턴 희망',doc:'이력서 미등록',support:'취업 지원',init:'ME'},
+    {name:'Dilnoza Yusupova',nameKo:'딜노자 유수포바',school:'한양대학교',major:'경제학',nation:'우즈베키스탄',topik:'TOPIK 5급',plan:'정주 희망',doc:'문서 완료',support:'비자 상담',init:'DY'},
+    {name:'Raj Patel',nameKo:'라즈 파텔',school:'성균관대학교',major:'화학공학',nation:'인도',topik:'TOPIK 3급',plan:'연구직 희망',doc:'포트폴리오 미등록',support:'지도 필요',init:'RP'},
+    {name:'Li Yanfei',nameKo:'리옌페이',school:'경희대학교',major:'경영학과',nation:'중국',topik:'TOPIK 4급',plan:'취업 준비',doc:'자기소개서 미등록',support:'프로그램 추천',init:'LY'},
+    {name:'Tran Van Duc',nameKo:'트란반득',school:'한국외국어대학교',major:'한국어학과',nation:'베트남',topik:'TOPIK 6급',plan:'통번역 취업',doc:'문서 완료',support:'우수 관리',init:'TD'},
+    {name:'Chen Jiayi',nameKo:'천지아이',school:'고려대학교',major:'미디어학과',nation:'중국',topik:'TOPIK 5급',plan:'콘텐츠 취업',doc:'포트폴리오 완료',support:'박람회 추천',init:'CJ'}
+  ];
+  var selectedInstitutionCards = new Set();
+
+  function setText(selector, text) {
+    var el = document.querySelector(selector);
+    if (el) el.textContent = text;
+  }
+
+  function setInstitutionChrome() {
+    document.body.classList.add('portal-institution');
+    setText('#pageTitle', '학생 조회');
+    setText('#tab-search', '학생 조회');
+    setText('#tab-insight', '지원 현황 분석');
+    setText('.filter-title', '관리 조건 필터');
+    var stats = document.querySelectorAll('.stat-card .lbl');
+    ['전체 관리 학생','지원 필요','문서 미완료','TOPIK 4급 이상','이번 주 상담'].forEach(function(label, i){ if(stats[i]) stats[i].textContent = label; });
+    var nums = document.querySelectorAll('.stat-card .num');
+    ['284','36','71','63','18'].forEach(function(num, i){ if(nums[i]) nums[i].textContent = num; });
+    setText('.results-count', '조회 결과 ');
+    var cnt = document.getElementById('resultCnt');
+    if (cnt) cnt.textContent = institutionStudents.length + '명';
+    var bulkBtn = document.querySelector('#bulkBar .bulk-btn');
+    if (bulkBtn) bulkBtn.textContent = '지원 안내 발송';
+    var bannerTitle = document.querySelector('#panel-search .banner .b-title');
+    var bannerSub = document.querySelector('#panel-search .banner .b-sub');
+    if (bannerTitle) bannerTitle.textContent = '외국인 유학생 취업 지원 프로그램 안내';
+    if (bannerSub) bannerSub.textContent = '서류 보완, 상담 예약, 박람회 안내의 통합 관리.';
+  }
+
+  window.renderStudents = function(list) {
+    var data = list || institutionStudents;
+    var grid = document.getElementById('studentsGrid');
+    var cnt = document.getElementById('resultCnt');
+    if (!grid) return;
+    if (cnt) cnt.textContent = data.length + '명';
+    grid.innerHTML = data.map(function(s, i){
+      var idx = institutionStudents.indexOf(s);
+      if (idx < 0) idx = i;
+      var supportClass = (s.support === '우수 관리' || s.doc === '문서 완료') ? 'accent' : 'warn';
+      return '<tr class="data-row' + (selectedInstitutionCards.has(idx) ? ' selected' : '') + '" id="inst-sc-' + idx + '" onclick="openDetailModal(' + idx + ')">' +
+        '<td class="row-check" onclick="event.stopPropagation();toggleCard(' + idx + ')"><span class="grid-check' + (selectedInstitutionCards.has(idx) ? ' on' : '') + '">' + (selectedInstitutionCards.has(idx) ? '✓' : '') + '</span></td>' +
+        '<td class="tcell-strong">' + s.nameKo + '<div style="font-size:10px;color:#6b7280;font-weight:600;margin-top:2px;">' + s.plan + '</div></td>' +
+        '<td>' + s.nation + '</td>' +
+        '<td>' + s.school + '</td>' +
+        '<td>' + s.major + '</td>' +
+        '<td><span class="grid-pill accent">' + s.topik + '</span></td>' +
+        '<td><span class="grid-pill ' + supportClass + '">' + s.doc + ' · ' + s.support + '</span></td>' +
+        '<td class="grid-actions"><button class="grid-btn" onclick="event.stopPropagation();openDetailModal(' + idx + ')">관리 상세</button><button class="grid-btn primary" onclick="event.stopPropagation();openMsgModal(' + idx + ')">안내 발송</button></td>' +
+      '</tr>';
+    }).join('');
+    grid.querySelectorAll('.data-row').forEach(function(row, i){ row.classList.add('search-hit'); row.style.animationDelay = (i * 35) + 'ms'; });
+  };
+
+  window.toggleCard = function(i) {
+    selectedInstitutionCards.has(i) ? selectedInstitutionCards.delete(i) : selectedInstitutionCards.add(i);
+    window.renderStudents(institutionStudents);
+    var bb = document.getElementById('bulkBar');
+    var selected = selectedInstitutionCards.size;
+    if (selected > 0) {
+      bb.style.display = 'flex';
+      document.getElementById('selectedCount').textContent = selected + '명 선택됨';
+      document.getElementById('bulkSubtitle').textContent = '선택된 ' + selected + '명에게 지원 안내 발송';
+    } else if (bb) bb.style.display = 'none';
+  };
+
+  window.clearSelection = function(){
+    selectedInstitutionCards.clear();
+    var bb = document.getElementById('bulkBar');
+    if (bb) bb.style.display = 'none';
+    window.renderStudents(institutionStudents);
+  };
+
+  window.openDetailModal = function(i) {
+    var s = institutionStudents[i] || institutionStudents[0];
+    document.getElementById('modal-name').textContent = s.name + ' (' + s.nameKo + ')';
+    document.getElementById('modal-sub').textContent = s.school + ' · ' + s.major + ' · ' + s.nation + ' · 기관 관리 대상';
+    var body = document.querySelector('#studentDetailModal .modal-body');
+    if (body) {
+      var old = document.getElementById('institutionDetailExtra');
+      if (old) old.remove();
+      var extra = document.createElement('div');
+      extra.id = 'institutionDetailExtra';
+      extra.className = 'detail-sec';
+      extra.innerHTML = '<h4>지원 관리 상태</h4><div class="history-mini">' +
+        '<div class="hm-item"><div class="hm-badge cert">문서</div><div><div class="hm-title">' + s.doc + '</div><div class="hm-sub">이력서, 자기소개서, 추천서 등록 상태 확인</div></div><span class="demo-status">관리</span></div>' +
+        '<div class="hm-item"><div class="hm-badge work">계획</div><div><div class="hm-title">' + s.plan + '</div><div class="hm-sub">진학·취업 계획과 한국 정주 의사 확인</div></div><span class="demo-status">조회</span></div>' +
+        '<div class="hm-item"><div class="hm-badge edu">지원</div><div><div class="hm-title">' + s.support + '</div><div class="hm-sub">상담, 서류 보완, 프로그램 추천 대상 여부</div></div><span class="demo-status">필요</span></div>' +
+      '</div>';
+      var actions = body.querySelector('.action-btns');
+      body.insertBefore(extra, actions || null);
+      var primary = body.querySelector('.act-btn.primary');
+      var secondary = body.querySelector('.act-btn.secondary');
+      if (primary) primary.textContent = '지원 안내 보내기';
+      if (secondary) secondary.textContent = '관리 메모 보기';
+    }
+    openModal('studentDetailModal');
+  };
+
+  window.openMsgModal = function(i) {
+    var s = institutionStudents[i] || institutionStudents[0];
+    document.getElementById('msgRecipient').value = s.name + ' (' + s.nameKo + ')';
+    document.getElementById('msgTo').textContent = s.nameKo + ' 학생에게';
+    var title = document.querySelector('#msgModal .modal-head h3');
+    if (title) title.textContent = '지원 안내 보내기';
+    openModal('msgModal');
+  };
+
+  window.doSearch = function(){
+    var btn = document.querySelector('#panel-search .search-btn');
+    var grid = document.getElementById('studentsSheetWrap');
+    var note = document.getElementById('talentSearchNote');
+    var values = Array.from(document.querySelectorAll('#panel-search .filter-box select')).map(function(s){ return s.value; });
+    if (btn) { btn.classList.add('is-loading'); btn.textContent = '조회 중'; }
+    if (grid) grid.classList.add('search-refreshing');
+    if (note) { note.classList.add('show'); note.textContent = '지원 필요 여부와 문서 등록 상태 기준 조회 중'; }
+    setTimeout(function(){
+      var nation = values[0] || '전체 국적';
+      var school = values[1] || '전체 학교';
+      var result = institutionStudents.filter(function(s){
+        return (nation.indexOf('전체') > -1 || s.nation === nation) && (school.indexOf('전체') > -1 || s.school === school);
+      });
+      if (result.length < 3) result = institutionStudents.filter(function(s){ return s.support !== '우수 관리'; });
+      selectedInstitutionCards.clear();
+      var bulk = document.getElementById('bulkBar');
+      if (bulk) bulk.style.display = 'none';
+      window.renderStudents(result.slice(0, 8));
+      if (grid) grid.classList.remove('search-refreshing');
+      if (btn) { btn.classList.remove('is-loading'); btn.textContent = '조회하기'; }
+      if (note) note.textContent = '기관 관리 기준에 맞는 학생 ' + Math.min(result.length, 8) + '명이 표시되었습니다.';
+      if (window.demoToast) window.demoToast('기관용 학생 조회 결과 갱신 완료.');
+    }, 520);
+  };
+
+  window.switchTab = function(tab){
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+    document.getElementById('pageTitle').textContent = tab === 'search' ? '학생 조회' : '지원 현황 분석';
+    document.querySelectorAll('.nav-item').forEach(function(n,i){ n.classList.toggle('active', (tab === 'search' && i === 0) || (tab === 'insight' && i === 1)); });
+  };
+
+  setInstitutionChrome();
+  window.renderStudents(institutionStudents);
+})();
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

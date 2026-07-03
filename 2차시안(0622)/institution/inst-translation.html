@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 기관 번역</title>
+<link rel="stylesheet" href="../work-tool.css">
+<link rel="stylesheet" href="../portal-components.css">
+<script src="../work-tool.js" defer></script>
+<script src="../work-tool-actions.js" defer></script>
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+</head>
+<body class="portal-institution work-tool">
+<main class="wt-window">
+  <header class="wt-titlebar">
+    <div>Career Bridge · 기관 번역</div>
+    <div class="lang-sw wt-titlebar-lang" aria-label="언어 선택"><span class="active" data-lang="ko">KO</span><span data-lang="en">EN</span><span data-lang="zh">ZH</span></div>
+  </header>
+  <section class="wt-toolbar wt-toolbar-core" aria-label="빠른 도구">
+    <button type="button" class="wt-action-btn" onclick="wtApprove()">승인처리</button>
+    <button type="button" class="wt-action-btn" onclick="wtAddOrg()">기관추가</button>
+    <button type="button" class="wt-tool-btn" onclick="wtExport()">내보내기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtPreview()">미리보기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtViewDetail()">자세히 보기</button>
+  </section>
+  <section class="wt-workspace">
+    <aside class="wt-left-panel">
+      <div class="wt-panel-title">업무 바로가기</div>
+      <div class="wt-tree">
+        <div class="wt-tree-item" onclick="window.location.href='institution.html'">▣ 대시보드</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-students.html'">　├ 학생 조회</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-care.html'">　├ 관리 큐</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-counsel.html'">　├ 상담 이력</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-ocr-review.html'">　├ OCR 검수</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-report.html'">　├ 성과 리포트</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-insight.html'">　├ 지원 현황 분석</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-community.html'">　├ 커뮤니티</div>
+        <div class="wt-tree-item" onclick="window.location.href='inst-messages.html'">　├ 메시지 관리</div>
+        <div class="wt-tree-item active" onclick="window.location.href='inst-translation.html'">　└ 번역 서비스</div>
+      </div>
+      <form class="wt-quick-form" onsubmit="return false">
+        <div class="wt-field"><label>기관명</label><input type="text" value="코트라 해외취업팀" readonly></div>
+        <div class="wt-field"><label>담당자</label><input type="text" value="정유진 담당자" readonly></div>
+        <div class="wt-field"><label>처리 상태</label><select><option selected>안내 발송</option><option>완료</option></select></div>
+        <button type="button" class="wt-action-btn" onclick="window.location.href='../index.html'">로그아웃</button>
+      </form>
+    </aside>
+    <section class="wt-doc">
+      <div class="wt-document-head">
+        <div>
+          <div class="wt-document-title">기관 다국어 번역</div>
+          <div class="wt-doc-sub">기준일: 2026-06-22 / 담당: 정유진 · 코트라 해외취업팀</div>
+        </div>
+        <div class="wt-doc-meta">
+          <span class="wt-badge">자동저장 ON</span>
+          <span class="wt-badge">지원 안내 번역</span>
+          </div>
+      </div>
+      <div class="wt-doc-body">
+        <div class="wt-doc-inner wt-trans-scroll">
+          <div class="wt-trans-page">
+            <div class="wt-trans-hero">
+              <h2>기관 다국어 번역 서비스</h2>
+              <p>지원 안내, 상담 안내, 프로그램 공지를 한국어·영어·중국어로 번역해<br>유학생 지원 관리를 더 빠르게 진행합니다.</p>
+              <div class="wt-trans-chips">
+                <span class="wt-trans-chip">한국어 (KO)</span>
+                <span class="wt-trans-chip">English (EN)</span>
+                <span class="wt-trans-chip">中文 (ZH)</span>
+                <span class="wt-trans-chip">AI 실시간 번역</span>
+              </div>
+            </div>
+
+            <div class="wt-translator">
+              <div class="wt-trans-toolbar">
+                <button type="button" class="wt-lang-btn active">한국어</button>
+                <button type="button" class="wt-swap-btn" onclick="swap()">⇄</button>
+                <button type="button" class="wt-lang-btn" id="toBtn1" onclick="setTo(this,'영어')">영어</button>
+                <button type="button" class="wt-lang-btn" id="toBtn2" onclick="setTo(this,'중국어')">중국어</button>
+                <div class="wt-ai-status"><span class="wt-ai-dot"></span>AI 번역 준비됨</div>
+              </div>
+              <div class="wt-trans-grid">
+                <div class="wt-trans-panel">
+                  <label for="transInput">한국어</label>
+                  <textarea class="wt-trans-input" id="transInput" placeholder="번역할 텍스트 입력..." oninput="updateCount()"></textarea>
+                </div>
+                <div class="wt-trans-panel">
+                  <label for="transOutput" id="toLabel">영어</label>
+                  <textarea class="wt-trans-output" id="transOutput" readonly placeholder="번역 결과 표시 영역"></textarea>
+                </div>
+              </div>
+              <div class="wt-trans-footer">
+                <span class="wt-char-count" id="charCount">0 / 2000자</span>
+                <button type="button" class="wt-trans-action" onclick="doTranslate()">번역하기</button>
+              </div>
+            </div>
+
+            <div class="wt-trans-section-title">빠른 번역 템플릿</div>
+            <div class="wt-quick-grid">
+              <div class="wt-quick-card" onclick="loadTemplate('guide')">
+                <span class="wt-qc-type">안내</span>
+                <div class="wt-qc-title">지원 안내 번역</div>
+                <div class="wt-qc-desc">취업 지원 프로그램 참여 안내</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span><span class="wt-qc-lang">ZH</span>
+              </div>
+              <div class="wt-quick-card" onclick="loadTemplate('consult')">
+                <span class="wt-qc-type">상담</span>
+                <div class="wt-qc-title">상담 안내 번역</div>
+                <div class="wt-qc-desc">비자·서류·취업 상담 일정 안내</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span><span class="wt-qc-lang">ZH</span>
+              </div>
+              <div class="wt-quick-card" onclick="loadTemplate('program')">
+                <span class="wt-qc-type">프로그램</span>
+                <div class="wt-qc-title">프로그램 공지 번역</div>
+                <div class="wt-qc-desc">박람회·워크숍·교육 과정 안내</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span>
+              </div>
+            </div>
+
+            <div class="wt-preview-card">
+              <h3>지원 안내 문구 다국어 미리보기</h3>
+              <p>코트라 해외취업팀 지원 안내 공지 3개 언어 동시 번역</p>
+              <div class="wt-pt-grid">
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">한국어 (원문)</div>
+                  <div class="wt-pt-text">코트라 해외취업팀에서 외국인 유학생 대상 취업 지원 프로그램 참여자를 모집합니다. TOPIK 3급 이상, 서류 등록 완료자 우선 안내합니다.</div>
+                </div>
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">English</div>
+                  <div class="wt-pt-text empty" id="ptEn">번역 버튼으로 영어 번역 생성</div>
+                </div>
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">中文</div>
+                  <div class="wt-pt-text empty" id="ptZh">번역 버튼으로 중국어 번역 생성</div>
+                </div>
+              </div>
+              <button type="button" class="wt-pt-action" id="ptBtn" onclick="translatePreview()">안내 문구 3개 언어 동시 번역</button>
+            </div>
+
+            <div class="wt-history-card">
+              <h3>최근 번역 내역</h3>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → ZH</span><span class="wt-th-text">정유진 담당자님, 면접 일정 확인했습니다. 감사합니다.</span><span class="wt-th-time">오늘 10:15</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → EN</span><span class="wt-th-text">KOTRA Overseas Employment Team is recruiting participants for the employment support program for international students.</span><span class="wt-th-time">어제 14:30</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">EN → KO</span><span class="wt-th-text">I would like to schedule a consultation regarding my visa status and required documents.</span><span class="wt-th-time">3일 전</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → ZH</span><span class="wt-th-text">6월 28일 외국인 취업 박람회 참가 안내 — 사전 등록 필수</span><span class="wt-th-time">1주 전</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+  <footer class="wt-statusbar">
+    <span>준비</span>
+    <span>기관 번역</span>
+    <span>마지막 저장: 09:12</span>
+  </footer>
+</main>
+<script>
+let currentTo = '영어';
+const templates = {
+  guide: '코트라 해외취업팀에서 외국인 유학생 대상 취업 지원 프로그램 참여자를 모집합니다. TOPIK 3급 이상, Career Bridge 서류 등록 완료자를 우선 안내합니다.',
+  consult: '안녕하세요, 정유진 담당자입니다. 비자 및 서류 상담을 위해 이번 주 금요일 오후 3시 방문 상담 일정을 안내드립니다.',
+  program: '6월 28일 서울 COEX에서 개최되는 외국인 취업 박람회 참가 안내드립니다. 사전 등록은 6월 25일까지입니다.'
+};
+const results = {
+  '영어': 'KOTRA Overseas Employment Team is recruiting participants for the employment support program for international students. TOPIK Level 3 or above required. Priority given to those who completed document registration on Career Bridge.',
+  '중국어': 'KOTRA海外就业团队正在招募外国留学生就业支援项目参与者。需 TOPIK 3 级以上，Career Bridge 文件登记完成者优先通知。'
+};
+function setTo(el, lang) {
+  document.getElementById('toBtn1').classList.remove('active');
+  document.getElementById('toBtn2').classList.remove('active');
+  el.classList.add('active');
+  currentTo = lang;
+  document.getElementById('toLabel').textContent = lang;
+  document.getElementById('transOutput').value = '';
+}
+function swap() {
+  const i = document.getElementById('transInput'), o = document.getElementById('transOutput');
+  const t = i.value; i.value = o.value; o.value = t;
+}
+function updateCount() {
+  document.getElementById('charCount').textContent = document.getElementById('transInput').value.length + ' / 2000자';
+}
+function doTranslate() {
+  const inp = document.getElementById('transInput').value.trim();
+  if (!inp) { alert('번역할 텍스트를 입력해 주세요.'); return; }
+  const o = document.getElementById('transOutput');
+  o.value = '번역 중...';
+  setTimeout(function() { o.value = results[currentTo] || '번역이 완료되었습니다.'; }, 800);
+}
+function loadTemplate(k) {
+  document.getElementById('transInput').value = templates[k];
+  updateCount();
+  document.getElementById('transOutput').value = '';
+}
+function translatePreview() {
+  const btn = document.getElementById('ptBtn');
+  btn.textContent = '번역 중...'; btn.disabled = true;
+  setTimeout(function() {
+    const en = document.getElementById('ptEn'), zh = document.getElementById('ptZh');
+    en.classList.remove('empty'); zh.classList.remove('empty');
+    en.textContent = 'KOTRA Overseas Employment Team is recruiting participants for the employment support program for international students. TOPIK Level 3 or above. Priority for document registration completed.';
+    zh.textContent = 'KOTRA海外就业团队正在招募外国留学生就业支援项目参与者。需 TOPIK 3 级以上，文件登记完成者优先。';
+    btn.textContent = '번역 완료 — 안내 공지에 적용'; btn.disabled = false;
+  }, 1400);
+}
+function wtApprove() { demoToast('번역 초안을 승인 처리했습니다.'); }
+function wtAddOrg() { demoToast('기관 추가는 관리자 콘솔에서 이용하세요.'); }
+function wtExport() { demoToast('번역 내역을 CSV로 내보냅니다.'); }
+function wtPreview() { demoToast('미리보기 모드로 전환합니다.'); }
+function wtViewDetail() { demoToast('번역 상세 내역을 표시합니다.'); }
+function demoToast(message) {
+  var el = document.getElementById('demoToast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'demoToast';
+    el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#315470;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .2s';
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  el.style.opacity = '1';
+  clearTimeout(window.__demoToastTimer);
+  window.__demoToastTimer = setTimeout(function() { el.style.opacity = '0'; }, 1800);
+}
+</script>
+</body>
+</html>

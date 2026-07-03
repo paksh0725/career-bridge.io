@@ -1,0 +1,55 @@
+{
+  "company/company-search.html": {
+    "tableId": "studentsGrid",
+    "jsVar": "students",
+    "source": "users/students.json",
+    "columns": ["nameKo", "nation", "school", "major", "topik", "tags"]
+  },
+  "company/company-talent.html": {
+    "tableId": "studentsGrid",
+    "jsVar": "students",
+    "source": "users/students.json"
+  },
+  "institution/inst-students.html": {
+    "tableId": "studentsGrid",
+    "jsVar": "students",
+    "source": "users/students.json",
+    "extraFields": ["plan", "doc", "support"]
+  },
+  "institution/inst-counsel.html": {
+    "rows": [
+      { "name": "Wang Xiaoming", "type": "취업", "lastDate": "2026-06-18", "nextDate": "2026-06-25", "counselor": "정유진", "status": "예정" },
+      { "name": "Nguyen Thi Lan", "type": "비자", "lastDate": "2026-06-10", "nextDate": "2026-06-28", "counselor": "박준혁", "status": "예정" },
+      { "name": "Munkh-Erdene", "type": "비자", "lastDate": "2026-05-22", "nextDate": "2026-06-20", "counselor": "이민서", "status": "재상담 필요" },
+      { "name": "Dilnoza Yusupova", "type": "취업", "lastDate": "2026-06-05", "nextDate": "-", "counselor": "정유진", "status": "완료" },
+      { "name": "Raj Patel", "type": "학업", "lastDate": "2026-06-01", "nextDate": "2026-07-02", "counselor": "박준혁", "status": "예정" }
+    ]
+  },
+  "company/company-recruit.html": {
+    "jobPostings": [
+      { "title": "2026 글로벌 마케팅 신입", "role": "글로벌 마케팅", "languages": ["한국어", "중국어"], "visaSupport": true, "candidates": 12, "status": "모집중", "deadline": "2026-07-15" },
+      { "title": "글로벌사업부 무역 보조", "role": "무역 실무", "languages": ["한국어", "영어"], "visaSupport": true, "candidates": 8, "status": "모집중", "deadline": "2026-07-30" },
+      { "title": "삼성물산 인턴십", "role": "해외영업", "languages": ["한국어"], "visaSupport": false, "candidates": 5, "status": "마감 임박", "deadline": "2026-06-30" }
+    ],
+    "interviews": [
+      { "candidate": "Chen Jiayi", "datetime": "2026-06-26 14:00", "manager": "이수진", "method": "화상", "status": "예정" },
+      { "candidate": "Wang Xiaoming", "datetime": "2026-06-27 10:00", "manager": "이수진", "method": "화상", "status": "일정 조율" },
+      { "candidate": "Tran Van Duc", "datetime": "2026-06-24 15:30", "manager": "김채용", "method": "대면", "status": "완료" }
+    ]
+  },
+  "admin/admin-members.html": {
+    "memberStats": [
+      { "type": "유학생", "count": 842, "active": 756, "newThisMonth": 56 },
+      { "type": "기업", "count": 37, "active": 31, "newThisMonth": 3 },
+      { "type": "기관", "count": 12, "active": 11, "newThisMonth": 1 },
+      { "type": "학과대표", "count": 28, "active": 24, "newThisMonth": 2 }
+    ]
+  },
+  "admin/admin-security.html": {
+    "certPending": [
+      { "name": "Nguyen Van A", "type": "TOPIK 6급", "issuer": "한국어능력시험", "submitted": "2026-06-21", "status": "승인 대기" },
+      { "name": "Wang Xiaoming", "type": "재학증명", "issuer": "경희대학교", "submitted": "2026-06-20", "status": "검토 중" },
+      { "name": "Li Yanfei", "type": "비교과 SBT", "issuer": "경희대학교", "submitted": "2026-06-19", "status": "승인 대기" }
+    ]
+  }
+}

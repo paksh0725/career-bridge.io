@@ -1,0 +1,68 @@
+<div class="wt-slim-notice" aria-label="업무 안내">
+  <span class="wt-slim-label">Student Support</span>
+  <span class="wt-slim-text">문서·상담·비자 만료 임박 학생 우선 관리</span>
+  <button type="button" class="wt-slim-btn" onclick="window.location.href='inst-students.html'">학생 조회</button>
+</div>
+<div class="wt-section-layout wt-stack-layout wt-portal-dashboard">
+  <div class="wt-panel-summary">
+    <div class="section-lead"><h2>기관 지원 대시보드</h2><p>기준일 2026-06-22 · 코트라 해외취업팀</p></div>
+    <div class="wt-mock-kpi-list">
+      <div class="wt-mock-kpi-item"><strong>취업지원 대상</strong><em>147명</em></div>
+      <div class="wt-mock-kpi-item"><strong>상담 전환율</strong><em>79%</em></div>
+      <div class="wt-mock-kpi-item"><strong>상담 완료율</strong><em>83%</em></div>
+      <div class="wt-mock-kpi-item"><strong>문서 제출률</strong><em>76%</em></div>
+      <div class="wt-mock-kpi-item"><strong>인증 완료율</strong><em>91%</em></div>
+      <div class="wt-mock-kpi-item"><strong>비자 D-30</strong><em>8명</em></div>
+      <div class="wt-mock-kpi-item"><strong>비자 D-60</strong><em>19명</em></div>
+      <div class="wt-mock-kpi-item"><strong>TOPIK 4급+</strong><em>58%</em></div>
+      <div class="wt-mock-kpi-item"><strong>정주 희망률</strong><em>62%</em></div>
+    </div>
+    <div class="wt-mock-block wt-mock-chart-block">
+      <h3>상담 완료율 추이</h3>
+      <div class="line-chart-host" role="img" aria-label="상담 완료율"
+        data-labels='["1월","2월","3월","4월","5월","6월"]'
+        data-series='[{"name":"완료율","values":[68,71,74,79,81,83],"color":"#4f7fc8"}]'
+        data-suffix="%"></div>
+    </div>
+    <div class="wt-mock-block">
+      <h3>관리 필요 현황</h3>
+      <div class="wt-mock-kpi-list">
+        <div class="wt-mock-kpi-item"><strong>서류 보완</strong><em>18명</em></div>
+        <div class="wt-mock-kpi-item"><strong>상담 예정</strong><em>9명</em></div>
+        <div class="wt-mock-kpi-item"><strong>프로그램 안내</strong><em>24명</em></div>
+        <div class="wt-mock-kpi-item"><strong>관리 완료</strong><em>61명</em></div>
+      </div>
+    </div>
+  </div>
+  <div class="wt-sheet-zone">
+    <div class="wt-sheet-zone-head"><strong>우선 처리 학생</strong><span>비자·문서·상담</span></div>
+    <div class="wt-mock-table-wrap wt-sheet-scroll">
+      <table class="wt-mock-table sheet data-grid">
+        <thead><tr><th>학생</th><th>학교/전공</th><th>사유</th><th>상태</th><th>액션</th></tr></thead>
+        <tbody>
+          <tr><td>Nguyen Van A</td><td>경희대·국제통상</td><td>비자 D-28</td><td><span class="wt-mock-badge urgent">긴급</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-care.html'">관리</button></td></tr>
+          <tr><td>Aliya K.</td><td>한양대·화학</td><td>성적증명 미제출</td><td><span class="wt-mock-badge warn">확인</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-messages.html'">안내</button></td></tr>
+          <tr><td>Tran Thi B</td><td>고려대·경제</td><td>상담 미완료</td><td><span class="wt-mock-badge info">예정</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-counsel.html'">상담</button></td></tr>
+          <tr><td>Li Wei</td><td>성균관·경영</td><td>이력서 미등록</td><td><span class="wt-mock-badge warn">확인</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-students.html'">조회</button></td></tr>
+          <tr><td>Wang Lei</td><td>연세대·IT</td><td>TOPIK 3급</td><td><span class="wt-mock-badge warn">지도</span></td><td class="wt-mock-actions"><button onclick="window.location.href='inst-students.html'">조회</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="adm-sheet-scroll wt-sheet-scroll">
+    <div class="section-lead"><h2>업무 메뉴</h2><p>항목별 페이지로 이동</p></div>
+    <div class="wt-portal-menu-extra" style="margin-bottom:12px;display:flex;flex-direction:column;gap:8px;">
+      <a class="wt-portal-link" href="inst-care.html"><strong>관리 큐</strong><span>비자·문서·상담 우선순위</span></a>
+      <a class="wt-portal-link" href="inst-counsel.html"><strong>상담 이력</strong><span>취업·비자·생활 상담</span></a>
+      <a class="wt-portal-link" href="inst-ocr-review.html"><strong>OCR 검수</strong><span>문서 추출·승인</span></a>
+      <a class="wt-portal-link" href="inst-report.html"><strong>성과 리포트</strong><span>상담·문서 지표</span></a>
+    </div>
+    <div class="wt-portal-menu" aria-label="업무 메뉴">
+      <a class="wt-portal-link" href="inst-students.html"><strong>학생 조회</strong><span>국적·전공·TOPIK 검색</span></a>
+      <a class="wt-portal-link" href="inst-insight.html"><strong>지원 현황 분석</strong><span>추이 차트</span></a>
+      <a class="wt-portal-link" href="inst-community.html"><strong>커뮤니티</strong><span>취업정보·Q&amp;A</span></a>
+      <a class="wt-portal-link" href="inst-messages.html"><strong>메시지 관리</strong><span>안내·상담 메시지</span></a>
+      <a class="wt-portal-link" href="inst-translation.html"><strong>번역 서비스</strong><span>다국어 안내</span></a>
+    </div>
+  </div>
+</div>

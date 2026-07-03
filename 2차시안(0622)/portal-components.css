@@ -1,0 +1,747 @@
+/**
+ * Career Bridge — 포털 공통 컴포넌트 (모달·커뮤니티·관리자·데모)
+ * work-tool.css 다음에 로드. 그라데이션 없음, #4f7fc8 톤.
+ */
+:root {
+  --pc-ink: #1f3f76;
+  --pc-muted: #6e8797;
+  --pc-line: #d8e7f5;
+  --pc-panel: #ffffff;
+  --pc-soft: #f4f7fc;
+  --pc-accent: #4f7fc8;
+  --pc-accent-dark: #3d6aa8;
+  --pc-accent-pale: #eef3fb;
+  --pc-shadow: 0 8px 24px rgba(79, 127, 200, 0.1);
+}
+
+/* —— 모달 —— */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 63, 118, 0.16);
+  backdrop-filter: blur(3px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show {
+  display: flex;
+}
+.modal {
+  background: var(--pc-panel);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 580px;
+  max-height: 86vh;
+  overflow-y: auto;
+  box-shadow: var(--pc-shadow);
+  border: 1px solid var(--pc-line);
+  animation: pcModalIn 0.22s ease;
+}
+@keyframes pcModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.modal-head-blue {
+  background: var(--pc-accent);
+  padding: 18px 22px;
+  border-radius: 12px 12px 0 0;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.modal-head-blue h3 {
+  font-size: 16px;
+  font-weight: 800;
+}
+.modal-head-blue p {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+.modal-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--pc-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.modal-head h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--pc-ink);
+}
+.modal-head p {
+  font-size: 12px;
+  color: var(--pc-muted);
+  margin-top: 3px;
+}
+.close-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.close-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: #fff;
+}
+.close-btn-dark {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--pc-line);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close-btn-dark svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--pc-accent);
+}
+.modal-body {
+  padding: 18px 20px;
+}
+.modal-foot {
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--pc-line);
+}
+.detail-sec {
+  margin-bottom: 16px;
+}
+.detail-sec h4 {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pc-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+body.work-tool .detail-grid {
+  grid-template-columns: 1fr !important;
+}
+.d-item {
+  background: var(--pc-soft);
+  border-radius: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--pc-line);
+}
+.d-item .dk {
+  font-size: 10px;
+  color: var(--pc-muted);
+}
+.d-item .dv {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pc-ink);
+  margin-top: 2px;
+}
+.lang-row {
+  margin-bottom: 8px;
+}
+.lang-lbl {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--pc-accent);
+  margin-bottom: 4px;
+}
+.lang-lbl b {
+  color: var(--pc-accent-dark);
+}
+.progress {
+  background: var(--pc-accent-pale);
+  border-radius: 5px;
+  height: 5px;
+}
+.pf,
+.progress-fill {
+  height: 100%;
+  background: var(--pc-accent);
+  border-radius: 5px;
+}
+.history-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.hm-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: var(--pc-soft);
+  border-radius: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--pc-line);
+}
+.hm-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.hm-badge.edu {
+  background: var(--pc-accent-pale);
+  color: var(--pc-accent);
+}
+.hm-badge.work {
+  background: #e8f3ef;
+  color: #3f8f78;
+}
+.hm-badge.cert {
+  background: #fff8e6;
+  color: #9a7b36;
+}
+.hm-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pc-ink);
+}
+.hm-sub {
+  font-size: 10px;
+  color: var(--pc-muted);
+}
+.hm-period {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--pc-accent);
+  margin-left: auto;
+}
+.action-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+body.work-tool .action-btns {
+  flex-direction: column !important;
+}
+.act-btn {
+  padding: 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+.act-btn.primary {
+  background: var(--pc-accent);
+  color: #fff;
+}
+.act-btn.secondary {
+  background: var(--pc-soft);
+  color: var(--pc-accent);
+  border: 1px solid var(--pc-line);
+}
+.fg {
+  margin-bottom: 12px;
+}
+.fg label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pc-accent);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.fg input,
+.fg select,
+.fg textarea {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--pc-line);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--pc-ink);
+  background: #fff;
+  outline: none;
+  font-family: inherit;
+}
+.fg textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+.btn-cancel {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--pc-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--pc-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+.btn-confirm {
+  flex: 2;
+  padding: 10px;
+  background: var(--pc-accent);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-confirm:hover {
+  background: var(--pc-accent-dark);
+}
+.btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* —— 커뮤니티 · 투표 —— */
+.comm-cat-bar {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 14px;
+  background: #fff;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--pc-line);
+  width: fit-content;
+  flex-wrap: wrap;
+}
+.comm-cat-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pc-accent);
+  cursor: pointer;
+}
+.comm-cat-btn.active {
+  background: var(--pc-accent);
+  color: #fff;
+}
+.comm-post-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.comm-post-tag.job {
+  background: var(--pc-accent-pale);
+  color: var(--pc-accent);
+}
+.comm-post-tag.qna {
+  background: #fce7f3;
+  color: #be185d;
+}
+.poll-card {
+  background: #fff;
+  border: 1px solid var(--pc-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.poll-q {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pc-ink);
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.poll-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  margin-right: 6px;
+}
+.poll-badge.univ {
+  background: var(--pc-accent-pale);
+  color: var(--pc-accent);
+}
+.poll-badge.company {
+  background: #e8f3ef;
+  color: #3f8f78;
+}
+.poll-badge.student {
+  background: #fff8e6;
+  color: #9a7b36;
+}
+.poll-vote-btn {
+  background: var(--pc-accent);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.poll-bar-row {
+  margin-bottom: 10px;
+}
+.poll-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--pc-ink);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.poll-bar-track {
+  background: var(--pc-soft);
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+.poll-bar-fill {
+  background: var(--pc-accent);
+  height: 100%;
+  border-radius: 6px;
+}
+.rank-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  font-size: 12px;
+  border-bottom: 1px solid var(--pc-soft);
+}
+.rank-item .rn {
+  color: var(--pc-ink);
+}
+.rank-item .rc {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pc-accent);
+  background: var(--pc-accent-pale);
+  padding: 2px 7px;
+  border-radius: 8px;
+}
+
+/* —— 관리자 · 드로어 —— */
+.adm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.adm-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--pc-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: var(--pc-shadow);
+  cursor: pointer;
+}
+.adm-row:hover {
+  border-color: var(--pc-accent);
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.pill.wait {
+  background: #fff8e6;
+  color: #9a7b36;
+}
+.pill.ok {
+  background: #e8f3ef;
+  color: #3f8f78;
+}
+.pill.no {
+  background: #fdecea;
+  color: #b42318;
+}
+.pill.info {
+  background: var(--pc-accent-pale);
+  color: var(--pc-accent);
+}
+.pill.muted {
+  background: #eef2f6;
+  color: var(--pc-muted);
+}
+.tgl {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: #d6e2ee;
+  position: relative;
+  cursor: pointer;
+  border: none;
+}
+.tgl::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.16s;
+}
+.tgl.on {
+  background: var(--pc-accent);
+}
+.tgl.on::after {
+  left: 21px;
+}
+.evt-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--pc-line);
+}
+.evt-ico.warn {
+  background: #fff8e6;
+  color: #9a7b36;
+}
+.evt-ico.info {
+  background: var(--pc-accent-pale);
+  color: var(--pc-accent);
+}
+.evt-ico.bad {
+  background: #fdecea;
+  color: #b42318;
+}
+.evt-ico {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.evt-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pc-ink);
+}
+.evt-sub {
+  font-size: 11px;
+  color: var(--pc-muted);
+}
+.evt-time {
+  font-size: 11px;
+  color: var(--pc-muted);
+  white-space: nowrap;
+}
+.queue-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pc-line);
+}
+.queue-num {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--pc-accent);
+  min-width: 26px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.go-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pc-accent);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.drawer-wrap {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+}
+.drawer-wrap.show {
+  display: block;
+}
+.drawer-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(31, 63, 118, 0.16);
+}
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 430px;
+  max-width: 92vw;
+  background: #fff;
+  box-shadow: -8px 0 32px rgba(31, 63, 118, 0.12);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.24s ease;
+}
+.drawer-wrap.show .drawer {
+  transform: translateX(0);
+}
+.drawer-head {
+  background: var(--pc-accent);
+  color: #fff;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.drawer-body {
+  padding: 18px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+.drawer-foot {
+  padding: 12px 20px;
+  border-top: 1px solid var(--pc-line);
+  display: flex;
+  gap: 8px;
+}
+
+/* —— 서브탭 (관리자 페이지 내부) —— */
+body.work-tool .adm-dash-summary .tab-bar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+body.work-tool .adm-dash-summary .tab-btn {
+  width: 100%;
+  text-align: left;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 12px;
+  border: 1px solid var(--pc-line);
+  background: #fff;
+  color: var(--pc-ink);
+  cursor: pointer;
+}
+body.work-tool .adm-dash-summary .tab-btn.active {
+  background: var(--pc-accent);
+  color: #fff;
+  border-color: var(--pc-accent);
+}
+
+/* —— 데모 · 검색 상태 —— */
+.demo-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 3000;
+  background: var(--pc-ink);
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+.demo-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.search-state-note,
+.demo-state-note {
+  margin: 8px 0;
+  padding: 9px 11px;
+  border-radius: 8px;
+  background: var(--pc-accent-pale);
+  color: var(--pc-accent-dark);
+  border: 1px solid var(--pc-line);
+  font-size: 12px;
+  font-weight: 700;
+}
+.bulk-bar {
+  background: var(--pc-accent);
+  border-radius: 10px;
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #fff;
+  font-size: 12px;
+}
+.bulk-btn {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.line-chart-note {
+  font-size: 11px;
+  color: var(--pc-muted);
+  margin-top: 6px;
+}
+.section-lead h2 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--pc-ink);
+}
+.section-lead p {
+  font-size: 11px;
+  color: var(--pc-muted);
+  margin-top: 4px;
+}
+
+/* —— #2563EB 레거시 인라인 보정 —— */
+body.work-tool .search-btn,
+body.work-tool .btn-confirm,
+body.work-tool .poll-vote-btn,
+body.work-tool .sc-btn.primary {
+  background: var(--pc-accent) !important;
+  border-color: var(--pc-accent) !important;
+}
+body.work-tool .modal-head-blue {
+  background: var(--pc-accent) !important;
+}

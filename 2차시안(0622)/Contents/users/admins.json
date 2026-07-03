@@ -1,0 +1,46 @@
+[
+  {
+    "id": "adm-001",
+    "name": "한정",
+    "nameFull": "한정 관리자",
+    "title": "최고 관리자",
+    "department": "플랫폼 운영팀",
+    "email": "admin.jeong@careerbridge.kr",
+    "role": "super_admin",
+    "roleLabel": "최고 관리자",
+    "memo": "오전 중 인증 승인 23건 처리 예정."
+  },
+  {
+    "id": "adm-002",
+    "name": "김OO",
+    "nameFull": "김OO (인증 심사자)",
+    "title": "인증 심사자",
+    "department": "인증팀",
+    "email": "cert.kim@careerbridge.kr",
+    "role": "cert_reviewer",
+    "roleLabel": "인증 심사자",
+    "memo": "DID · SBT 승인 대기 23건."
+  },
+  {
+    "id": "adm-003",
+    "name": "이OO",
+    "nameFull": "이OO (콘텐츠 관리자)",
+    "title": "콘텐츠 관리자",
+    "department": "콘텐츠팀",
+    "email": "content.lee@careerbridge.kr",
+    "role": "content_manager",
+    "roleLabel": "콘텐츠 관리자",
+    "memo": "신고글 7건, 채용공고 승인 5건 대기."
+  },
+  {
+    "id": "adm-004",
+    "name": "박OO",
+    "nameFull": "박OO (운영 지원)",
+    "title": "운영 지원",
+    "department": "운영팀",
+    "email": "ops.park@careerbridge.kr",
+    "role": "ops_support",
+    "roleLabel": "운영 지원",
+    "memo": "CS 문의 주 89건, 평균 응답 3.8시간."
+  }
+]

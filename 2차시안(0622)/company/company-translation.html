@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 기업 번역</title>
+<link rel="stylesheet" href="../work-tool.css">
+<link rel="stylesheet" href="../portal-components.css">
+<script src="../work-tool.js" defer></script>
+<script src="../work-tool-actions.js" defer></script>
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+</head>
+<body class="portal-company work-tool">
+<main class="wt-window">
+  <header class="wt-titlebar">
+    <div>Career Bridge · 기업 번역</div>
+    <div class="lang-sw wt-titlebar-lang" aria-label="언어 선택"><span class="active" data-lang="ko">KO</span><span data-lang="en">EN</span><span data-lang="zh">ZH</span></div>
+  </header>
+  <section class="wt-toolbar wt-toolbar-core" aria-label="빠른 도구">
+    <button type="button" class="wt-action-btn" onclick="wtApprove()">승인처리</button>
+    <button type="button" class="wt-action-btn" onclick="wtAddOrg()">기관추가</button>
+    <button type="button" class="wt-tool-btn" onclick="wtExport()">내보내기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtPreview()">미리보기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtViewDetail()">자세히 보기</button>
+  </section>
+  <section class="wt-workspace">
+    <aside class="wt-left-panel">
+      <div class="wt-panel-title">업무 바로가기</div>
+      <div class="wt-tree">
+        <div class="wt-tree-item" onclick="window.location.href='company.html'">▣ 대시보드</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-search.html'">　├ 인재 검색</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-talent.html'">　├ AI 추천·비교</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-recruit.html'">　├ 채용·면접</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-report.html'">　├ 채용 성과</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-insight.html'">　├ 인사이트 분석</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-community.html'">　├ 커뮤니티</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-messages.html'">　├ 메시지 관리</div>
+        <div class="wt-tree-item active" onclick="window.location.href='company-translation.html'">　└ 번역 서비스</div>
+      </div>
+      <form class="wt-quick-form" onsubmit="return false">
+        <div class="wt-field"><label>기업명</label><input type="text" value="삼성전자" readonly></div>
+        <div class="wt-field"><label>담당자</label><input type="text" value="이수진 과장" readonly></div>
+        <div class="wt-field"><label>처리 상태</label><select><option selected>채용 진행중</option><option>검토중</option></select></div>
+        <button type="button" class="wt-action-btn" onclick="window.location.href='../index.html'">로그아웃</button>
+      </form>
+    </aside>
+    <section class="wt-doc">
+      <div class="wt-document-head">
+        <div>
+          <div class="wt-document-title">기업 다국어 번역</div>
+          <div class="wt-doc-sub">기준일: 2026-06-22 / 담당: 이수진 과장 · 삼성전자 인사팀</div>
+        </div>
+        <div class="wt-doc-meta">
+          <span class="wt-badge">자동저장 ON</span>
+          <span class="wt-badge">채용 메시지 번역</span>
+          </div>
+      </div>
+      <div class="wt-doc-body">
+        <div class="wt-doc-inner wt-trans-scroll">
+          <div class="wt-trans-page">
+            <div class="wt-trans-hero">
+              <h2>기업 다국어 번역 서비스</h2>
+              <p>채용 공고, 면접 안내, 오퍼레터를 한국어·영어·중국어로 번역해<br>지원자와의 커뮤니케이션 속도를 높입니다.</p>
+              <div class="wt-trans-chips">
+                <span class="wt-trans-chip">한국어 (KO)</span>
+                <span class="wt-trans-chip">English (EN)</span>
+                <span class="wt-trans-chip">中文 (ZH)</span>
+                <span class="wt-trans-chip">AI 실시간 번역</span>
+              </div>
+            </div>
+
+            <div class="wt-translator">
+              <div class="wt-trans-toolbar">
+                <button type="button" class="wt-lang-btn active">한국어</button>
+                <button type="button" class="wt-swap-btn" onclick="swap()">⇄</button>
+                <button type="button" class="wt-lang-btn" id="toBtn1" onclick="setTo(this,'영어')">영어</button>
+                <button type="button" class="wt-lang-btn" id="toBtn2" onclick="setTo(this,'중국어')">중국어</button>
+                <div class="wt-ai-status"><span class="wt-ai-dot"></span>AI 번역 준비됨</div>
+              </div>
+              <div class="wt-trans-grid">
+                <div class="wt-trans-panel">
+                  <label for="transInput">한국어</label>
+                  <textarea class="wt-trans-input" id="transInput" placeholder="번역할 텍스트 입력..." oninput="updateCount()"></textarea>
+                </div>
+                <div class="wt-trans-panel">
+                  <label for="transOutput" id="toLabel">영어</label>
+                  <textarea class="wt-trans-output" id="transOutput" readonly placeholder="번역 결과 표시 영역"></textarea>
+                </div>
+              </div>
+              <div class="wt-trans-footer">
+                <span class="wt-char-count" id="charCount">0 / 2000자</span>
+                <button type="button" class="wt-trans-action" onclick="doTranslate()">번역하기</button>
+              </div>
+            </div>
+
+            <div class="wt-trans-section-title">빠른 번역 템플릿</div>
+            <div class="wt-quick-grid">
+              <div class="wt-quick-card" onclick="loadTemplate('job')">
+                <span class="wt-qc-type">채용</span>
+                <div class="wt-qc-title">채용 공고 번역</div>
+                <div class="wt-qc-desc">글로벌 사업부 채용 공고 다국어 발행</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span><span class="wt-qc-lang">ZH</span>
+              </div>
+              <div class="wt-quick-card" onclick="loadTemplate('interview')">
+                <span class="wt-qc-type">면접</span>
+                <div class="wt-qc-title">면접 안내 번역</div>
+                <div class="wt-qc-desc">화상·대면 면접 일정 안내 메시지</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span><span class="wt-qc-lang">ZH</span>
+              </div>
+              <div class="wt-quick-card" onclick="loadTemplate('offer')">
+                <span class="wt-qc-type">오퍼</span>
+                <div class="wt-qc-title">오퍼레터 번역</div>
+                <div class="wt-qc-desc">최종 합격 및 입사 조건 안내</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span>
+              </div>
+            </div>
+
+            <div class="wt-preview-card">
+              <h3>채용 공고 다국어 미리보기</h3>
+              <p>삼성전자 글로벌 사업부 채용 공고 3개 언어 동시 번역</p>
+              <div class="wt-pt-grid">
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">한국어 (원문)</div>
+                  <div class="wt-pt-text">삼성전자 글로벌 사업부에서 외국인 유학생 인턴을 모집합니다. TOPIK 4급 이상, 경영·무역 전공 우대.</div>
+                </div>
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">English</div>
+                  <div class="wt-pt-text empty" id="ptEn">번역 버튼으로 영어 번역 생성</div>
+                </div>
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">中文</div>
+                  <div class="wt-pt-text empty" id="ptZh">번역 버튼으로 중국어 번역 생성</div>
+                </div>
+              </div>
+              <button type="button" class="wt-pt-action" id="ptBtn" onclick="translatePreview()">공고 3개 언어 동시 번역</button>
+            </div>
+
+            <div class="wt-history-card">
+              <h3>최근 번역 내역</h3>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → EN</span><span class="wt-th-text">We are pleased to invite you for an interview at our headquarters on Thursday at 2 PM.</span><span class="wt-th-time">오늘 10:15</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → ZH</span><span class="wt-th-text">삼성전자 글로벌 사업부 채용 공고 — TOPIK 4급 이상 지원 가능</span><span class="wt-th-time">어제 14:30</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">EN → KO</span><span class="wt-th-text">Thank you for your application. We will review your resume and contact you within 5 business days.</span><span class="wt-th-time">3일 전</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → EN</span><span class="wt-th-text">Congratulations! We are delighted to offer you an internship position in our Global Business Division.</span><span class="wt-th-time">1주 전</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+  <footer class="wt-statusbar">
+    <span>준비</span>
+    <span>기업 번역</span>
+    <span>마지막 저장: 09:12</span>
+  </footer>
+</main>
+<script>
+let currentTo = '영어';
+const templates = {
+  job: '삼성전자 글로벌 사업부에서 외국인 유학생 인턴을 모집합니다. TOPIK 4급 이상, 경영·무역 전공 우대. 지원 마감은 7월 15일입니다.',
+  interview: '안녕하세요, 이수진 과장입니다. 이번 주 목요일 오후 2시 화상 면접 일정을 안내드립니다. Zoom 링크는 별도 발송 예정입니다.',
+  offer: '축하드립니다. 귀하를 삼성전자 글로벌 사업부 인턴으로 최종 선발하였습니다. 입사 예정일은 2026년 9월 1일입니다.'
+};
+const results = {
+  '영어': 'Samsung Electronics Global Business Division is recruiting international student interns. TOPIK Level 4 or above required. Business and trade majors preferred. Application deadline: July 15.',
+  '중국어': '三星电子全球业务部门正在招募外国留学生实习生。需 TOPIK 4 级以上，经营·贸易专业优先。申请截止日期为7月15日。'
+};
+function setTo(el, lang) {
+  document.getElementById('toBtn1').classList.remove('active');
+  document.getElementById('toBtn2').classList.remove('active');
+  el.classList.add('active');
+  currentTo = lang;
+  document.getElementById('toLabel').textContent = lang;
+  document.getElementById('transOutput').value = '';
+}
+function swap() {
+  const i = document.getElementById('transInput'), o = document.getElementById('transOutput');
+  const t = i.value; i.value = o.value; o.value = t;
+}
+function updateCount() {
+  document.getElementById('charCount').textContent = document.getElementById('transInput').value.length + ' / 2000자';
+}
+function doTranslate() {
+  const inp = document.getElementById('transInput').value.trim();
+  if (!inp) { alert('번역할 텍스트를 입력해 주세요.'); return; }
+  const o = document.getElementById('transOutput');
+  o.value = '번역 중...';
+  setTimeout(function() { o.value = results[currentTo] || '번역이 완료되었습니다.'; }, 800);
+}
+function loadTemplate(k) {
+  document.getElementById('transInput').value = templates[k];
+  updateCount();
+  document.getElementById('transOutput').value = '';
+}
+function translatePreview() {
+  const btn = document.getElementById('ptBtn');
+  btn.textContent = '번역 중...'; btn.disabled = true;
+  setTimeout(function() {
+    const en = document.getElementById('ptEn'), zh = document.getElementById('ptZh');
+    en.classList.remove('empty'); zh.classList.remove('empty');
+    en.textContent = 'Samsung Electronics Global Business Division is recruiting international student interns. TOPIK Level 4 or above. Business and trade majors preferred.';
+    zh.textContent = '三星电子全球业务部门正在招募外国留学生实习生。需 TOPIK 4 级以上，经营·贸易专业优先。';
+    btn.textContent = '번역 완료 — 채용 공고에 적용'; btn.disabled = false;
+  }, 1400);
+}
+function wtApprove() { demoToast('번역 초안을 승인 처리했습니다.'); }
+function wtAddOrg() { demoToast('기관 추가는 관리자 콘솔에서 이용하세요.'); }
+function wtExport() { demoToast('번역 내역을 CSV로 내보냅니다.'); }
+function wtPreview() { demoToast('미리보기 모드로 전환합니다.'); }
+function wtViewDetail() { demoToast('번역 상세 내역을 표시합니다.'); }
+function demoToast(message) {
+  var el = document.getElementById('demoToast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'demoToast';
+    el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#315470;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .2s';
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  el.style.opacity = '1';
+  clearTimeout(window.__demoToastTimer);
+  window.__demoToastTimer = setTimeout(function() { el.style.opacity = '0'; }, 1800);
+}
+</script>
+</body>
+</html>

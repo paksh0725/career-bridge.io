@@ -1,0 +1,12 @@
+﻿# GitHub upload prep
+node_modules/
+**/node_modules/
+*.zip
+*.png
+.agents/
+.codex/
+Test/
+1차시안/
+2차시안원본(0622)/
+기록용/
+(주)한정고등교육연구원 외주 수정/

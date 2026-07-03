@@ -1,0 +1,130 @@
+{
+  "version": "1.0.0",
+  "description": "HTML 페이지 ↔ Contents 데이터 매핑. Codex가 삽입 시 이 파일을 먼저 참조.",
+  "loadOrder": [
+    "Contents/contents-bundle.js",
+    "Contents/contents-apply.js"
+  ],
+  "pages": {
+    "admin/admin.html": {
+      "charts": ["admin/admin.html#weeklySignups", "admin/admin.html#coreKpi"],
+      "kpis": "kpis/pages.json#admin/admin.html",
+      "users": { "sidebar": "users/admins.json#adm-001" }
+    },
+    "admin/admin-kpi.html": {
+      "charts": ["admin/admin-kpi.html#mrr", "admin/admin-kpi.html#paidConversion"],
+      "kpis": "kpis/pages.json#admin/admin-kpi.html"
+    },
+    "admin/admin-sla.html": {
+      "charts": ["admin/admin-sla.html#sla", "admin/admin-sla.html#ocrFail"]
+    },
+    "admin/admin-marketing.html": {
+      "charts": ["admin/admin-marketing.html#signupConversion"]
+    },
+    "admin/admin-billing.html": {
+      "charts": ["admin/admin-billing.html#mrrBreakdown"]
+    },
+    "admin/admin-matching.html": {
+      "charts": ["admin/admin-matching.html#matchScore", "admin/admin-matching.html#hires"]
+    },
+    "admin/admin-ocr-quality.html": {
+      "charts": ["admin/admin-ocr-quality.html#ocrAccuracy"]
+    },
+    "admin/admin-stats.html": {
+      "charts": [
+        "admin/admin-stats.html#monthlySignups",
+        "admin/admin-stats.html#studentsByNation",
+        "admin/admin-stats.html#certificationRate",
+        "admin/admin-stats.html#matchingFunnel"
+      ]
+    },
+    "admin/admin-partners.html": {
+      "charts": ["admin/admin-partners.html#agencyNetwork"]
+    },
+    "admin/admin-members.html": {
+      "tables": "tables/pages.json#admin/admin-members.html"
+    },
+    "admin/admin-security.html": {
+      "tables": "tables/pages.json#admin/admin-security.html"
+    },
+    "company/company.html": {
+      "charts": ["company/company.html#replyRate"],
+      "kpis": "kpis/pages.json#company/company.html",
+      "users": { "sidebar": "users/managers.json#mgr-co-001", "students": "users/students.json" }
+    },
+    "company/company-report.html": {
+      "charts": ["company/company-report.html#replyRate", "company/company-report.html#interviewCvr", "company/company-report.html#timeToHire"]
+    },
+    "company/company-insight.html": {
+      "charts": [
+        "company/company-insight.html#studentsByNation",
+        "company/company-insight.html#stayIntent",
+        "company/company-insight.html#topMajors",
+        "company/company-insight.html#topikDistribution"
+      ]
+    },
+    "company/company-search.html": {
+      "tables": "tables/pages.json#company/company-search.html",
+      "users": { "students": "users/students.json" }
+    },
+    "company/company-talent.html": {
+      "tables": "tables/pages.json#company/company-talent.html",
+      "users": { "students": "users/students.json" }
+    },
+    "company/company-recruit.html": {
+      "tables": "tables/pages.json#company/company-recruit.html"
+    },
+    "institution/institution.html": {
+      "charts": ["institution/institution.html#counselComplete"],
+      "kpis": "kpis/pages.json#institution/institution.html",
+      "users": { "sidebar": "users/managers.json#mgr-in-002" }
+    },
+    "institution/inst-report.html": {
+      "charts": [
+        "institution/inst-report.html#counselConversion",
+        "institution/inst-report.html#docSubmission",
+        "institution/inst-report.html#programParticipation"
+      ]
+    },
+    "institution/inst-insight.html": {
+      "charts": [
+        "institution/inst-insight.html#studentsByNation",
+        "institution/inst-insight.html#stayIntent",
+        "institution/inst-insight.html#topMajors",
+        "institution/inst-insight.html#topikDistribution"
+      ],
+      "users": { "students": "users/students.json" }
+    },
+    "institution/inst-students.html": {
+      "tables": "tables/pages.json#institution/inst-students.html",
+      "users": { "students": "users/students.json" }
+    },
+    "institution/inst-counsel.html": {
+      "tables": "tables/pages.json#institution/inst-counsel.html"
+    },
+    "student/student.html": {
+      "kpis": "kpis/pages.json#student/student.html",
+      "users": { "primary": "users/students.json#stu-001" }
+    },
+    "student/messages.html": {
+      "messages": "messages/threads.json"
+    },
+    "student/student-messages.html": {
+      "messages": "messages/threads.json"
+    }
+  },
+  "chartBinding": {
+    "selector": ".line-chart-host[aria-label=\"{ariaLabel}\"]",
+    "attributes": {
+      "data-labels": "labels",
+      "data-series": "series",
+      "data-suffix": "suffix"
+    },
+    "note": "work-tool-charts.js 가 DOMContentLoaded 시 자동 렌더. 속성만 갱신 후 initLineCharts() 재호출."
+  },
+  "studentJsShape": {
+    "description": "company.html 등 인라인 students 배열과 호환",
+    "fields": ["name", "nameKo", "school", "major", "nation", "topik", "tags", "init"],
+    "optionalFields": ["matchScore", "plan", "doc", "support"]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "companies": [
+    { "id": "co-samsung", "name": "삼성전자", "nameEn": "Samsung Electronics", "industry": "전자/IT", "size": "대기업", "location": "서울", "visaSupport": true, "preferredLanguages": ["한국어", "영어", "중국어"] },
+    { "id": "co-lg", "name": "LG전자", "nameEn": "LG Electronics", "industry": "전자/IT", "size": "대기업", "location": "서울", "visaSupport": true, "preferredLanguages": ["한국어", "영어"] },
+    { "id": "co-samsung-ctr", "name": "삼성물산", "nameEn": "Samsung C&T", "industry": "무역/물류", "size": "대기업", "location": "서울", "visaSupport": true, "preferredLanguages": ["한국어", "영어", "중국어"] },
+    { "id": "co-startup-a", "name": "OO스타트업", "nameEn": "OO Startup", "industry": "스타트업", "size": "스타트업", "location": "서울", "visaSupport": false, "preferredLanguages": ["한국어"] }
+  ],
+  "institutions": [
+    { "id": "inst-khu", "name": "경희대학교", "nameEn": "Kyung Hee University", "type": "대학", "department": "국제교류처", "location": "서울" },
+    { "id": "inst-kotra", "name": "코트라", "nameEn": "KOTRA", "type": "공공기관", "department": "해외취업팀", "location": "서울" },
+    { "id": "inst-yonsei", "name": "연세대학교", "nameEn": "Yonsei University", "type": "대학", "department": "학사지원팀", "location": "서울" },
+    { "id": "inst-hufs", "name": "한국외국어대학교", "nameEn": "HUFS", "type": "대학", "department": "학생지원팀", "location": "서울" },
+    { "id": "inst-sejong-zz", "name": "정저우 세종학당", "nameEn": "Zhengzhou King Sejong Institute", "type": "어학기관", "department": "한국어 교육", "location": "중국 정저우" }
+  ]
+}

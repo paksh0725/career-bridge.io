@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 관리자 번역</title>
+<link rel="stylesheet" href="../work-tool.css">
+<link rel="stylesheet" href="../portal-components.css">
+<script src="../work-tool.js" defer></script>
+<script src="../work-tool-actions.js" defer></script>
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+</head>
+<body class="portal-admin work-tool">
+<main class="wt-window">
+  <header class="wt-titlebar">
+    <div>Career Bridge · 관리자 번역</div>
+    <div class="lang-sw wt-titlebar-lang" aria-label="언어 선택"><span class="active" data-lang="ko">KO</span><span data-lang="en">EN</span><span data-lang="zh">ZH</span></div>
+  </header>
+  <section class="wt-toolbar wt-toolbar-core" aria-label="빠른 도구">
+    <button type="button" class="wt-action-btn" onclick="wtApprove()">승인처리</button>
+    <button type="button" class="wt-action-btn" onclick="wtAddOrg()">기관추가</button>
+    <button type="button" class="wt-tool-btn" onclick="wtExport()">내보내기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtPreview()">미리보기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtViewDetail()">자세히 보기</button>
+  </section>
+  <section class="wt-workspace">
+    <aside class="wt-left-panel">
+      <div class="wt-panel-title">관리 메뉴</div>
+      <div class="wt-tree">
+        <div class="wt-tree-item" onclick="window.location.href='admin.html'">▣ 대시보드</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-kpi.html'">　├ 경영 KPI</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-sla.html'">　├ 운영 SLA</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-marketing.html'">　├ 마케팅 퍼널</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-matching.html'">　├ 매칭 성과</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-ocr-quality.html'">　├ AI/OCR 품질</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-billing.html'">　├ 계약 · 과금</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-security.html'">　├ 보안 · 인증</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-members.html'">　├ 회원 관리</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-content.html'">　├ 콘텐츠 관리</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-partners.html'">　├ 파트너 · 협력</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-stats.html'">　├ 통계 · 리포트</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-banners.html'">　├ 배너 · 홍보</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-system.html'">　├ 시스템 · 권한</div>
+        <div class="wt-tree-item" onclick="window.location.href='admin-orgperm.html'">　├ 기관 · 기업 권한</div>
+        <div class="wt-tree-item active" onclick="window.location.href='admin-translation.html'">　└ 번역 서비스</div>
+      </div>
+      <form class="wt-quick-form" onsubmit="return false">
+        <div class="wt-field"><label>관리자</label><input type="text" value="한정 관리자" readonly></div>
+        <div class="wt-field"><label>소속</label><input type="text" value="플랫폼 운영팀" readonly></div>
+        <div class="wt-field"><label>권한 등급</label><select><option selected>최고 관리자</option><option>콘텐츠 관리자</option></select></div>
+        <button type="button" class="wt-action-btn" onclick="window.location.href='../index.html'">로그아웃</button>
+      </form>
+    </aside>
+    <section class="wt-doc">
+      <div class="wt-document-head">
+        <div>
+          <div class="wt-document-title">관리자 다국어 번역</div>
+          <div class="wt-doc-sub">기준일: 2026-06-22 / 작성자: 한정 관리자 · 플랫폼 운영팀</div>
+        </div>
+        <div class="wt-doc-meta">
+          <span class="wt-badge">관리자 데모</span>
+          <span class="wt-badge">플랫폼 공지 번역</span>
+          </div>
+      </div>
+      <div class="wt-doc-body">
+        <div class="wt-doc-inner wt-trans-scroll">
+          <div class="wt-trans-page">
+            <div class="wt-trans-hero">
+              <h2>관리자 다국어 번역 서비스</h2>
+              <p>플랫폼 공지, 인증 안내, 시스템 알림을 한국어·영어·중국어로 번역해<br>전체 사용자에게 일관된 안내를 제공합니다.</p>
+              <div class="wt-trans-chips">
+                <span class="wt-trans-chip">한국어 (KO)</span>
+                <span class="wt-trans-chip">English (EN)</span>
+                <span class="wt-trans-chip">中文 (ZH)</span>
+                <span class="wt-trans-chip">AI 실시간 번역</span>
+              </div>
+            </div>
+
+            <div class="wt-translator">
+              <div class="wt-trans-toolbar">
+                <button type="button" class="wt-lang-btn active">한국어</button>
+                <button type="button" class="wt-swap-btn" onclick="swap()">⇄</button>
+                <button type="button" class="wt-lang-btn" id="toBtn1" onclick="setTo(this,'영어')">영어</button>
+                <button type="button" class="wt-lang-btn" id="toBtn2" onclick="setTo(this,'중국어')">중국어</button>
+                <div class="wt-ai-status"><span class="wt-ai-dot"></span>AI 번역 준비됨</div>
+              </div>
+              <div class="wt-trans-grid">
+                <div class="wt-trans-panel">
+                  <label for="transInput">한국어</label>
+                  <textarea class="wt-trans-input" id="transInput" placeholder="번역할 텍스트 입력..." oninput="updateCount()"></textarea>
+                </div>
+                <div class="wt-trans-panel">
+                  <label for="transOutput" id="toLabel">영어</label>
+                  <textarea class="wt-trans-output" id="transOutput" readonly placeholder="번역 결과 표시 영역"></textarea>
+                </div>
+              </div>
+              <div class="wt-trans-footer">
+                <span class="wt-char-count" id="charCount">0 / 2000자</span>
+                <button type="button" class="wt-trans-action" onclick="doTranslate()">번역하기</button>
+              </div>
+            </div>
+
+            <div class="wt-trans-section-title">빠른 번역 템플릿</div>
+            <div class="wt-quick-grid">
+              <div class="wt-quick-card" onclick="loadTemplate('notice')">
+                <span class="wt-qc-type">공지</span>
+                <div class="wt-qc-title">플랫폼 공지 번역</div>
+                <div class="wt-qc-desc">점검·업데이트·이벤트 공지</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span><span class="wt-qc-lang">ZH</span>
+              </div>
+              <div class="wt-quick-card" onclick="loadTemplate('auth')">
+                <span class="wt-qc-type">인증</span>
+                <div class="wt-qc-title">인증 안내 번역</div>
+                <div class="wt-qc-desc">기관·기업 인증 승인/반려 안내</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span><span class="wt-qc-lang">ZH</span>
+              </div>
+              <div class="wt-quick-card" onclick="loadTemplate('alert')">
+                <span class="wt-qc-type">알림</span>
+                <div class="wt-qc-title">시스템 알림 번역</div>
+                <div class="wt-qc-desc">보안·정책 변경·긴급 알림</div>
+                <span class="wt-qc-lang">KO</span><span class="wt-qc-lang">EN</span>
+              </div>
+            </div>
+
+            <div class="wt-preview-card">
+              <h3>플랫폼 공지 다국어 미리보기</h3>
+              <p>Career Bridge 정기 점검 공지 3개 언어 동시 번역</p>
+              <div class="wt-pt-grid">
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">한국어 (원문)</div>
+                  <div class="wt-pt-text">Career Bridge 플랫폼 정기 점검 안내: 2026년 6월 28일(토) 02:00~06:00 서비스 일시 중단. 점검 중 메시지·번역 기능 이용 불가.</div>
+                </div>
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">English</div>
+                  <div class="wt-pt-text empty" id="ptEn">번역 버튼으로 영어 번역 생성</div>
+                </div>
+                <div class="wt-pt-card">
+                  <div class="wt-pt-lang">中文</div>
+                  <div class="wt-pt-text empty" id="ptZh">번역 버튼으로 중국어 번역 생성</div>
+                </div>
+              </div>
+              <button type="button" class="wt-pt-action" id="ptBtn" onclick="translatePreview()">공지 3개 언어 동시 번역</button>
+            </div>
+
+            <div class="wt-history-card">
+              <h3>최근 번역 내역</h3>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → EN</span><span class="wt-th-text">Scheduled maintenance on June 28, 2026 from 02:00 to 06:00 KST. Messaging and translation services will be unavailable.</span><span class="wt-th-time">오늘 09:00</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → ZH</span><span class="wt-th-text">귀하의 기관 인증 신청이 승인되었습니다. 관리자 콘솔에서 권한 설정을 확인해 주세요.</span><span class="wt-th-time">어제 16:20</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → EN</span><span class="wt-th-text">Your organization verification has been approved. Please check permission settings in the admin console.</span><span class="wt-th-time">3일 전</span></div>
+              <div class="wt-th-row"><span class="wt-th-langs">KO → ZH</span><span class="wt-th-text">개인정보 처리방침 개정 안내 — 2026년 7월 1일부터 적용</span><span class="wt-th-time">1주 전</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+  <footer class="wt-statusbar">
+    <span>준비</span>
+    <span>관리자 번역</span>
+    <span>마지막 저장: 09:12</span>
+  </footer>
+</main>
+<script>
+let currentTo = '영어';
+const templates = {
+  notice: 'Career Bridge 플랫폼 정기 점검 안내: 2026년 6월 28일(토) 02:00~06:00 서비스 일시 중단. 점검 중 메시지·번역 기능 이용 불가.',
+  auth: '귀하의 기관 인증 신청이 승인되었습니다. 관리자 콘솔에서 권한 설정을 확인해 주시기 바랍니다.',
+  alert: '[긴급] 보안 정책 변경 안내: 2026년 7월 1일부터 2단계 인증(2FA)이 모든 관리자 계정에 필수 적용됩니다.'
+};
+const results = {
+  '영어': 'Career Bridge Scheduled Maintenance Notice: Service will be temporarily unavailable on Saturday, June 28, 2026 from 02:00 to 06:00 KST. Messaging and translation features will not be available during maintenance.',
+  '중국어': 'Career Bridge 平台定期维护通知：2026年6月28日（周六）02:00~06:00 服务暂停。维护期间消息及翻译功能不可用。'
+};
+function setTo(el, lang) {
+  document.getElementById('toBtn1').classList.remove('active');
+  document.getElementById('toBtn2').classList.remove('active');
+  el.classList.add('active');
+  currentTo = lang;
+  document.getElementById('toLabel').textContent = lang;
+  document.getElementById('transOutput').value = '';
+}
+function swap() {
+  const i = document.getElementById('transInput'), o = document.getElementById('transOutput');
+  const t = i.value; i.value = o.value; o.value = t;
+}
+function updateCount() {
+  document.getElementById('charCount').textContent = document.getElementById('transInput').value.length + ' / 2000자';
+}
+function doTranslate() {
+  const inp = document.getElementById('transInput').value.trim();
+  if (!inp) { alert('번역할 텍스트를 입력해 주세요.'); return; }
+  const o = document.getElementById('transOutput');
+  o.value = '번역 중...';
+  setTimeout(function() { o.value = results[currentTo] || '번역이 완료되었습니다.'; }, 800);
+}
+function loadTemplate(k) {
+  document.getElementById('transInput').value = templates[k];
+  updateCount();
+  document.getElementById('transOutput').value = '';
+}
+function translatePreview() {
+  const btn = document.getElementById('ptBtn');
+  btn.textContent = '번역 중...'; btn.disabled = true;
+  setTimeout(function() {
+    const en = document.getElementById('ptEn'), zh = document.getElementById('ptZh');
+    en.classList.remove('empty'); zh.classList.remove('empty');
+    en.textContent = 'Career Bridge Scheduled Maintenance: Service unavailable on Sat, June 28, 2026, 02:00–06:00 KST. Messaging and translation unavailable during maintenance.';
+    zh.textContent = 'Career Bridge 平台定期维护：2026年6月28日（周六）02:00~06:00 服务暂停。维护期间消息及翻译功能不可用。';
+    btn.textContent = '번역 완료 — 공지에 게시'; btn.disabled = false;
+  }, 1400);
+}
+function wtApprove() { demoToast('번역 초안을 승인·게시 처리했습니다.'); }
+function wtAddOrg() { demoToast('기관 추가 화면으로 이동합니다.'); }
+function wtExport() { demoToast('번역 내역을 CSV로 내보냅니다.'); }
+function wtPreview() { demoToast('미리보기 모드로 전환합니다.'); }
+function wtViewDetail() { demoToast('번역 상세 내역을 표시합니다.'); }
+function demoToast(message) {
+  var el = document.getElementById('demoToast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'demoToast';
+    el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#315470;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity .2s';
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  el.style.opacity = '1';
+  clearTimeout(window.__demoToastTimer);
+  window.__demoToastTimer = setTimeout(function() { el.style.opacity = '0'; }, 1800);
+}
+</script>
+</body>
+</html>

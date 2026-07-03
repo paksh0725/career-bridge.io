@@ -1,0 +1,79 @@
+{
+  "institution/institution.html": {
+    "counselComplete": {
+      "ariaLabel": "상담 완료율",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "완료율", "values": [68, 71, 74, 79, 81, 83], "color": "#4f7fc8" }],
+      "suffix": "%",
+      "note": "상담 완료율 6개월 추이"
+    }
+  },
+  "institution/inst-report.html": {
+    "counselConversion": {
+      "ariaLabel": "상담 전환율",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "전환율", "values": [68, 71, 74, 76, 79, 83], "color": "#4f7fc8" }],
+      "suffix": "%"
+    },
+    "docSubmission": {
+      "ariaLabel": "문서 제출률",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "제출률", "values": [62, 65, 68, 71, 74, 76], "color": "#3f8f78" }],
+      "suffix": "%"
+    },
+    "programParticipation": {
+      "ariaLabel": "프로그램 참여율",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "참여율", "values": [28, 32, 35, 38, 41, 44], "color": "#9a7b36" }],
+      "suffix": "%"
+    }
+  },
+  "institution/inst-insight.html": {
+    "studentsByNation": {
+      "ariaLabel": "국적별 유학생 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "중국", "color": "#4F83B8", "values": [88, 90, 93, 95, 97, 98] },
+        { "name": "베트남", "color": "#3F8F78", "values": [62, 63, 64, 65, 66, 67] },
+        { "name": "몽골", "color": "#9A7B36", "values": [38, 39, 40, 41, 41, 42] },
+        { "name": "우즈벡", "color": "#7B6CB8", "values": [28, 29, 29, 30, 30, 31] },
+        { "name": "인도", "color": "#C05F6A", "values": [22, 22, 23, 23, 24, 24] }
+      ],
+      "suffix": "명"
+    },
+    "stayIntent": {
+      "ariaLabel": "한국 정주 의사 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "희망", "color": "#4F83B8", "values": [72, 76, 79, 83, 86, 89] },
+        { "name": "미정", "color": "#3F8F78", "values": [108, 112, 116, 119, 121, 124] },
+        { "name": "미희망", "color": "#9A7B36", "values": [88, 85, 80, 76, 73, 71] }
+      ],
+      "suffix": "명"
+    },
+    "topMajors": {
+      "ariaLabel": "인기 전공 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "경영학", "color": "#4F83B8", "values": [58, 60, 62, 64, 66, 67] },
+        { "name": "컴퓨터공학", "color": "#3F8F78", "values": [44, 46, 48, 49, 51, 52] },
+        { "name": "국제통상", "color": "#9A7B36", "values": [35, 36, 38, 39, 40, 41] },
+        { "name": "경제학", "color": "#7B6CB8", "values": [33, 34, 35, 36, 37, 38] },
+        { "name": "화학공학", "color": "#C05F6A", "values": [22, 23, 24, 25, 26, 27] }
+      ],
+      "suffix": "명"
+    },
+    "topikDistribution": {
+      "ariaLabel": "TOPIK 등급 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "TOPIK 6급", "color": "#4F83B8", "values": [14, 15, 15, 16, 17, 18] },
+        { "name": "TOPIK 5급", "color": "#3F8F78", "values": [38, 40, 41, 43, 44, 45] },
+        { "name": "TOPIK 4급", "color": "#9A7B36", "values": [54, 56, 58, 60, 61, 62] },
+        { "name": "TOPIK 3급", "color": "#7B6CB8", "values": [68, 70, 71, 72, 73, 74] },
+        { "name": "TOPIK 2급 이하", "color": "#C05F6A", "values": [92, 90, 88, 87, 86, 85] }
+      ],
+      "suffix": "명"
+    }
+  }
+}

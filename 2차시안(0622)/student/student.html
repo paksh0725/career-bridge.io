@@ -1,0 +1,2796 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 유학생 대시보드</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI','Malgun Gothic',sans-serif; background:#EFF6FF; min-height:100vh; }
+
+/* Sidebar */
+.sidebar { position:fixed; left:0; top:0; bottom:0; width:240px; background:#2563EB; display:flex; flex-direction:column; z-index:100; box-shadow:2px 0 10px rgba(21,101,192,0.12); }
+.sb-logo { padding:22px 20px 16px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.sb-brand { font-size:18px; font-weight:800; color:white; letter-spacing:-0.3px; }
+.sb-sub { font-size:11px; color:rgba(255,255,255,0.5); margin-top:3px; }
+.sb-user { padding:16px 20px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.sb-avatar { width:42px; height:42px; border-radius:11px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:white; margin-bottom:8px; }
+.sb-name { font-size:13px; font-weight:700; color:white; }
+.sb-role { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.sb-badge { display:inline-block; margin-top:5px; padding:2px 8px; background:rgba(255,255,255,0.12); border-radius:8px; font-size:10px; color:rgba(255,255,255,0.7); font-weight:600; }
+nav { flex:1; padding:8px 0; overflow-y:auto; }
+.nav-sec { padding:10px 20px 5px; font-size:10px; font-weight:700; color:rgba(255,255,255,0.32); text-transform:uppercase; letter-spacing:1px; }
+.nav-item { display:flex; align-items:center; gap:9px; padding:9px 20px; cursor:pointer; color:rgba(255,255,255,0.62); font-size:13px; font-weight:500; transition:all 0.14s; border-left:2px solid transparent; }
+.nav-item svg { width:15px; height:15px; flex-shrink:0; fill:currentColor; }
+.nav-item:hover { background:rgba(255,255,255,0.07); color:white; }
+.nav-item.active { background:rgba(255,255,255,0.12); color:white; border-left-color:rgba(255,255,255,0.55); }
+.sb-bottom { padding:14px 20px; border-top:1px solid rgba(255,255,255,0.1); }
+.sb-logout { width:100%; padding:8px; border:1px solid rgba(255,255,255,0.18); border-radius:7px; background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6); font-size:12px; cursor:pointer; transition:all 0.14s; }
+.sb-logout:hover { background:rgba(255,255,255,0.1); color:white; }
+
+/* Topbar */
+.topbar { position:fixed; left:240px; right:0; top:0; height:60px; background:white; border-bottom:1px solid #E0ECFF; display:flex; align-items:center; justify-content:space-between; padding:0 24px; z-index:99; }
+.tb-title { font-size:16px; font-weight:700; color:#1A3A6B; }
+.tb-right { display:flex; align-items:center; gap:10px; }
+.lang-sw { display:flex; background:#EFF6FF; border-radius:7px; padding:3px; }
+.lang-sw span { padding:4px 9px; border-radius:5px; font-size:11px; font-weight:600; cursor:pointer; color:#4A78C4; transition:all 0.14s; }
+.lang-sw span.active { background:#2563EB; color:white; }
+.tb-notif { width:34px; height:34px; border:1px solid #BFDBFE; border-radius:8px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; }
+.tb-notif svg { width:16px; height:16px; fill:#4A78C4; }
+.ndot { position:absolute; top:5px; right:5px; width:7px; height:7px; background:#2563EB; border-radius:50%; border:2px solid white; }
+
+/* Main */
+.main { margin-left:240px; padding-top:60px; min-height:100vh; }
+.content { padding:24px; padding-bottom:80px; }
+
+/* Tab bar */
+.tab-bar { display:flex; gap:3px; margin-bottom:22px; background:white; padding:5px; border-radius:12px; border:1px solid #BFDBFE; width:fit-content; }
+.tab-btn { padding:9px 18px; border-radius:8px; border:none; background:transparent; font-size:12px; font-weight:600; color:#4A78C4; cursor:pointer; transition:all 0.14s; }
+.tab-btn.active { background:#2563EB; color:white; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* Profile header card */
+.profile-card { background:#2563EB; border-radius:16px; padding:28px; color:white; margin-bottom:18px; display:flex; align-items:center; gap:20px; position:relative; }
+.profile-avatar { width:72px; height:72px; border-radius:16px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; flex-shrink:0; }
+.profile-info h2 { font-size:20px; font-weight:800; margin-bottom:3px; }
+.profile-info .en-name { font-size:13px; opacity:0.75; margin-bottom:10px; }
+.p-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.p-tag { padding:3px 10px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.2); border-radius:20px; font-size:11px; font-weight:600; }
+.edit-btn { position:absolute; right:20px; top:20px; padding:7px 14px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:7px; color:white; font-size:11px; font-weight:600; cursor:pointer; transition:all 0.14s; }
+.edit-btn:hover { background:rgba(255,255,255,0.22); }
+
+/* Stats row */
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:18px; }
+.stat-card { background:white; border-radius:12px; padding:14px 16px; border:1px solid #BFDBFE; text-align:center; }
+.stat-card .num { font-size:26px; font-weight:800; color:#2563EB; }
+.stat-card .lbl { font-size:11px; color:#8AABDB; margin-top:2px; }
+
+/* Info grid */
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+.info-card { background:white; border-radius:14px; padding:18px; border:1px solid #BFDBFE; }
+.info-card h3 { font-size:12px; font-weight:700; color:#2563EB; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px; }
+.info-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #F0F7FF; }
+.info-row:last-child { border-bottom:none; }
+.info-row .ik { font-size:11px; color:#8AABDB; }
+.info-row .iv { font-size:12px; color:#1A3A6B; font-weight:600; }
+.lang-row { margin-bottom:9px; }
+.lang-lbl { display:flex; justify-content:space-between; font-size:12px; color:#4A78C4; margin-bottom:4px; }
+.lang-lbl b { color:#2563EB; }
+.progress { background:#E0ECFF; border-radius:6px; height:5px; }
+.progress-fill { height:100%; background:#2563EB; border-radius:6px; }
+.intro-text { font-size:12px; color:#4A78C4; line-height:1.7; }
+.keyword-tags { display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; }
+.keyword-tag { padding:3px 9px; background:#DBEAFE; border-radius:14px; font-size:11px; font-weight:600; color:#2563EB; }
+
+/* History */
+.section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.section-header h3 { font-size:14px; font-weight:700; color:#1A3A6B; }
+.add-btn { padding:7px 14px; background:#2563EB; color:white; border:none; border-radius:7px; font-size:12px; font-weight:600; cursor:pointer; }
+.add-btn:hover { background:#1D4ED8; }
+.history-list { display:flex; flex-direction:column; gap:10px; }
+.history-item { background:white; border-radius:12px; padding:16px 18px; border:1px solid #BFDBFE; display:flex; align-items:center; gap:14px; }
+.h-badge { width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+.h-badge.edu { background:#DBEEFF; color:#2563EB; }
+.h-badge.work { background:#E0ECFF; color:#1D4ED8; }
+.h-badge.cert { background:#DBEAFE; color:#2196F3; }
+.h-content { flex:1; }
+.h-title { font-size:13px; font-weight:700; color:#1A3A6B; }
+.h-sub { font-size:11px; color:#8AABDB; margin-top:2px; }
+.h-period { font-size:11px; font-weight:600; color:#4A78C4; background:#DBEAFE; padding:4px 10px; border-radius:7px; white-space:nowrap; }
+.add-history-btn { width:100%; padding:12px; background:white; border:1.5px dashed #C5D8F5; border-radius:10px; color:#8AABDB; font-size:12px; cursor:pointer; margin-top:8px; transition:all 0.14s; }
+.add-history-btn:hover { border-color:#2563EB; color:#2563EB; }
+
+/* Documents */
+.doc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.doc-card { background:white; border-radius:12px; padding:18px; border:1.5px solid #BFDBFE; cursor:pointer; transition:all 0.14s; }
+.doc-card:hover { border-color:#2563EB; transform:translateY(-1px); }
+.doc-type { display:inline-block; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:700; background:#2563EB; color:white; margin-bottom:9px; }
+.doc-name { font-size:13px; font-weight:700; color:#1A3A6B; margin-bottom:4px; }
+.doc-meta { font-size:11px; color:#8AABDB; }
+.doc-status { display:inline-block; margin-top:8px; padding:3px 9px; border-radius:14px; font-size:11px; font-weight:600; }
+.doc-status.verified { background:#DBEAFE; color:#2563EB; }
+.doc-status.pending { background:#F0F7FF; color:#4A78C4; }
+.upload-card { background:#F8FBFF; border-radius:12px; padding:18px; border:1.5px dashed #C5D8F5; cursor:pointer; text-align:center; transition:all 0.14s; }
+.upload-card:hover { border-color:#2563EB; background:#DBEAFE; }
+.upload-card .plus-icon { width:36px; height:36px; background:#BFDBFE; border-radius:9px; display:flex; align-items:center; justify-content:center; margin:0 auto 8px; }
+.upload-card .plus-icon svg { width:18px; height:18px; fill:#2563EB; }
+.upload-card p { font-size:12px; color:#6B8CCC; }
+
+/* Privacy */
+.privacy-box { background:white; border-radius:14px; padding:22px; border:1px solid #BFDBFE; margin-bottom:14px; }
+.privacy-box h3 { font-size:13px; font-weight:700; color:#1A3A6B; margin-bottom:4px; }
+.privacy-box > p { font-size:12px; color:#8AABDB; margin-bottom:18px; }
+.privacy-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0F7FF; }
+.privacy-row:last-child { border-bottom:none; }
+.pr-label { font-size:12px; font-weight:600; color:#1A3A6B; }
+.pr-desc { font-size:11px; color:#8AABDB; margin-top:2px; }
+.toggle-grp { display:flex; background:#EFF6FF; border-radius:7px; padding:3px; gap:2px; }
+.toggle-opt { padding:5px 11px; border-radius:5px; font-size:11px; font-weight:600; cursor:pointer; color:#4A78C4; transition:all 0.14s; }
+.toggle-opt.active { background:#2563EB; color:white; }
+
+/* Company search (B page for students) */
+.company-filter { background:white; border-radius:14px; padding:18px 20px; border:1px solid #BFDBFE; margin-bottom:18px; }
+.cf-title { font-size:12px; font-weight:700; color:#1A3A6B; margin-bottom:14px; text-transform:uppercase; letter-spacing:0.5px; }
+.cf-grid { display:grid; grid-template-columns:repeat(3,1fr) auto; gap:10px; align-items:flex-end; }
+.cf-group label { display:block; font-size:11px; font-weight:700; color:#4A78C4; margin-bottom:5px; }
+.cf-group select { width:100%; padding:9px 11px; border:1.5px solid #BFDBFE; border-radius:8px; font-size:13px; color:#1A3A6B; background:#F8FBFF; outline:none; }
+.search-btn { padding:9px 20px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+.search-btn:hover { background:#1D4ED8; }
+.company-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.company-card { background:white; border-radius:14px; padding:20px; border:1.5px solid #BFDBFE; cursor:pointer; transition:all 0.14s; }
+.company-card:hover { border-color:#2563EB; transform:translateY(-2px); box-shadow:0 4px 16px rgba(21,101,192,0.09); }
+.cc-logo { width:44px; height:44px; border-radius:11px; background:#DBEAFE; border:1px solid #BFDBFE; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#2563EB; margin-bottom:12px; }
+.cc-name { font-size:14px; font-weight:700; color:#1A3A6B; margin-bottom:3px; }
+.cc-type { font-size:11px; color:#8AABDB; margin-bottom:10px; }
+.cc-field { font-size:11px; margin-bottom:5px; }
+.cc-field .cfl { color:#8AABDB; }
+.cc-field .cfv { color:#1A3A6B; font-weight:600; }
+.cc-foot { display:flex; gap:6px; margin-top:12px; }
+.cc-btn { flex:1; padding:8px; border-radius:7px; font-size:11px; font-weight:600; cursor:pointer; text-align:center; border:none; transition:all 0.14s; }
+.cc-btn.primary { background:#2563EB; color:white; }
+.cc-btn.secondary { background:#DBEAFE; color:#2563EB; border:1px solid #BFDBFE; }
+.cc-btn:hover { opacity:0.88; }
+.cc-tag { display:inline-block; padding:2px 8px; background:#DBEAFE; border-radius:10px; font-size:10px; font-weight:600; color:#4A78C4; margin-right:4px; margin-bottom:4px; }
+
+/* Banner */
+.banner { background:#2563EB; border-radius:12px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; margin-top:18px; cursor:pointer; }
+.banner-text .b-label { font-size:10px; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+.banner-text .b-title { font-size:13px; font-weight:700; color:white; }
+.banner-text .b-sub { font-size:11px; color:rgba(255,255,255,0.65); margin-top:3px; }
+.banner-more { font-size:12px; padding:7px 14px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:7px; color:white; white-space:nowrap; }
+
+/* Modal */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(21,101,192,0.18); backdrop-filter:blur(3px); z-index:1000; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal { background:white; border-radius:18px; width:90%; max-width:520px; max-height:86vh; overflow-y:auto; box-shadow:0 8px 36px rgba(21,101,192,0.13); border:1px solid #BFDBFE; animation:mIn 0.22s ease; }
+@keyframes mIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.filter-box{ background:white; border-radius:14px; padding:14px 18px; border:1px solid #BFDBFE; margin-bottom:18px; display:flex; gap:10px; flex-wrap:wrap; }
+.filter-box select{ padding:8px 12px; border-radius:8px; border:1px solid #BFDBFE; font-size:12px; color:#1A3A6B; background:white; }
+.insight-card{ background:white; border-radius:14px; padding:18px 20px; border:1px solid #BFDBFE; }
+.insight-card h3{ font-size:13px; font-weight:700; color:#1A3A6B; margin-bottom:12px; }
+.rank-item{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #EFF6FF; font-size:12px; }
+.rank-item .rn{ color:#1A3A6B; }
+.rank-item .rc{ color:#2563EB; font-weight:700; }
+.comm-cat-bar{ display:flex; gap:3px; margin-bottom:18px; background:white; padding:5px; border-radius:12px; border:1px solid #BFDBFE; width:fit-content; }
+.comm-cat-btn{ padding:9px 18px; border-radius:8px; border:none; background:transparent; font-size:12px; font-weight:600; color:#4A78C4; cursor:pointer; transition:all .14s; }
+.comm-cat-btn.active{ background:#2563EB; color:white; }
+.comm-layout{ display:grid; grid-template-columns:1fr 280px; gap:18px; align-items:start; margin-top:18px; }
+.comm-post{ display:flex; align-items:center; gap:14px; background:white; border:1px solid #BFDBFE; border-radius:12px; padding:14px 18px; margin-bottom:10px; cursor:pointer; transition:.15s; }
+.comm-post:hover{ border-color:#2563EB; }
+.comm-post-tag{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; white-space:nowrap; flex-shrink:0; }
+.comm-post-tag.job{ background:#DBEAFE; color:#2563EB; }
+.comm-post-tag.qna{ background:#FCE7F3; color:#BE185D; }
+.comm-post-title{ font-size:13px; font-weight:600; color:#1A3A6B; margin-top:6px; }
+.comm-post-meta{ font-size:11px; color:#8AABDB; margin-top:3px; }
+.poll-card{ background:white; border:1px solid #BFDBFE; border-radius:14px; padding:16px 20px; margin-bottom:12px; }
+.poll-q{ font-size:13px; font-weight:700; color:#1A3A6B; margin-bottom:8px; cursor:pointer; }
+.poll-badge{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:7px; margin-right:6px; }
+.poll-badge.univ{ background:#DBEAFE; color:#2563EB; }
+.poll-badge.company{ background:#D1FAE5; color:#047857; }
+.poll-badge.student{ background:#FEF3C7; color:#B45309; }
+.poll-meta{ font-size:11px; color:#8AABDB; margin-top:8px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+.poll-vote-btn{ background:#2563EB; color:white; border:none; padding:7px 16px; border-radius:9px; font-size:12px; font-weight:700; cursor:pointer; }
+.poll-bar-row{ margin-bottom:12px; }
+.poll-bar-label{ display:flex; justify-content:space-between; font-size:12px; color:#1A3A6B; font-weight:600; margin-bottom:5px; }
+.poll-bar-track{ background:#EFF6FF; border-radius:8px; height:10px; overflow:hidden; }
+.poll-bar-fill{ background:#2563EB; height:100%; border-radius:8px; }
+.poll-bar-row.selectable{ cursor:pointer; padding:6px 8px; margin:0 -8px 12px -8px; border-radius:8px; transition:.15s; }
+.poll-bar-row.selectable:hover{ background:#F5F9FF; }
+.poll-bar-row.selected{ background:#EFF6FF; box-shadow:inset 0 0 0 1.5px #2563EB; }
+.btn-confirm:disabled{ opacity:.5; cursor:default; }
+@media(max-width:900px){ .comm-layout{ grid-template-columns:1fr; } }
+.modal-head { padding:20px 24px; border-bottom:1px solid #DBEAFE; display:flex; justify-content:space-between; align-items:flex-start; }
+.modal-head h3 { font-size:16px; font-weight:700; color:#1A3A6B; }
+.modal-head p { font-size:12px; color:#8AABDB; margin-top:3px; }
+.close-btn { width:28px; height:28px; border:1px solid #BFDBFE; border-radius:7px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.close-btn svg { width:14px; height:14px; fill:#4A78C4; }
+.modal-body { padding:20px 24px; }
+.fg { margin-bottom:12px; }
+.fg label { display:block; font-size:11px; font-weight:700; color:#4A78C4; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.4px; }
+.ocr-card{ background:#FAF8F0; border:1px solid #E8E1C8; border-radius:12px; padding:16px 18px; margin-bottom:14px; }
+.ocr-card-head{ font-size:13px; font-weight:700; color:#8A6D00; margin-bottom:8px; }
+.ocr-card-body div{ font-size:12px; color:#5B5040; line-height:1.7; }
+.auto-label{ font-size:12px; font-weight:700; color:#1E3A5F; margin:14px 0 8px; }
+.auto-field{ display:flex; justify-content:space-between; align-items:center; background:white; border:1px solid #E3ECF7; border-radius:9px; padding:10px 14px; margin-bottom:8px; font-size:12px; }
+.auto-field label{ color:#8AABDB; margin:0; text-transform:none; }
+.auto-val{ font-weight:700; color:#1E3A5F; font-size:13px; }
+.auto-val-input{ border:none; background:transparent; text-align:right; font-weight:700; color:#1E3A5F; font-size:13px; outline:none; width:55%; }
+.status-pill{ background:#DCF5E3; color:#1E8449; font-weight:700; padding:3px 10px; border-radius:6px; font-size:11px; }
+.fg input, .fg select, .fg textarea { width:100%; padding:9px 12px; border:1.5px solid #BFDBFE; border-radius:8px; font-size:13px; color:#1A3A6B; background:#F8FBFF; outline:none; font-family:inherit; }
+.fg textarea { resize:vertical; min-height:75px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.modal-foot { display:flex; gap:8px; padding:16px 24px; border-top:1px solid #DBEAFE; }
+.btn-cancel { flex:1; padding:10px; border:1.5px solid #BFDBFE; border-radius:8px; background:white; color:#8AABDB; font-size:13px; cursor:pointer; }
+.btn-confirm { flex:2; padding:10px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+.btn-confirm:hover { background:#1D4ED8; }
+.comp-detail-header { background:#2563EB; border-radius:14px 14px 0 0; padding:24px; color:white; }
+.comp-detail-header h3 { font-size:18px; font-weight:800; }
+.comp-detail-header p { font-size:12px; opacity:0.7; margin-top:4px; }
+.comp-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:16px; }
+.cd-item { background:#F5F9FF; border-radius:9px; padding:10px 13px; }
+.cd-item .dk { font-size:10px; color:#8AABDB; margin-bottom:3px; }
+.cd-item .dv { font-size:13px; font-weight:600; color:#1A3A6B; }
+
+/* Large screen layout guard */
+@media (min-width: 1200px) {
+  body { overflow-x:hidden; }
+  .nav { padding-left:clamp(48px, 5vw, 72px); padding-right:clamp(48px, 5vw, 72px); }
+  .hero, .section, .users-section, .stats-section, .cta-section { padding-left:64px; padding-right:64px; }
+  .hero-inner, .section-inner, .users-grid, .stats-grid { max-width:1180px; }
+  .hero .hero-inner[style] { max-width:840px !important; }
+  .hero h1 { font-size:44px; line-height:1.18; }
+  .section-title, .cta-section h2 { font-size:30px; line-height:1.28; }
+  .section-desc, .hero p { max-width:640px; }
+  .features-grid, .users-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:stretch; }
+  .feat-card, .user-card { min-height:100%; }
+  .feat-title, .user-card h3, .b-title { line-height:1.35; }
+  .btn-primary, .btn-secondary, .cta-btn-white, .cta-btn-outline { min-width:160px; max-width:260px; }
+  .banner-slide { padding-left:max(64px, calc((100vw - 1180px) / 2)); padding-right:max(64px, calc((100vw - 1180px) / 2)); }
+  .main .content, .content { max-width:1240px; margin-left:auto; margin-right:auto; }
+  .profile-card, .stats-row, .info-grid, .company-filter, .company-grid, .doc-grid, .translator, .quick-grid, .pt-grid, .history-card, .msg-layout, .messages-layout { max-width:100%; }
+  .company-grid, .doc-grid, .quick-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:stretch; }
+  .stats-row { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .info-grid, .trans-grid, .comp-detail-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .company-card, .doc-card, .quick-card, .info-card, .stat-card { min-width:0; }
+  .cc-name, .doc-name, .qc-title, .h-title, .tb-title, .profile-info h2, .modal-head h3 { line-height:1.35; }
+  .cc-name, .doc-name, .qc-title, .h-title { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .cc-type, .doc-meta, .qc-desc, .h-sub { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+}
+
+@media (min-width: 1600px) {
+  .hero, .section, .users-section, .stats-section, .cta-section { padding-left:72px; padding-right:72px; }
+  .hero-inner, .section-inner, .users-grid, .stats-grid { max-width:1200px; }
+  .main .content, .content { max-width:1280px; }
+  .hero h1 { font-size:44px; }
+  .section-title, .cta-section h2 { font-size:30px; }
+}
+
+/* Demo interaction states */
+.demo-toast { position:fixed; right:24px; bottom:24px; z-index:3000; background:#1E3A5F; color:white; border-radius:10px; padding:12px 16px; font-size:13px; font-weight:700; box-shadow:0 10px 30px rgba(30,58,95,0.18); opacity:0; transform:translateY(10px); pointer-events:none; transition:all 0.2s ease; }
+.demo-toast.show { opacity:1; transform:translateY(0); }
+.demo-state-note { margin-top:10px; padding:10px 12px; border-radius:9px; background:#DBEAFE; color:#1D4ED8; border:1px solid #BFDBFE; font-size:12px; font-weight:700; display:none; }
+.demo-state-note.show { display:block; }
+.demo-mode-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:#DBEAFE; color:#2563EB; font-size:11px; font-weight:800; margin-left:8px; vertical-align:middle; }
+.demo-status { display:inline-flex; padding:3px 8px; border-radius:999px; background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; font-size:10px; font-weight:800; }
+
+/* Reference-inspired clean light blue theme */
+:root {
+  --cb-ink:#18395F;
+  --cb-muted:#6E8CAF;
+  --cb-soft:#F6FAFF;
+  --cb-panel:#FFFFFF;
+  --cb-line:#D8E7F5;
+  --cb-blue:#8FB6D9;
+  --cb-blue-strong:#4B78AA;
+  --cb-blue-dark:#2F5F95;
+  --cb-blue-pale:#EEF6FD;
+  --cb-shadow:0 10px 30px rgba(86, 132, 176, 0.11);
+}
+body { color:var(--cb-ink); background:var(--cb-soft); }
+.nav, .topbar, .card, .modal, .inbox, .chat-header, .chat-input-area,
+.filter-box, .stat-card, .student-card, .insight-card, .profile-card,
+.info-card, .history-item, .doc-card, .privacy-box, .company-filter,
+.company-card, .quick-card, .profile-trans, .history-card, .translator,
+.user-card, .mock-profile, .mock-stat {
+  border-color:var(--cb-line) !important;
+  box-shadow:var(--cb-shadow);
+}
+.nav, .topbar, .card, .modal, .inbox, .chat-header, .chat-input-area,
+.filter-box, .stat-card, .student-card, .insight-card, .info-card,
+.history-item, .doc-card, .privacy-box, .company-filter, .company-card,
+.quick-card, .profile-trans, .history-card, .translator, .user-card,
+.mock-profile, .mock-stat { background:rgba(255,255,255,0.96) !important; }
+.sidebar, .cta-section, .bulk-bar, .banner, .modal-head-blue,
+.comp-detail-header, .profile-card, .hero-badge, .btn-primary,
+.nav-signup, .search-btn, .tab-btn.active, .compose-btn, .send-btn,
+.btn-confirm, .add-btn, .cc-btn.primary, .sc-btn.primary, .act-btn.primary,
+.trans-btn, .pt-btn, .lang-sw span.active, .toggle-opt.active,
+.student-card.selected .sc-check, .mock-avatar, .feat-icon {
+  background:var(--cb-blue-strong) !important;
+}
+.sidebar { background:linear-gradient(180deg, #8FB6D9 0%, #4B78AA 100%) !important; box-shadow:8px 0 28px rgba(86,132,176,0.16) !important; }
+.hero { background:linear-gradient(155deg, #F6FAFF 0%, #FFFFFF 62%) !important; }
+.users-section, .hero-visual, .feat-card, .s3-item, .input-wrap,
+.inbox-search, .lang-sw, .toggle-grp, .d-item, .hm-item, .cd-item,
+.upload-card, .trans-output, .demo-state-note { background:var(--cb-blue-pale) !important; }
+.bs-1,.bs-2,.bs-3,.bs-4,.bs-5,.bs-6 { background:linear-gradient(135deg, #5F8FBE 0%, #A8C7E3 100%) !important; }
+.cta-section { background:linear-gradient(135deg, #4B78AA 0%, #8FB6D9 100%) !important; }
+.footer { background:#2B496A !important; }
+.nav-logo, .nav-logo span, .hero h1 span, .section-label,
+.lang-sw span, .fg label, .results-count span, .stat-card .num,
+.sc-tag, .cc-tag, .rank-item .rc, .bar-val, .uf-item,
+.modal-foot-link a, .chat-action, .trans-hint span,
+.tb-notif svg, .close-btn-dark svg, .mock-stat .mn {
+  color:var(--cb-blue-strong) !important;
+}
+.hero h1, .section-title, .cta-section h2, .tb-title, .filter-title,
+.sc-name, .cc-name, .profile-info h2, .modal h3, .modal-head h3,
+.chat-name, .msg-sender, .info-row .iv, .h-title, .doc-name,
+.qc-title, .profile-trans h3, .history-card h3, .logo-title,
+.card h2 { color:var(--cb-ink) !important; }
+.hero p, .section-desc, .feat-desc, .user-card p, .sc-sub, .cc-type,
+.card > p, .logo-sub, .msg-preview, .chat-sub, .info-row .ik,
+.h-sub, .doc-meta, .qc-desc, .profile-trans > p, .modal-head p,
+.modal > p { color:var(--cb-muted) !important; }
+.btn-secondary, .nav-login, .cta-btn-outline, .sc-btn.secondary,
+.cc-btn.secondary, .act-btn.secondary, .chat-action, .btn-cancel,
+.lang-select-btn, .close-btn-dark {
+  color:var(--cb-blue-strong) !important;
+  border-color:var(--cb-line) !important;
+  background:#FFFFFF !important;
+}
+.btn-primary:hover, .nav-signup:hover, .search-btn:hover, .compose-btn:hover,
+.send-btn:hover, .btn-confirm:hover, .add-btn:hover, .cc-btn.primary:hover,
+.sc-btn.primary:hover { background:var(--cb-blue-dark) !important; }
+.fg input, .fg select, .fg textarea, .trans-input, .trans-output,
+.inbox-search input, .input-wrap input {
+  border-color:var(--cb-line) !important;
+  background:#F8FBFF !important;
+  color:var(--cb-ink) !important;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus {
+  border-color:var(--cb-blue) !important;
+  background:#FFFFFF !important;
+}
+.sc-tag, .cc-tag, .user-type-badge, .mock-tag, .th-langs,
+.doc-status, .qc-type, .qc-lang, .demo-mode-pill, .demo-status {
+  background:#E8F2FB !important;
+  color:var(--cb-blue-strong) !important;
+  border-color:var(--cb-line) !important;
+}
+.progress, .chat-date { background:#E8F2FB !important; }
+.pf, .progress-fill, .bar, .unread-dot, .ndot, .uf-dot { background:var(--cb-blue-strong) !important; }
+.bubble.me { background:var(--cb-blue-strong) !important; }
+.bubble.them { background:#FFFFFF !important; color:var(--cb-ink) !important; box-shadow:0 6px 20px rgba(86,132,176,0.10) !important; }
+.demo-toast { background:#2B496A !important; box-shadow:0 12px 32px rgba(43,73,106,0.18) !important; }
+.modal-overlay { background:rgba(47,95,149,0.16) !important; }
+.student-card:hover, .company-card:hover, .doc-card:hover, .user-card:hover,
+.quick-card:hover { border-color:var(--cb-blue) !important; box-shadow:0 14px 36px rgba(86,132,176,0.16) !important; }
+
+/* Responsive layout refinement */
+@media (max-width: 1100px) {
+  body { overflow-x:hidden; }
+  .nav { padding-left:24px !important; padding-right:24px !important; }
+  .hero, .section, .users-section, .stats-section, .cta-section { padding-left:24px !important; padding-right:24px !important; }
+  .hero-inner, .features-grid, .users-grid, .stats-grid, .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .filter-grid, .stats-row { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .search-btn { width:100%; }
+  .sidebar { position:static !important; width:100% !important; min-height:auto !important; bottom:auto !important; box-shadow:none !important; }
+  .sidebar nav { display:flex; flex-wrap:wrap; gap:4px; padding:10px 14px !important; overflow:visible !important; }
+  .sb-logo, .sb-user, .sb-bottom { padding:14px 18px !important; }
+  .nav-sec { width:100%; padding:8px 4px 2px !important; }
+  .nav-item { border-left:0 !important; border-radius:8px; padding:9px 12px !important; }
+  .topbar { position:sticky !important; left:0 !important; right:auto !important; top:0 !important; width:100% !important; }
+  .main { margin-left:0 !important; padding-top:0 !important; }
+  .content { padding:18px !important; }
+  .msg-layout { margin-left:0 !important; margin-top:0 !important; height:calc(100vh - 60px) !important; grid-template-columns:minmax(260px, 36%) minmax(0, 1fr) !important; }
+  .bw { max-width:82% !important; }
+}
+
+@media (max-width: 760px) {
+  .nav { height:auto !important; min-height:62px; flex-wrap:wrap; gap:10px; padding-top:10px !important; padding-bottom:10px !important; }
+  .nav-right { width:100%; justify-content:flex-start; flex-wrap:wrap; }
+  .hero { padding-top:48px !important; padding-bottom:52px !important; }
+  .hero-inner, .features-grid, .users-grid, .stats-grid, .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid,
+  .info-grid, .detail-grid, .comp-detail-grid, .insight-row, .trans-grid, .filter-grid, .filter-row2, .cf-grid, .stats-row,
+  .form-row, .stat-3 { grid-template-columns:1fr !important; }
+  .banner-slide, .banner, .profile-card, .history-item, .privacy-row, .section-header, .results-header, .bulk-bar, .trans-footer { flex-direction:column !important; align-items:flex-start !important; gap:12px !important; }
+  .banner-slide { padding:28px 22px 52px !important; min-height:auto !important; }
+  .b-right { align-items:flex-start !important; }
+  .footer { flex-direction:column !important; align-items:flex-start !important; gap:12px !important; padding:26px 22px !important; }
+  .tab-bar { width:100% !important; overflow-x:auto; }
+  .tab-btn { flex:1 0 auto; }
+  .modal { width:calc(100% - 28px) !important; max-height:88vh !important; }
+  .modal-foot, .action-btns, .cc-foot, .cta-btns, .hero-btns { grid-template-columns:1fr !important; flex-direction:column !important; width:100%; }
+  .btn-primary, .btn-secondary, .cta-btn-white, .cta-btn-outline, .act-btn, .cc-btn, .sc-btn { width:100% !important; max-width:none !important; }
+  .msg-layout { display:block !important; height:auto !important; min-height:calc(100vh - 60px); }
+  .inbox { max-height:42vh; border-right:0 !important; border-bottom:1px solid var(--cb-line, #D8E7F5) !important; }
+  .chat-area { min-height:58vh; }
+  .chat-messages { min-height:320px; }
+  .bw { max-width:94% !important; }
+  .lang-swap { grid-template-columns:1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size:34px !important; }
+  .section-title, .cta-section h2 { font-size:24px !important; }
+  .content, .hero, .section, .users-section, .stats-section, .cta-section { padding-left:16px !important; padding-right:16px !important; }
+  .card { padding:24px !important; }
+  .sidebar nav { display:block; }
+  .nav-item { margin-bottom:4px; }
+}
+
+/* Presentation and large display optimization */
+@media (min-width: 1600px) {
+  .main .content, .content {
+    max-width:min(1680px, calc(100vw - 320px)) !important;
+    width:100% !important;
+    margin-left:0 !important;
+    margin-right:auto !important;
+    padding-left:32px !important;
+    padding-right:40px !important;
+  }
+  .topbar { padding-left:32px !important; padding-right:40px !important; }
+  .filter-box, .company-filter, .profile-card, .privacy-box,
+  .info-card, .history-item, .doc-card, .company-card, .student-card,
+  .stat-card, .insight-card, .translator, .profile-trans, .history-card,
+  .quick-card { box-shadow:0 14px 34px rgba(86,132,176,0.12) !important; }
+  .students-grid, .company-grid { gap:18px !important; }
+  .student-card, .company-card, .doc-card, .quick-card { padding:22px !important; }
+  .filter-box, .company-filter { padding:22px 24px !important; }
+  .stat-card { padding:17px 18px !important; }
+  .stat-card .num { font-size:28px !important; }
+  .stat-card .lbl { font-size:12px !important; }
+  .sc-name, .cc-name, .doc-name, .qc-title { font-size:15px !important; }
+  .sc-sub, .cc-type, .doc-meta, .qc-desc { font-size:12px !important; }
+  .sc-tag, .cc-tag, .doc-status, .demo-status { font-size:11px !important; }
+  .sc-btn, .cc-btn, .search-btn, .add-btn, .btn-confirm, .btn-cancel,
+  .chat-action, .compose-btn, .trans-btn, .pt-btn { min-height:34px; }
+  .fg label, .cf-group label { font-size:12px !important; }
+  .fg input, .fg select, .fg textarea, .cf-group select { font-size:14px !important; min-height:38px; }
+  .tab-btn { font-size:13px !important; padding:10px 20px !important; }
+  .tb-title { font-size:18px !important; }
+}
+
+@media (min-width: 1900px) {
+  .sidebar { width:220px !important; }
+  .topbar { left:220px !important; height:64px !important; }
+  .main { margin-left:220px !important; padding-top:64px !important; }
+  .msg-layout { margin-left:220px !important; margin-top:64px !important; height:calc(100vh - 64px) !important; grid-template-columns:360px minmax(0, 1fr) !important; }
+  .main .content, .content {
+    max-width:min(1780px, calc(100vw - 260px)) !important;
+    padding-left:28px !important;
+    padding-right:44px !important;
+  }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; }
+  .filter-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) auto !important; }
+  .stats-bar { grid-template-columns:repeat(5, minmax(0, 1fr)) !important; }
+  .stats-row { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .info-grid, .insight-row, .trans-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .student-card, .company-card { min-height:170px; }
+  .profile-card { padding:34px !important; }
+  .profile-avatar { width:82px !important; height:82px !important; }
+  .profile-info h2 { font-size:24px !important; }
+  .chat-messages { padding:24px 30px !important; }
+  .bubble { font-size:14px !important; }
+}
+
+@media (min-width: 2400px) {
+  .main .content, .content { max-width:1900px !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .student-card, .company-card, .doc-card { padding:24px !important; }
+  .sc-name, .cc-name { font-size:16px !important; }
+  .sc-sub, .cc-type { font-size:12px !important; }
+}
+
+/* Material 3 inspired tonal color system */
+:root {
+  --m3-primary:#5D8FBA;
+  --m3-on-primary:#FFFFFF;
+  --m3-primary-container:#E4F1FA;
+  --m3-on-primary-container:#214762;
+  --m3-secondary:#718799;
+  --m3-on-secondary:#FFFFFF;
+  --m3-secondary-container:#ECF3F8;
+  --m3-on-secondary-container:#2E4A5D;
+  --m3-tertiary:#6B6F91;
+  --m3-on-tertiary:#FFFFFF;
+  --m3-tertiary-container:#E7E8F6;
+  --m3-on-tertiary-container:#272B49;
+  --m3-error:#BA1A1A;
+  --m3-on-error:#FFFFFF;
+  --m3-error-container:#FFDAD6;
+  --m3-on-error-container:#410002;
+  --m3-background:#FBFDFF;
+  --m3-on-background:#182A38;
+  --m3-surface:#FFFFFF;
+  --m3-surface-dim:#F3F7FA;
+  --m3-surface-container-low:#FAFCFE;
+  --m3-surface-container:#F5F9FC;
+  --m3-surface-container-high:#EEF5FA;
+  --m3-on-surface:#182A38;
+  --m3-on-surface-variant:#5D6E7C;
+  --m3-outline:#CEDBE5;
+  --m3-outline-variant:#E5EDF3;
+  --m3-shadow:0 8px 24px rgba(38, 72, 102, 0.10);
+  --m3-shadow-strong:0 14px 36px rgba(38, 72, 102, 0.14);
+}
+
+body { background:var(--m3-background) !important; color:var(--m3-on-background) !important; }
+.hero, .cta-section, .sidebar, .banner, .modal-head-blue, .comp-detail-header,
+.profile-card, .bs-1, .bs-2, .bs-3, .bs-4, .bs-5, .bs-6 {
+  background:var(--m3-primary) !important;
+  background-image:none !important;
+}
+.hero { background:var(--m3-background) !important; }
+.cta-section, .banner, .modal-head-blue, .comp-detail-header, .profile-card,
+.sidebar { color:var(--m3-on-primary) !important; }
+.nav, .topbar, .card, .modal, .filter-box, .company-filter, .stat-card,
+.student-card, .company-card, .doc-card, .quick-card, .info-card,
+.insight-card, .privacy-box, .history-card, .history-item, .profile-trans,
+.translator, .inbox, .chat-header, .chat-input-area, .user-card,
+.mock-profile, .mock-stat, .feat-card {
+  background:var(--m3-surface) !important;
+  border-color:var(--m3-outline-variant) !important;
+  box-shadow:var(--m3-shadow) !important;
+}
+.users-section, .hero-visual, .lang-sw, .toggle-grp, .input-wrap,
+.inbox-search, .chat-area, .d-item, .hm-item, .cd-item, .s3-item,
+.upload-card, .trans-output, .demo-state-note, .mock-tag, .sc-tag,
+.cc-tag, .doc-status, .qc-lang, .user-type-badge, .demo-status,
+.demo-mode-pill, .rank-item .rc, .th-langs {
+  background:var(--m3-surface-container) !important;
+  border-color:var(--m3-outline-variant) !important;
+  color:var(--m3-on-surface-variant) !important;
+}
+.nav-logo, .nav-logo span, .hero h1 span, .section-label, .fg label,
+.cf-group label, .results-count span, .stat-card .num, .mock-stat .mn,
+.lang-sw span, .chat-action, .trans-hint span, .modal-foot-link a,
+.uf-item, .bar-val, .detail-sec h4, .tb-notif svg, .close-btn-dark svg {
+  color:var(--m3-primary) !important;
+}
+.hero h1, .section-title, .cta-section h2, .tb-title, .filter-title,
+.sc-name, .cc-name, .doc-name, .qc-title, .profile-info h2, .modal h3,
+.modal-head h3, .chat-name, .msg-sender, .info-row .iv, .h-title,
+.profile-trans h3, .history-card h3, .logo-title, .card h2,
+.results-count, .feat-title, .user-card h3, .mock-name {
+  color:var(--m3-on-surface) !important;
+}
+.hero p, .section-desc, .feat-desc, .user-card p, .sc-sub, .cc-type,
+.doc-meta, .qc-desc, .card > p, .logo-sub, .msg-preview, .chat-sub,
+.info-row .ik, .h-sub, .profile-trans > p, .modal-head p, .modal > p,
+.mock-sub, .stat-card .lbl, .rank-item .rn, .bar-lbl, .d-item .dk,
+.cd-item .dk, .th-text, .char-count {
+  color:var(--m3-on-surface-variant) !important;
+}
+.btn-primary, .nav-signup, .search-btn, .tab-btn.active, .compose-btn,
+.send-btn, .btn-confirm, .add-btn, .cc-btn.primary, .sc-btn.primary,
+.act-btn.primary, .trans-btn, .pt-btn, .lang-sw span.active,
+.toggle-opt.active, .student-card.selected .sc-check, .mock-avatar,
+.feat-icon, .pf, .progress-fill, .bar, .unread-dot, .ndot, .uf-dot,
+.bubble.me {
+  background:var(--m3-primary) !important;
+  background-image:none !important;
+  color:var(--m3-on-primary) !important;
+  border-color:var(--m3-primary) !important;
+}
+.btn-primary *, .nav-signup *, .search-btn *, .tab-btn.active *,
+.compose-btn *, .send-btn *, .btn-confirm *, .add-btn *, .cc-btn.primary *,
+.sc-btn.primary *, .act-btn.primary *, .trans-btn *, .pt-btn *,
+.lang-sw span.active *, .bubble.me * { color:var(--m3-on-primary) !important; }
+.btn-secondary, .nav-login, .cta-btn-outline, .cta-btn-white,
+.sc-btn.secondary, .cc-btn.secondary, .act-btn.secondary, .chat-action,
+.btn-cancel, .lang-select-btn, .close-btn-dark, .bulk-btn {
+  background:var(--m3-surface) !important;
+  color:var(--m3-primary) !important;
+  border-color:var(--m3-outline) !important;
+  background-image:none !important;
+}
+.btn-primary:hover, .nav-signup:hover, .search-btn:hover, .compose-btn:hover,
+.send-btn:hover, .btn-confirm:hover, .add-btn:hover, .cc-btn.primary:hover,
+.sc-btn.primary:hover, .act-btn.primary:hover, .trans-btn:hover, .pt-btn:hover {
+  background:#4F7FA8 !important;
+  border-color:#4F7FA8 !important;
+  color:var(--m3-on-primary) !important;
+}
+.btn-secondary:hover, .nav-login:hover, .cta-btn-outline:hover,
+.cta-btn-white:hover, .sc-btn.secondary:hover, .cc-btn.secondary:hover,
+.act-btn.secondary:hover, .chat-action:hover, .btn-cancel:hover,
+.lang-select-btn:hover, .bulk-btn:hover {
+  background:var(--m3-primary-container) !important;
+  color:var(--m3-on-primary-container) !important;
+  border-color:var(--m3-primary) !important;
+}
+.fg input, .fg select, .fg textarea, .cf-group select, .trans-input,
+.trans-output, .inbox-search input, .input-wrap input {
+  background:var(--m3-surface-container-low) !important;
+  color:var(--m3-on-surface) !important;
+  border-color:var(--m3-outline) !important;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus,
+.cf-group select:focus, .trans-input:focus {
+  background:var(--m3-surface) !important;
+  border-color:var(--m3-primary) !important;
+  box-shadow:0 0 0 3px rgba(69,111,147,0.14) !important;
+}
+.sc-avatar, .cc-logo, .h-badge, .hm-badge, .doc-type, .qc-type,
+.sb-avatar, .msg-avatar, .chat-avatar, .b-avatar, .logo-mark,
+.upload-card .plus-icon {
+  background:var(--m3-primary-container) !important;
+  color:var(--m3-on-primary-container) !important;
+  border-color:var(--m3-outline-variant) !important;
+}
+.sc-tag.accent, .doc-status.verified, .user-type-badge.c {
+  background:var(--m3-secondary-container) !important;
+  color:var(--m3-on-secondary-container) !important;
+}
+.progress, .chat-date { background:var(--m3-outline-variant) !important; color:var(--m3-on-surface-variant) !important; }
+.bubble.them { background:var(--m3-surface) !important; color:var(--m3-on-surface) !important; box-shadow:var(--m3-shadow) !important; }
+.demo-toast, .footer { background:#315470 !important; color:#FFFFFF !important; }
+.modal-overlay { background:rgba(24,42,56,0.22) !important; }
+.student-card:hover, .company-card:hover, .doc-card:hover, .user-card:hover,
+.quick-card:hover, .feat-card:hover {
+  border-color:var(--m3-primary) !important;
+  box-shadow:var(--m3-shadow-strong) !important;
+}
+.student-card.selected { background:var(--m3-primary-container) !important; border-color:var(--m3-primary) !important; }
+.banner .b-title, .banner .b-label, .banner .b-sub,
+.cta-section h2, .cta-section p, .modal-head-blue h3, .modal-head-blue p,
+.comp-detail-header h3, .comp-detail-header p, .profile-card h2,
+.profile-card .en-name, .profile-card .p-tag, .sidebar .sb-brand,
+.sidebar .sb-sub, .sidebar .sb-name, .sidebar .sb-role, .sidebar .sb-badge,
+.sidebar .nav-sec, .sidebar .nav-item, .sidebar .sb-logout {
+  color:var(--m3-on-primary) !important;
+}
+.sidebar .nav-item.active, .sidebar .nav-item:hover, .sidebar .sb-logout:hover {
+  background:rgba(255,255,255,0.16) !important;
+}
+.b-cta, .banner-more, .b-mini-tag, .b-badge, .p-tag {
+  background:rgba(255,255,255,0.14) !important;
+  border-color:rgba(255,255,255,0.26) !important;
+  color:var(--m3-on-primary) !important;
+}
+#loginError { background:var(--m3-error-container) !important; color:var(--m3-on-error-container) !important; border-color:#FFB4AB !important; }
+
+/* Multi-device responsive viewport patch */
+html { width:100%; min-width:0; -webkit-text-size-adjust:100%; }
+body { width:100%; min-width:0; overflow-x:hidden; }
+img, svg, video, canvas { max-width:100%; }
+button, input, select, textarea { font:inherit; min-width:0; }
+.main, .content, .topbar, .msg-layout, .messages-layout, .translator, .modal, .card,
+.filter-box, .company-filter, .profile-card, .history-card, .info-card, .insight-card,
+.student-card, .company-card, .doc-card, .quick-card, .privacy-box { min-width:0; }
+
+@media (min-width: 1200px) {
+  .sidebar { width:clamp(210px, 12.5vw, 240px) !important; }
+  .topbar { left:clamp(210px, 12.5vw, 240px) !important; height:clamp(58px, 3.4vw, 66px) !important; }
+  .main { margin-left:clamp(210px, 12.5vw, 240px) !important; padding-top:clamp(58px, 3.4vw, 66px) !important; }
+  .content { width:100% !important; max-width:min(1480px, calc(100vw - clamp(260px, 16vw, 340px))) !important; margin-left:auto !important; margin-right:auto !important; padding:clamp(22px, 1.8vw, 34px) !important; padding-bottom:clamp(72px, 5vw, 110px) !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important; }
+  .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important; }
+  .filter-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) auto !important; }
+  .stats-bar { grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)) !important; }
+  .stats-row { grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)) !important; }
+  .info-grid, .insight-row, .trans-grid, .comp-detail-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .tab-bar { max-width:100%; overflow-x:auto; }
+  .tb-title { font-size:clamp(16px, 1vw, 20px) !important; }
+  .filter-box, .company-filter, .profile-card, .history-card, .translator { border-radius:clamp(14px, 1vw, 18px) !important; }
+}
+
+@media (min-width: 1800px) {
+  .content { max-width:min(1700px, calc(100vw - 320px)) !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)) !important; }
+  .doc-grid, .quick-grid { grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important; }
+  .filter-box, .company-filter, .profile-card, .history-card, .translator, .insight-card, .info-card { padding:clamp(20px, 1.25vw, 28px) !important; }
+}
+
+@media (max-width: 1199px) {
+  body { overflow-x:hidden !important; }
+  .sidebar { position:static !important; width:100% !important; min-height:0 !important; height:auto !important; bottom:auto !important; flex-direction:column !important; }
+  .sidebar nav { display:flex !important; flex-wrap:wrap !important; gap:4px !important; overflow:visible !important; padding:10px 14px !important; }
+  .sb-logo, .sb-user, .sb-bottom { padding:12px 18px !important; }
+  .sb-user { display:flex !important; align-items:center !important; gap:10px !important; flex-wrap:wrap !important; }
+  .sb-avatar { margin-bottom:0 !important; }
+  .sb-bottom { display:none !important; }
+  .nav-sec { width:100% !important; padding:8px 4px 2px !important; }
+  .nav-item { border-left:0 !important; border-radius:8px !important; padding:8px 12px !important; }
+  .topbar { position:sticky !important; left:0 !important; right:auto !important; top:0 !important; width:100% !important; height:auto !important; min-height:58px !important; padding:12px 18px !important; gap:10px !important; flex-wrap:wrap !important; }
+  .tb-right { margin-left:auto !important; flex-wrap:wrap !important; }
+  .main { margin-left:0 !important; padding-top:0 !important; width:100% !important; }
+  .content { width:100% !important; max-width:100% !important; padding:20px !important; padding-bottom:70px !important; }
+  .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .filter-grid, .filter-row2, .cf-grid, .stats-bar, .stats-row, .info-grid, .insight-row, .trans-grid, .comp-detail-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .search-btn { width:100% !important; }
+  .tab-bar { width:100% !important; overflow-x:auto !important; white-space:nowrap !important; }
+  .tab-btn { flex:0 0 auto !important; }
+  .profile-card { flex-wrap:wrap !important; }
+  .edit-btn { position:static !important; margin-left:auto !important; }
+  .bulk-bar, .banner, .results-header, .section-header { flex-wrap:wrap !important; gap:10px !important; }
+}
+
+@media (max-width: 760px) {
+  body { min-height:100vh !important; }
+  .content { padding:16px !important; }
+  .tb-title { width:100% !important; line-height:1.35 !important; }
+  .tb-right { width:100% !important; margin-left:0 !important; justify-content:flex-start !important; }
+  .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid,
+  .filter-grid, .filter-row2, .cf-grid, .stats-bar, .stats-row, .info-grid, .insight-row, .trans-grid, .comp-detail-grid,
+  .form-row, .stat-3, .detail-grid, .lang-swap { grid-template-columns:1fr !important; }
+  .profile-card, .history-item, .privacy-row, .hm-item { align-items:flex-start !important; }
+  .profile-card, .history-item, .privacy-row, .hm-item, .modal-foot, .action-btns, .cc-foot, .sc-foot, .bulk-actions { flex-direction:column !important; }
+  .h-period, .hm-period, .edit-btn { margin-left:0 !important; }
+  .sc-btn, .cc-btn, .act-btn, .btn-cancel, .btn-confirm, .bulk-btn, .search-btn, .add-btn { width:100% !important; }
+  .modal-overlay { padding:14px !important; align-items:flex-start !important; overflow-y:auto !important; }
+  .modal { width:100% !important; max-width:none !important; max-height:calc(100vh - 28px) !important; }
+  .modal-head, .modal-head-blue, .modal-body, .modal-foot { padding-left:18px !important; padding-right:18px !important; }
+}
+
+@media (max-width: 760px), (orientation: portrait) and (max-width: 1024px) {
+  body:has(.msg-layout), body:has(.messages-layout) { height:auto !important; min-height:100vh !important; overflow:auto !important; }
+  .msg-layout, .messages-layout { margin-left:0 !important; margin-top:0 !important; height:auto !important; min-height:calc(100vh - 58px) !important; display:flex !important; flex-direction:column !important; grid-template-columns:1fr !important; }
+  .inbox { width:100% !important; max-height:38vh !important; border-right:0 !important; border-bottom:1px solid var(--cb-line, #D8E7F5) !important; }
+  .chat-area { min-height:62vh !important; }
+  .chat-header, .chat-input-area { padding-left:16px !important; padding-right:16px !important; }
+  .chat-actions { width:100% !important; margin-left:0 !important; flex-wrap:wrap !important; }
+  .chat-action { flex:1 1 auto !important; text-align:center !important; }
+  .chat-messages { padding:16px !important; }
+  .bw { max-width:94% !important; }
+}
+
+@media (max-width: 480px) {
+  .content { padding:12px !important; }
+  .sidebar nav { display:block !important; padding:8px 12px !important; }
+  .nav-item { width:100% !important; }
+  .lang-sw { max-width:100%; overflow-x:auto; }
+  .tab-btn { padding:8px 12px !important; font-size:11px !important; }
+  .stat-card .num, .s3-item .s3n { font-size:22px !important; }
+  .profile-info h2, .modal-head h3, .modal-head-blue h3 { font-size:17px !important; }
+  .student-card, .company-card, .doc-card, .info-card, .insight-card, .filter-box, .company-filter, .translator, .privacy-box { padding:16px !important; }
+}
+
+@media (min-width: 761px) and (max-width: 1199px) and (orientation: portrait) {
+  .students-grid, .company-grid, .doc-grid, .quick-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .content { padding:22px !important; }
+}
+
+/* History related document drawer */
+.history-entry { display:flex; flex-direction:column; gap:0; }
+.history-item { cursor:pointer; position:relative; transition:box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease; }
+.history-item::after { content:'문서 보기'; margin-left:auto; margin-right:12px; padding:4px 10px; border-radius:999px; background:#E8F2FB; color:#456F93; font-size:11px; font-weight:800; white-space:nowrap; }
+.history-entry.open .history-item { border-color:#8FB6D9 !important; box-shadow:0 14px 34px rgba(86,132,176,0.14) !important; }
+.history-entry.open .history-item::after { content:'닫기'; background:#456F93; color:#fff; }
+.history-doc-panel { display:none; margin:-2px 8px 10px; padding:16px; background:#F8FBFE; border:1px solid #D8E7F5; border-top:0; border-radius:0 0 14px 14px; box-shadow:0 12px 28px rgba(86,132,176,0.08); }
+.history-entry.open .history-doc-panel { display:block; animation:historyDocIn 0.18s ease both; }
+@keyframes historyDocIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+.history-doc-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.history-doc-title { font-size:13px; font-weight:800; color:#18395F; }
+.history-doc-sub { font-size:11px; color:#6E8CAF; margin-top:3px; line-height:1.5; }
+.history-doc-upload { border:1px solid #D8E7F5; background:#fff; color:#456F93; border-radius:8px; padding:8px 12px; font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap; }
+.history-doc-upload:hover { background:#EEF6FD; }
+.history-doc-list { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
+.history-doc-card { background:#fff; border:1px solid #D8E7F5; border-radius:12px; padding:12px; display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:center; cursor:pointer; }
+.history-doc-card:hover { border-color:#8FB6D9; box-shadow:0 10px 24px rgba(86,132,176,0.12); }
+.history-doc-type { width:38px; height:38px; border-radius:10px; background:#E8F2FB; color:#456F93; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:900; }
+.history-doc-name { font-size:12px; font-weight:800; color:#18395F; line-height:1.35; }
+.history-doc-meta { font-size:10px; color:#6E8CAF; margin-top:2px; }
+.history-doc-actions { display:flex; gap:6px; }
+.history-doc-action { border:1px solid #D8E7F5; background:#fff; color:#456F93; border-radius:7px; padding:7px 9px; font-size:11px; font-weight:800; cursor:pointer; }
+.history-doc-action.primary { background:#456F93; border-color:#456F93; color:#fff; }
+.history-empty-doc { border:1.5px dashed #C5D8F5; background:#fff; border-radius:12px; padding:14px; color:#6E8CAF; font-size:12px; line-height:1.55; }
+@media(max-width:760px){
+  .history-item::after { margin-left:0; margin-right:0; }
+  .history-doc-head { flex-direction:column; }
+  .history-doc-upload { width:100%; }
+  .history-doc-list { grid-template-columns:1fr; }
+  .history-doc-card { grid-template-columns:auto 1fr; }
+  .history-doc-actions { grid-column:1 / -1; }
+  .history-doc-action { flex:1; }
+}
+
+/* Fake search interaction polish */
+.search-state-note { margin:0 0 14px; padding:11px 13px; border-radius:10px; background:#EEF6FD; border:1px solid #D8E7F5; color:#456F93; font-size:12px; font-weight:800; display:none; }
+.search-state-note.show { display:block; animation:searchNoteIn 0.18s ease both; }
+.search-btn.is-loading { pointer-events:none; opacity:0.78; }
+.search-btn.is-loading::after { content:''; display:inline-block; width:12px; height:12px; margin-left:8px; border:2px solid rgba(255,255,255,0.45); border-top-color:#fff; border-radius:50%; vertical-align:-2px; animation:spin 0.7s linear infinite; }
+.company-grid.search-refreshing { opacity:0.42; transform:translateY(4px); transition:all 0.18s ease; }
+.company-card.search-hit { animation:searchCardIn 0.26s ease both; }
+@keyframes searchNoteIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+@keyframes searchCardIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* Bottom promotional ad banner */
+.bottom-ad-showcase { margin-top:0; margin-bottom:24px; border-radius:22px; overflow:hidden; background:#FFFFFF; border:1px solid #D8E7F5; box-shadow:0 18px 46px rgba(86,132,176,0.16); }
+.bottom-ad-showcase{ position:relative; }
+.ad-slide-track{ display:flex; transition:transform .5s cubic-bezier(.4,0,.2,1); }
+.ad-slide-track .bottom-ad-inner{ min-width:100%; }
+.ad-slide-dots{ position:absolute; left:0; right:0; bottom:8px; display:flex; justify-content:center; gap:6px; z-index:2; }
+.ad-dot{ width:7px; height:7px; border-radius:50%; background:#BFDBFE; cursor:pointer; transition:.2s; }
+.ad-dot.active{ background:#2563EB; width:18px; border-radius:4px; }
+.bottom-ad-inner { position:relative; display:grid; grid-template-columns:minmax(0, 1fr) minmax(320px, 42%); min-height:220px; background:linear-gradient(135deg, #F8FBFF 0%, #EFF6FD 100%); }
+.bottom-ad-copy { padding:30px 34px; display:flex; flex-direction:column; justify-content:center; gap:12px; }
+.bottom-ad-kicker { width:fit-content; padding:6px 10px; border-radius:999px; background:#E8F2FB; color:#456F93; font-size:11px; font-weight:900; letter-spacing:0.08em; text-transform:uppercase; }
+.bottom-ad-title { color:#123048; font-size:26px; line-height:1.25; font-weight:900; letter-spacing:-0.04em; }
+.bottom-ad-desc { color:#58738A; font-size:13px; line-height:1.75; max-width:560px; font-weight:650; }
+.bottom-ad-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:2px; }
+.bottom-ad-btn { border:0; border-radius:10px; padding:10px 15px; font-size:12px; font-weight:900; cursor:pointer; transition:transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease; }
+.bottom-ad-btn.primary { background:#4B78AA; color:#fff; box-shadow:0 10px 24px rgba(75,120,170,0.2); }
+.bottom-ad-btn.secondary { background:#fff; color:#456F93; border:1px solid #D8E7F5; }
+.bottom-ad-btn:hover { transform:translateY(-2px); }
+.bottom-ad-visual { position:relative; min-height:220px; background:#5F8FBE; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+.bottom-ad-visual::before { content:''; position:absolute; width:280px; height:280px; right:-70px; top:-86px; border-radius:50%; background:rgba(255,255,255,0.12); }
+.bottom-ad-visual::after { content:''; position:absolute; width:180px; height:180px; left:-70px; bottom:-86px; border-radius:50%; background:rgba(255,255,255,0.10); }
+.bottom-ad-badge { position:absolute; top:18px; left:18px; z-index:2; width:62px; height:72px; border-radius:12px 12px 18px 18px; background:#FFFFFF; color:#4B78AA; display:flex; align-items:center; justify-content:center; text-align:center; font-size:12px; line-height:1.2; font-weight:1000; box-shadow:0 12px 26px rgba(24,48,72,0.16); }
+.bottom-ad-panel { position:relative; z-index:1; width:min(78%, 430px); border-radius:18px; background:rgba(255,255,255,0.92); box-shadow:0 18px 36px rgba(24,48,72,0.18); overflow:hidden; transform:rotate(-1.2deg); }
+.bottom-ad-panel-top { height:34px; background:#123048; display:flex; align-items:center; gap:6px; padding:0 14px; }
+.bottom-ad-dot { width:7px; height:7px; border-radius:50%; background:#8FB6D9; }
+.bottom-ad-panel-body { padding:16px; display:grid; gap:10px; }
+.bottom-ad-line { height:9px; border-radius:999px; background:#D8E7F5; }
+.bottom-ad-line.w70 { width:70%; }
+.bottom-ad-line.w52 { width:52%; }
+.bottom-ad-mini-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-top:4px; }
+.bottom-ad-mini { height:54px; border-radius:12px; background:#EEF6FD; border:1px solid #D8E7F5; display:flex; align-items:flex-end; padding:8px; }
+.bottom-ad-mini span { width:100%; height:7px; border-radius:999px; background:#8FB6D9; }
+@media (max-width:900px){ .bottom-ad-inner { grid-template-columns:1fr; } .bottom-ad-visual { min-height:190px; order:-1; } .bottom-ad-copy { padding:24px; } .bottom-ad-title { font-size:22px; } }
+@media (max-width:520px){ .bottom-ad-showcase { border-radius:18px; } .bottom-ad-copy { padding:20px; } .bottom-ad-title { font-size:20px; } .bottom-ad-actions { flex-direction:column; } .bottom-ad-btn { width:100%; } .bottom-ad-panel { width:84%; } }
+
+/* Minimal tool-style internal UI refresh */
+:root {
+  --tool-bg:#F7F9FC;
+  --tool-surface:#FFFFFF;
+  --tool-surface-2:#FAFBFD;
+  --tool-line:#E4EAF2;
+  --tool-line-strong:#D7E0EA;
+  --tool-text:#172B3A;
+  --tool-muted:#66788A;
+  --tool-blue:#4F83B8;
+  --tool-blue-soft:#EAF3FB;
+  --tool-blue-hover:#3E6F9F;
+  --tool-shadow:0 8px 22px rgba(21, 38, 54, 0.055);
+}
+html, body { background:var(--tool-bg) !important; color:var(--tool-text) !important; }
+.main, .content, .chat-area { background:var(--tool-bg) !important; }
+.sidebar {
+  background:var(--tool-surface) !important;
+  color:var(--tool-text) !important;
+  border-right:1px solid var(--tool-line) !important;
+  box-shadow:none !important;
+}
+.sb-logo, .sb-user, .sb-bottom { border-color:var(--tool-line) !important; }
+.sb-brand, .sb-name { color:var(--tool-text) !important; }
+.sb-sub, .sb-role, .nav-sec { color:var(--tool-muted) !important; }
+.sb-badge, .demo-mode-pill, .demo-status, .sc-tag, .cc-tag, .user-type-badge, .qc-type, .qc-lang, .doc-status {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  border:1px solid transparent !important;
+}
+.sb-avatar, .sc-avatar, .cc-logo, .msg-avatar, .chat-avatar, .b-avatar, .profile-avatar, .h-badge, .hm-badge, .feat-icon, .mock-avatar {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  border:1px solid #D8E9F7 !important;
+}
+.nav-item {
+  color:var(--tool-muted) !important;
+  border-left:0 !important;
+  border-radius:10px !important;
+  margin:2px 10px !important;
+  padding:10px 12px !important;
+}
+.nav-item:hover { background:var(--tool-surface-2) !important; color:var(--tool-text) !important; }
+.nav-item.active {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  box-shadow:inset 0 0 0 1px rgba(79,131,184,0.10) !important;
+}
+.sb-logout {
+  background:var(--tool-surface-2) !important;
+  color:var(--tool-muted) !important;
+  border:1px solid var(--tool-line) !important;
+}
+.topbar, .nav, .inbox, .chat-header, .chat-input-area {
+  background:rgba(255,255,255,0.94) !important;
+  border-color:var(--tool-line) !important;
+  box-shadow:none !important;
+  backdrop-filter:saturate(160%) blur(10px);
+}
+.tb-title, .filter-title, .section-header h3, .profile-info h2, .modal-head h3, .modal-head-blue h3,
+.sc-name, .cc-name, .doc-name, .qc-title, .h-title, .chat-name, .msg-sender, .info-row .iv, .results-count,
+.insight-card h3, .history-card h3, .profile-trans h3, .card h2 { color:var(--tool-text) !important; }
+.profile-info p, .modal-head p, .modal-head-blue p, .sc-sub, .cc-type, .doc-meta, .qc-desc, .h-sub,
+.msg-preview, .chat-sub, .info-row .ik, .stat-card .lbl, .bar-lbl, .section-desc, .portal-summary span { color:var(--tool-muted) !important; }
+.filter-box, .stat-card, .student-card, .insight-card, .profile-card, .info-card, .history-item, .history-doc-panel,
+.doc-card, .privacy-box, .company-filter, .company-card, .quick-card, .profile-trans, .history-card, .translator,
+.modal, .portal-summary, .bottom-ad-showcase, .card, .d-item, .hm-item, .cd-item, .s3-item {
+  background:var(--tool-surface) !important;
+  border:1px solid var(--tool-line) !important;
+  box-shadow:var(--tool-shadow) !important;
+}
+.filter-box, .student-card, .company-card, .doc-card, .quick-card, .history-card, .profile-trans, .translator,
+.privacy-box, .info-card, .insight-card, .portal-summary { border-radius:14px !important; }
+.student-card:hover, .company-card:hover, .doc-card:hover, .quick-card:hover, .history-item:hover {
+  border-color:#C8D8E8 !important;
+  box-shadow:0 12px 28px rgba(21,38,54,0.075) !important;
+  transform:translateY(-1px) !important;
+}
+.tab-bar, .lang-sw, .toggle-grp, .inbox-search, .input-wrap, .upload-card, .trans-output, .demo-state-note, .search-state-note {
+  background:var(--tool-surface-2) !important;
+  border:1px solid var(--tool-line) !important;
+  box-shadow:none !important;
+}
+.tab-btn, .lang-sw span, .toggle-opt, .chat-action, .btn-cancel, .btn-secondary, .cc-btn.secondary, .sc-btn.secondary,
+.act-btn.secondary, .history-doc-action, .bottom-ad-btn.secondary {
+  background:transparent !important;
+  color:var(--tool-muted) !important;
+  border-color:var(--tool-line) !important;
+}
+.tab-btn.active, .lang-sw span.active, .toggle-opt.active, .btn-primary, .nav-signup, .search-btn, .compose-btn,
+.send-btn, .btn-confirm, .add-btn, .cc-btn.primary, .sc-btn.primary, .act-btn.primary, .trans-btn, .pt-btn,
+.history-doc-action.primary, .bottom-ad-btn.primary, .student-card.selected .sc-check {
+  background:var(--tool-blue) !important;
+  color:#FFFFFF !important;
+  border-color:var(--tool-blue) !important;
+  box-shadow:none !important;
+}
+.btn-primary:hover, .nav-signup:hover, .search-btn:hover, .compose-btn:hover, .send-btn:hover, .btn-confirm:hover,
+.add-btn:hover, .cc-btn.primary:hover, .sc-btn.primary:hover, .act-btn.primary:hover, .trans-btn:hover,
+.pt-btn:hover, .bottom-ad-btn.primary:hover { background:var(--tool-blue-hover) !important; }
+.fg label, .cf-group label, .detail-sec h4, .results-count span, .stat-card .num, .rank-item .rc, .bar-val,
+.trans-hint span, .modal-foot-link a, .tb-notif svg, .close-btn-dark svg { color:var(--tool-blue) !important; }
+.fg input, .fg select, .fg textarea, .trans-input, .inbox-search input, .input-wrap input, select {
+  background:#FFFFFF !important;
+  color:var(--tool-text) !important;
+  border:1px solid var(--tool-line-strong) !important;
+  box-shadow:none !important;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus, .trans-input:focus {
+  border-color:var(--tool-blue) !important;
+  box-shadow:0 0 0 3px rgba(79,131,184,0.10) !important;
+}
+.bulk-bar, .banner, .modal-head-blue, .comp-detail-header, .profile-card {
+  background:var(--tool-surface) !important;
+  color:var(--tool-text) !important;
+  border:1px solid var(--tool-line) !important;
+  box-shadow:var(--tool-shadow) !important;
+}
+.banner .b-label, .banner .b-title, .banner .b-sub, .modal-head-blue h3, .modal-head-blue p,
+.comp-detail-header h3, .comp-detail-header p, .profile-card h2, .profile-card p { color:var(--tool-text) !important; }
+.banner-more, .b-cta, .b-mini-tag, .b-badge, .p-tag {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  border:1px solid #D8E9F7 !important;
+}
+.progress, .progress-fill, .pf, .bar, .unread-dot, .ndot, .uf-dot { background:var(--tool-blue) !important; }
+.progress { background:#EDF2F7 !important; }
+.bubble.me { background:var(--tool-blue) !important; color:#FFFFFF !important; }
+.bubble.them { background:#FFFFFF !important; color:var(--tool-text) !important; border:1px solid var(--tool-line) !important; box-shadow:var(--tool-shadow) !important; }
+.bottom-ad-inner { background:#FFFFFF !important; }
+.bottom-ad-visual { background:#F4F8FC !important; border-left:1px solid var(--tool-line) !important; }
+.bottom-ad-visual::before, .bottom-ad-visual::after { background:rgba(79,131,184,0.08) !important; }
+.bottom-ad-panel { background:#FFFFFF !important; border:1px solid var(--tool-line) !important; box-shadow:0 18px 34px rgba(21,38,54,0.09) !important; }
+.bottom-ad-panel-top { background:#EEF4FA !important; }
+.bottom-ad-badge { background:var(--tool-blue) !important; color:#FFFFFF !important; }
+.bottom-ad-title { color:var(--tool-text) !important; }
+.bottom-ad-desc { color:var(--tool-muted) !important; }
+@media (max-width:1100px){ .sidebar { border-right:0 !important; border-bottom:1px solid var(--tool-line) !important; } .nav-item { margin:2px !important; } }
+
+/* Final internal layout and banner color correction */
+:root {
+  --cb-sidebar-w: clamp(228px, 12.5vw, 248px);
+  --cb-topbar-h: clamp(58px, 3.4vw, 66px);
+  --cb-panel-bg: #F6FAFD;
+  --cb-surface: #FFFFFF;
+  --cb-line-soft: #DCEAF6;
+  --cb-point: #5F94C3;
+  --cb-point-strong: #376C9C;
+  --cb-point-soft: #EAF4FB;
+  --cb-text-main: #14293A;
+  --cb-text-sub: #5D7082;
+}
+.sidebar {
+  width: var(--cb-sidebar-w) !important;
+  background: var(--cb-surface) !important;
+  color: var(--cb-text-main) !important;
+  border-right: 1px solid var(--cb-line-soft) !important;
+  box-shadow: 10px 0 26px rgba(31, 71, 103, 0.05) !important;
+}
+.sidebar .sb-brand,
+.sidebar .sb-name,
+.sidebar .nav-item,
+.sidebar .sb-logout {
+  color: var(--cb-text-main) !important;
+}
+.sidebar .sb-sub,
+.sidebar .sb-role,
+.sidebar .nav-sec {
+  color: var(--cb-text-sub) !important;
+}
+.sidebar .sb-avatar,
+.sidebar .sb-badge {
+  background: var(--cb-point-soft) !important;
+  color: var(--cb-point-strong) !important;
+  border: 1px solid #CBE2F4 !important;
+}
+.sidebar .nav-item.active,
+.sidebar .nav-item:hover {
+  background: var(--cb-point-soft) !important;
+  color: var(--cb-point-strong) !important;
+  border-color: transparent !important;
+}
+.sidebar .nav-item svg,
+.sidebar .sb-logout svg {
+  fill: var(--cb-point-strong) !important;
+}
+.topbar {
+  left: var(--cb-sidebar-w) !important;
+  height: var(--cb-topbar-h) !important;
+  min-height: var(--cb-topbar-h) !important;
+  background: rgba(255,255,255,0.96) !important;
+  border-bottom: 1px solid var(--cb-line-soft) !important;
+}
+.main {
+  margin-left: var(--cb-sidebar-w) !important;
+  padding-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  min-width: 0 !important;
+  background: var(--cb-panel-bg) !important;
+}
+.main .content,
+.content {
+  width: 100% !important;
+  max-width: min(1480px, calc(100vw - var(--cb-sidebar-w) - 56px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+.msg-layout {
+  margin-left: var(--cb-sidebar-w) !important;
+  margin-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  height: calc(100vh - var(--cb-topbar-h)) !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.bottom-ad-showcase,
+.banner,
+.cta-section:not(.brand-cta-section) {
+  background: linear-gradient(135deg, #F8FBFE 0%, #EAF4FB 100%) !important;
+  border: 1px solid var(--cb-line-soft) !important;
+  color: var(--cb-text-main) !important;
+  box-shadow: 0 18px 46px rgba(57, 103, 142, 0.10) !important;
+}
+.bottom-ad-showcase *,
+.banner *,
+.cta-section:not(.brand-cta-section) * {
+  color: inherit;
+}
+.bottom-ad-eyebrow,
+.bottom-ad-tag,
+.banner .badge,
+.cta-section:not(.brand-cta-section) .badge {
+  background: #DDEFFA !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #C5DFEF !important;
+}
+.bottom-ad-title,
+.bottom-ad-showcase h2,
+.bottom-ad-showcase h3,
+.banner h2,
+.banner h3,
+.cta-section:not(.brand-cta-section) h2,
+.cta-section:not(.brand-cta-section) h3 {
+  color: var(--cb-text-main) !important;
+}
+.bottom-ad-desc,
+.bottom-ad-showcase p,
+.banner p,
+.cta-section:not(.brand-cta-section) p {
+  color: var(--cb-text-sub) !important;
+}
+.bottom-ad-btn.primary,
+.bottom-ad-showcase .primary,
+.banner .primary,
+.cta-section:not(.brand-cta-section) .primary,
+.cta-section:not(.brand-cta-section) .cta-btn-white {
+  background: var(--cb-point-strong) !important;
+  color: #FFFFFF !important;
+  border-color: var(--cb-point-strong) !important;
+}
+.bottom-ad-btn.secondary,
+.bottom-ad-showcase .secondary,
+.banner .secondary,
+.cta-section:not(.brand-cta-section) .secondary,
+.cta-section:not(.brand-cta-section) .cta-btn-outline {
+  background: #FFFFFF !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #BCD9EE !important;
+}
+@media (max-width: 1180px), (orientation: portrait) {
+  .sidebar {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cb-line-soft) !important;
+    box-shadow: none !important;
+  }
+  .topbar {
+    position: sticky !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 58px !important;
+  }
+  .main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+  }
+  .main .content,
+  .content {
+    max-width: 100% !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .msg-layout {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .main .content,
+  .content {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* Final readable badge correction */
+.p-tag,
+.sc-tag,
+.cc-tag,
+.doc-status,
+.demo-status,
+.demo-mode-pill,
+.user-type-badge,
+.qc-type,
+.qc-lang,
+.mock-tag,
+.th-langs,
+.b-mini-tag,
+.b-badge,
+.banner-more,
+.translation-badge,
+.profile-card .p-tag {
+  background: #DDEFFA !important;
+  color: #2E638F !important;
+  border: 1px solid #C2DBEF !important;
+  box-shadow: none !important;
+}
+.p-tag.accent,
+.sc-tag.accent,
+.doc-status.verified,
+.demo-status.strong,
+.user-type-badge.c {
+  background: #CFE6F7 !important;
+  color: #214E74 !important;
+  border-color: #B8D6EA !important;
+}
+.profile-card .p-tag,
+.comp-detail-header .p-tag,
+.modal .p-tag {
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+.bubble.me .translation-badge {
+  background: rgba(255,255,255,0.92) !important;
+  color: #2E638F !important;
+  border-color: rgba(255,255,255,0.72) !important;
+}
+
+/* DID / SBT blockchain proof UI */
+.bc-card{background:#fff;border:1.5px solid #BFDBFE;border-radius:16px;padding:18px;box-shadow:0 12px 28px rgba(37,99,235,.08);margin-bottom:18px;}
+.bc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px;}
+.bc-kicker{font-size:11px;font-weight:900;color:#2563EB;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+.bc-title{font-size:17px;font-weight:900;color:#1A3A6B;}
+.bc-desc{font-size:12px;color:#6B8CC4;line-height:1.6;margin-top:4px;}
+.bc-status{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;background:#ECFDF5;color:#047857;font-size:11px;font-weight:900;white-space:nowrap;}
+.bc-status::before{content:'';width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 4px rgba(16,185,129,.14);}
+.bc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.bc-field{background:#F5F9FF;border:1px solid #D6E6FB;border-radius:12px;padding:11px 12px;min-width:0;}
+.bc-label{font-size:10px;font-weight:800;color:#6B8CC4;margin-bottom:5px;}
+.bc-value{font-size:12px;font-weight:900;color:#1E3A5F;word-break:break-all;}
+.bc-actions{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap;}
+.bc-btn{border:none;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:900;cursor:pointer;background:#2563EB;color:#fff;}
+.bc-btn.secondary{background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE;}
+.bc-btn.done{background:#ECFDF5;color:#047857;border:1px solid #A7F3D0;}
+.sbt-checks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 14px;}
+.sbt-option{display:flex;align-items:center;gap:8px;background:#F8FBFF;border:1px solid #D6E6FB;border-radius:11px;padding:10px 11px;font-size:12px;font-weight:800;color:#1E3A5F;cursor:pointer;}
+.sbt-option input{width:16px;height:16px;accent-color:#2563EB;}
+.bc-stepper{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:12px;}
+.bc-step{position:relative;background:#F5F9FF;border:1px solid #D6E6FB;border-radius:12px;padding:11px 8px;text-align:center;color:#6B8CC4;font-size:11px;font-weight:800;}
+.bc-step::before{content:attr(data-step);display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;margin:0 auto 7px;background:#D6E6FB;color:#2563EB;font-size:11px;font-weight:900;}
+.bc-step.active{background:#EFF6FF;border-color:#2563EB;color:#1D4ED8;box-shadow:0 8px 18px rgba(37,99,235,.12);}
+.bc-step.active::before{background:#2563EB;color:#fff;}
+.bc-step.done{background:#ECFDF5;border-color:#A7F3D0;color:#047857;}
+.bc-step.done::before{content:'✓';background:#10B981;color:#fff;}
+.bc-ledger{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px;}
+.bc-ledger .bc-field{background:#FFFFFF;}
+.bc-valid{display:flex;align-items:center;gap:8px;margin-top:12px;padding:11px 12px;border-radius:12px;background:#ECFDF5;border:1px solid #A7F3D0;color:#047857;font-size:12px;font-weight:900;}
+.bc-valid::before{content:'🔒';}
+@media (max-width:900px){.bc-grid,.sbt-checks,.bc-stepper,.bc-ledger{grid-template-columns:1fr}.bc-head{flex-direction:column}.bc-actions{width:100%}.bc-btn{width:100%}}
+
+
+/* Investor-facing Career Wallet / on-chain minting UI */
+.wallet-stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:16px;margin-bottom:18px;align-items:stretch;}
+.career-wallet{position:relative;overflow:hidden;background:linear-gradient(135deg,#091A3A 0%,#123D78 52%,#2563EB 100%);border:none;color:#fff;box-shadow:0 22px 50px rgba(20,64,140,.28);min-height:230px;}
+.career-wallet::before{content:'';position:absolute;right:-70px;top:-80px;width:210px;height:210px;border-radius:44px;background:rgba(255,255,255,.10);transform:rotate(28deg);}
+.career-wallet::after{content:'';position:absolute;left:24px;bottom:-62px;width:190px;height:190px;border:1px solid rgba(255,255,255,.16);border-radius:50%;}
+.career-wallet .bc-head,.career-wallet .bc-grid,.career-wallet .bc-actions{position:relative;z-index:1;}
+.wallet-logo{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.wallet-logo-mark{width:40px;height:40px;border-radius:14px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);}
+.wallet-title{font-size:20px;font-weight:950;letter-spacing:.1px;}
+.wallet-sub{font-size:11px;color:#BFD7FF;font-weight:800;text-transform:uppercase;letter-spacing:.9px;}
+.career-wallet .bc-desc{color:#DCEBFF;}
+.career-wallet .bc-status{background:rgba(16,185,129,.18);color:#D1FAE5;border:1px solid rgba(167,243,208,.35);}
+.career-wallet .bc-field{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px);}
+.career-wallet .bc-label{color:#BFD7FF;}
+.career-wallet .bc-value{color:#fff;font-family:Consolas,'SFMono-Regular',monospace;}
+.career-wallet .bc-btn{background:#fff;color:#123D78;box-shadow:0 10px 24px rgba(0,0,0,.16);}
+.career-wallet .bc-btn.secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.32);}
+.wallet-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:1;}
+.wallet-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);font-size:11px;font-weight:900;color:#EAF3FF;}
+.wallet-chip::before{content:'✓';color:#86EFAC;}
+.bc-activity{background:#fff;border:1.5px solid #BFDBFE;border-radius:16px;padding:16px;box-shadow:0 12px 28px rgba(37,99,235,.08);}
+.activity-title{font-size:14px;font-weight:950;color:#1A3A6B;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.activity-title span{font-size:10px;color:#2563EB;background:#EFF6FF;border-radius:999px;padding:4px 8px;}
+.activity-list{display:grid;gap:9px;}
+.activity-item{display:grid;grid-template-columns:42px 1fr;gap:10px;align-items:start;font-size:12px;color:#1E3A5F;}
+.activity-time{font-size:11px;color:#6B8CC4;font-weight:900;font-family:Consolas,monospace;}
+.activity-text{position:relative;font-weight:850;line-height:1.45;}
+.activity-text::before{content:'';position:absolute;left:-14px;top:5px;width:7px;height:7px;border-radius:50%;background:#2563EB;box-shadow:0 0 0 4px #DBEAFE;}
+.wallet-auth-modal .modal{max-width:460px;}
+.auth-sheet{border-radius:18px;background:linear-gradient(180deg,#F8FBFF,#FFFFFF);border:1px solid #D6E6FB;padding:18px;text-align:center;}
+.auth-wallet-icon{width:58px;height:58px;border-radius:18px;margin:0 auto 12px;background:linear-gradient(135deg,#123D78,#2563EB);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 14px 28px rgba(37,99,235,.22);}
+.auth-main{font-size:17px;font-weight:950;color:#1A3A6B;margin-bottom:6px;}
+.auth-sub{font-size:12px;color:#6B8CC4;line-height:1.65;margin-bottom:14px;}
+.auth-info{display:grid;gap:8px;text-align:left;margin:12px 0 16px;}
+.auth-info-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #D6E6FB;border-radius:11px;padding:10px 12px;font-size:12px;}
+.auth-info-row span:first-child{color:#6B8CC4;font-weight:800;}
+.auth-info-row span:last-child{color:#1E3A5F;font-weight:950;}
+.signature-box{display:none;margin-top:12px;border-radius:14px;background:#0F172A;color:#EAF3FF;padding:16px;text-align:left;font-family:Consolas,'SFMono-Regular',monospace;}
+.signature-box.show{display:block;}
+.sig-line{display:flex;justify-content:space-between;gap:12px;font-size:11px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+.sig-line b{color:#93C5FD;}
+.sig-loader{height:8px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:12px;}
+.sig-loader span{display:block;width:38%;height:100%;background:linear-gradient(90deg,#60A5FA,#34D399);border-radius:999px;animation:sigMove 1s infinite alternate;}
+@keyframes sigMove{from{transform:translateX(0)}to{transform:translateX(170%)}}
+.sbt-mint-panel{margin-top:14px;border-radius:16px;background:#071427;color:#EAF3FF;padding:16px;display:none;box-shadow:inset 0 0 0 1px rgba(147,197,253,.16);}
+.sbt-mint-panel.show{display:block;}
+.mint-title{font-size:13px;font-weight:950;color:#93C5FD;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;}
+.mint-row{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:11px;font-family:Consolas,monospace;}
+.mint-row span:last-child{color:#86EFAC;font-weight:900;}
+.certificate-card{display:none;margin-top:14px;border-radius:18px;padding:18px;background:linear-gradient(145deg,#111827,#1E3A8A 58%,#2563EB);color:#fff;box-shadow:0 20px 42px rgba(17,24,39,.25);position:relative;overflow:hidden;}
+.certificate-card.show{display:block;}
+.certificate-card::after{content:'SBT';position:absolute;right:16px;top:12px;font-size:54px;font-weight:950;color:rgba(255,255,255,.08);letter-spacing:-3px;}
+.cert-kicker{font-size:11px;font-weight:950;color:#BFDBFE;letter-spacing:1.1px;text-transform:uppercase;}
+.cert-title{font-size:20px;font-weight:950;margin:6px 0 14px;}
+.cert-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;position:relative;z-index:1;}
+.cert-field{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:9px;}
+.cert-label{font-size:10px;color:#BFDBFE;font-weight:850;margin-bottom:4px;}
+.cert-value{font-size:12px;color:#fff;font-weight:950;word-break:break-all;font-family:Consolas,'SFMono-Regular',monospace;}
+.cert-valid{display:inline-flex;margin-top:12px;gap:7px;align-items:center;background:rgba(16,185,129,.18);border:1px solid rgba(167,243,208,.35);color:#D1FAE5;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:950;}
+.cert-valid::before{content:'🔗';}
+.bc-step[data-step="1"]::before{content:'AI';font-size:9px;}
+.bc-step[data-step="2"]::before{content:'SIG';font-size:9px;}
+.bc-step[data-step="3"]::before{content:'SC';font-size:9px;}
+.bc-step[data-step="4"]::before{content:'TX';font-size:9px;}
+.bc-step[data-step="5"]::before{content:'BLK';font-size:9px;}
+@media(max-width:1000px){.wallet-stage{grid-template-columns:1fr}.cert-grid{grid-template-columns:1fr}}
+
+.chain-flow-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0 0 18px;}
+.chain-flow-step{position:relative;background:#fff;border:1.5px solid #BFDBFE;border-radius:14px;padding:13px 12px;box-shadow:0 10px 24px rgba(37,99,235,.07);min-height:82px;overflow:hidden;}
+.chain-flow-step::after{content:'';position:absolute;right:-18px;top:50%;width:36px;height:2px;background:#BFDBFE;transform:translateY(-50%);}
+.chain-flow-step:last-child::after{display:none;}
+.chain-flow-k{font-size:10px;font-weight:950;color:#2563EB;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.chain-flow-t{font-size:13px;font-weight:950;color:#1A3A6B;margin-bottom:4px;}
+.chain-flow-d{font-size:11px;color:#6B8CC4;line-height:1.45;}
+.chain-flow-icon{position:absolute;right:10px;bottom:8px;font-size:24px;color:#D6E6FB;font-weight:950;}
+.chain-flow-step.hot{background:linear-gradient(135deg,#F8FBFF,#EEF6FF);border-color:#93C5FD;}
+.chain-flow-step.done .chain-flow-k{color:#047857;}.chain-flow-step.done{border-color:#A7F3D0;background:#F6FEFA;}
+@media(max-width:1000px){.chain-flow-strip{grid-template-columns:1fr}.chain-flow-step::after{display:none}}
+
+
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-brand">Career Bridge</div>
+    <div class="sb-sub">유학생 커리어 플랫폼</div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-avatar">WX</div>
+    <div class="sb-name">Wang Xiaoming</div>
+    <div class="sb-role">왕샤오밍 · 중국</div>
+    <div class="sb-badge">유학생</div>
+  </div>
+  <nav>
+    <div class="nav-sec">내 정보</div>
+    <div class="nav-item active" onclick="setNav(this,'profile')">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>내 프로필
+    </div>
+    <div class="nav-item" onclick="setNav(this,'history')">
+      <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>이력 관리
+    </div>
+    <div class="nav-item" onclick="setNav(this,'docs')">
+      <svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>문서 관리
+    </div>
+    <div class="nav-item" onclick="setNav(this,'privacy')">
+      <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>공개 설정
+    </div>
+    <div class="nav-sec">탐색</div>
+    <div class="nav-item" onclick="setNav(this,'companies')">
+      <svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>기업 검색
+    </div>
+    <div class="nav-sec">커뮤니케이션</div>
+    <div class="nav-item" onclick="setNav(this,'community')">
+      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>커뮤니티
+    </div>
+    <div class="nav-item" onclick="window.location.href='messages.html'">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>메시지
+    </div>
+    <div class="nav-item" onclick="window.location.href='translation.html'">
+      <svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>번역 서비스
+    </div>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="window.location.href='index.html'">로그아웃</button>
+  </div>
+</div>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="tb-title" id="pageTitle">내 프로필</div>
+  <div class="tb-right">
+    <div class="lang-sw">
+      <span class="active" onclick="setLang(this,'ko')">KO</span>
+      <span onclick="setLang(this,'en')">EN</span>
+      <span onclick="setLang(this,'zh')">ZH</span>
+    </div>
+    <div class="tb-notif">
+      <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      <div class="ndot"></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="content">
+
+
+    <section class="bottom-ad-showcase" aria-label="유학생 광고 배너">
+      <div class="ad-slide-track" id="adTrack">
+        <div class="bottom-ad-inner">
+          <div class="bottom-ad-copy">
+            <div class="bottom-ad-kicker">Career Bridge Pick</div>
+            <div class="bottom-ad-title">이력서 번역부터<br>기업 메시지까지 한 번에</div>
+            <div class="bottom-ad-desc">유학생 프로필, 자기소개서, 포트폴리오를 한국어·영어·중국어로 정리하고 지원 가능한 기업과 바로 연결되는 시연 배너입니다.</div>
+            <div class="bottom-ad-actions">
+              <button class="bottom-ad-btn primary" onclick="switchTab('docs')">문서 관리 보기</button>
+              <button class="bottom-ad-btn secondary" onclick="switchTab('companies')">기업 검색 보기</button>
+            </div>
+          </div>
+          <div class="bottom-ad-visual">
+            <div class="bottom-ad-badge">CB<br>PICK</div>
+            <div class="bottom-ad-panel">
+              <div class="bottom-ad-panel-top"><span class="bottom-ad-dot"></span><span class="bottom-ad-dot"></span><span class="bottom-ad-dot"></span></div>
+              <div class="bottom-ad-panel-body">
+                <div class="bottom-ad-line w70"></div><div class="bottom-ad-line w52"></div>
+                <div class="bottom-ad-mini-grid"><div class="bottom-ad-mini"><span></span></div><div class="bottom-ad-mini"><span></span></div><div class="bottom-ad-mini"><span></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-ad-inner">
+          <div class="bottom-ad-copy">
+            <div class="bottom-ad-kicker">Community Poll</div>
+            <div class="bottom-ad-title">2026학년도 기숙사<br>만족도 조사 참여하기</div>
+            <div class="bottom-ad-desc">경희대학교 국제교류처 공식 투표 · 참여 128명 · 마감 D-5. 커뮤니티에서 바로 투표해보세요.</div>
+            <div class="bottom-ad-actions">
+              <button class="bottom-ad-btn primary" onclick="goToPoll()">투표 참여하기</button>
+            </div>
+          </div>
+          <div class="bottom-ad-visual">
+            <div class="bottom-ad-badge">POLL</div>
+            <div class="bottom-ad-panel">
+              <div class="bottom-ad-panel-top"><span class="bottom-ad-dot"></span><span class="bottom-ad-dot"></span><span class="bottom-ad-dot"></span></div>
+              <div class="bottom-ad-panel-body">
+                <div class="bottom-ad-line w70"></div><div class="bottom-ad-line w52"></div>
+                <div class="bottom-ad-mini-grid"><div class="bottom-ad-mini"><span></span></div><div class="bottom-ad-mini"><span></span></div><div class="bottom-ad-mini"><span></span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ad-slide-dots" id="adDots"></div>
+    </section>
+
+    <!-- PROFILE -->
+    <div class="tab-panel active" id="panel-profile">
+      <div class="profile-card">
+        <div class="profile-avatar">WX</div>
+        <div class="profile-info">
+          <h2>Wang Xiaoming (왕샤오밍)</h2>
+          <div class="en-name">경희대학교 · 경영학과 4학년</div>
+          <div class="p-tags">
+            <span class="p-tag">중국 (CN)</span>
+            <span class="p-tag">TOPIK 5급</span>
+            <span class="p-tag">취업 준비 중</span>
+            <span class="p-tag">한국 정주 희망</span>
+          </div>
+        </div>
+        <button class="edit-btn" onclick="openModal('editProfileModal')">편집</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="num">3</div><div class="lbl">등록 문서</div></div>
+        <div class="stat-card"><div class="num">5</div><div class="lbl">이력 항목</div></div>
+        <div class="stat-card"><div class="num">2</div><div class="lbl">받은 메시지</div></div>
+        <div class="stat-card"><div class="num">87%</div><div class="lbl">프로필 완성도</div></div>
+      </div>
+
+
+      <div class="wallet-stage">
+        <div class="bc-card career-wallet" id="didWalletCard">
+          <div class="bc-head">
+            <div>
+              <div class="wallet-logo"><div class="wallet-logo-mark">◈</div><div><div class="wallet-sub">Career Wallet</div><div class="wallet-title">블록체인 신원 지갑</div></div></div>
+              <div class="bc-desc">학생은 Career Wallet으로 서명하고, 학력·자격·어학·경력 인증은 백그라운드에서 Smart Contract와 Blockchain에 기록됩니다.</div>
+            </div>
+            <div class="bc-status" id="didStatus">Wallet Connected</div>
+          </div>
+          <div class="bc-grid">
+            <div class="bc-field"><div class="bc-label">DID Address</div><div class="bc-value" id="didAddress">did:career:0xA91F...82C3</div></div>
+            <div class="bc-field"><div class="bc-label">Wallet Connected</div><div class="bc-value" id="walletStatus">Career Wallet</div></div>
+            <div class="bc-field"><div class="bc-label">Verified Identity</div><div class="bc-value" id="walletName">KYC · Student Verified</div></div>
+          </div>
+          <div class="wallet-chip-row">
+            <span class="wallet-chip">Verified Identity</span>
+            <span class="wallet-chip">SBT Ready 4</span>
+            <span class="wallet-chip">Ethereum Network</span>
+          </div>
+          <div class="bc-actions">
+            <button class="bc-btn" onclick="openWalletSignatureModal()">지갑으로 인증하기</button>
+            <button class="bc-btn secondary" id="didDoneBtn" onclick="openWalletSignatureModal()">Signature Ready</button>
+          </div>
+        </div>
+        <div class="bc-activity" id="blockchainActivity">
+          <div class="activity-title">Blockchain Activity <span>Live Mock</span></div>
+          <div class="activity-list" id="activityList">
+            <div class="activity-item"><div class="activity-time">14:29</div><div class="activity-text">AI 검증 완료 · 4개 Credential 발급 가능</div></div>
+            <div class="activity-item"><div class="activity-time">14:30</div><div class="activity-text">Career Wallet 연결 완료</div></div>
+            <div class="activity-item"><div class="activity-time">14:30</div><div class="activity-text">Ethereum Network 준비 완료</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>기본 정보</h3>
+          <div class="info-row"><span class="ik">국적</span><span class="iv">중국 (China)</span></div>
+          <div class="info-row"><span class="ik">학교</span><span class="iv">경희대학교</span></div>
+          <div class="info-row"><span class="ik">전공</span><span class="iv">경영학과</span></div>
+          <div class="info-row"><span class="ik">학년</span><span class="iv">4학년 (졸업 예정)</span></div>
+          <div class="info-row"><span class="ik">학력</span><span class="iv">학사 재학</span></div>
+        </div>
+        <div class="info-card">
+          <h3>관심 분야 &amp; 계획</h3>
+          <div class="info-row"><span class="ik">관심 분야</span><span class="iv">마케팅, 무역, 컨설팅</span></div>
+          <div class="info-row"><span class="ik">진학 계획</span><span class="iv">국내 대학원 고려</span></div>
+          <div class="info-row"><span class="ik">취업 계획</span><span class="iv">2025년 하반기</span></div>
+          <div class="info-row"><span class="ik">한국 정주 의사</span><span class="iv">희망</span></div>
+          <div class="info-row"><span class="ik">희망 지역</span><span class="iv">서울, 수도권</span></div>
+        </div>
+        <div class="info-card">
+          <h3>언어 능력</h3>
+          <div class="lang-row">
+            <div class="lang-lbl"><span>한국어</span><b>TOPIK 5급 (고급)</b></div>
+            <div class="progress"><div class="progress-fill" style="width:85%"></div></div>
+          </div>
+          <div class="lang-row">
+            <div class="lang-lbl"><span>중국어</span><b>원어민</b></div>
+            <div class="progress"><div class="progress-fill" style="width:100%"></div></div>
+          </div>
+          <div class="lang-row">
+            <div class="lang-lbl"><span>영어</span><b>TOEIC 820</b></div>
+            <div class="progress"><div class="progress-fill" style="width:72%"></div></div>
+          </div>
+        </div>
+        <div class="info-card">
+          <h3>자기소개</h3>
+          <p class="intro-text">중국 출신 경영학 전공 유학생. 한국 기업의 글로벌 비즈니스 분야 관심, 한·중 무역 및 마케팅 커리어 지향, 한국 장기 거주 희망.</p>
+          <div class="keyword-tags">
+            <span class="keyword-tag">#한중무역</span>
+            <span class="keyword-tag">#마케팅</span>
+            <span class="keyword-tag">#글로벌비즈</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner" onclick="void(0)">
+        <div class="banner-text">
+          <div class="b-label">Partnership</div>
+          <div class="b-title">코트라(KOTRA) 글로벌 인턴십 모집 중</div>
+          <div class="b-sub">외국인 유학생 우대 · 지원 마감 2025.07.31</div>
+        </div>
+        <div class="banner-more">자세히 보기</div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="tab-panel" id="panel-history">
+      <div class="section-header">
+        <h3>이력 관리</h3>
+        <button class="add-btn" onclick="openModal('addHistoryModal')">+ 이력 추가</button>
+      </div>
+            <div class="history-list">
+        <div class="history-entry open" data-history="khu">
+          <div class="history-item" onclick="toggleHistoryDocs(this)">
+            <div class="h-badge edu">학력</div>
+            <div class="h-content">
+              <div class="h-title">경희대학교 경영학과</div>
+              <div class="h-sub">학사 · 서울캠퍼스</div>
+            </div>
+            <div class="h-period">2021.03 – 현재</div>
+          </div>
+          <div class="history-doc-panel">
+            <div class="history-doc-head">
+              <div><div class="history-doc-title">경희대학교 경영학과 관련 문서</div><div class="history-doc-sub">재학 증명, 성적, 추천서 등 이력 증빙 자료 확인과 등록.</div></div>
+              <button class="history-doc-upload" onclick="openHistoryUpload('경희대학교 경영학과');event.stopPropagation();">+ 관련 문서 업로드</button>
+            </div>
+            <div class="history-doc-list">
+              <div class="history-doc-card" onclick="openHistoryDoc('성적 증명서.pdf','0.8MB · 2025.02.20 업로드')">
+                <div class="history-doc-type">PDF</div><div><div class="history-doc-name">성적 증명서</div><div class="history-doc-meta">0.8MB · 검토 중</div></div>
+                <div class="history-doc-actions"><button class="history-doc-action" onclick="openHistoryDoc('성적 증명서.pdf','0.8MB · 2025.02.20 업로드');event.stopPropagation();">보기</button><button class="history-doc-action primary" onclick="downloadHistoryDoc('성적 증명서.pdf');event.stopPropagation();">다운</button></div>
+              </div>
+              <div class="history-doc-card" onclick="openHistoryDoc('재학 증명서.pdf','0.6MB · 2025.03.02 업로드')">
+                <div class="history-doc-type">PDF</div><div><div class="history-doc-name">재학 증명서</div><div class="history-doc-meta">0.6MB · 검토 완료</div></div>
+                <div class="history-doc-actions"><button class="history-doc-action" onclick="openHistoryDoc('재학 증명서.pdf','0.6MB · 2025.03.02 업로드');event.stopPropagation();">보기</button><button class="history-doc-action primary" onclick="downloadHistoryDoc('재학 증명서.pdf');event.stopPropagation();">다운</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="history-entry" data-history="pku">
+          <div class="history-item" onclick="toggleHistoryDocs(this)">
+            <div class="h-badge edu">학력</div>
+            <div class="h-content"><div class="h-title">북경대학교 (北京大学)</div><div class="h-sub">경제학과 · 편입 전</div></div>
+            <div class="h-period">2020.09 – 2021.02</div>
+          </div>
+          <div class="history-doc-panel">
+            <div class="history-doc-head"><div><div class="history-doc-title">북경대학교 관련 문서</div><div class="history-doc-sub">편입 전 학력 증명 문서 연결.</div></div><button class="history-doc-upload" onclick="openHistoryUpload('북경대학교');event.stopPropagation();">+ 관련 문서 업로드</button></div>
+            <div class="history-doc-list"><div class="history-doc-card" onclick="openHistoryDoc('이전 대학 성적표.pdf','0.7MB · 2025.01.18 업로드')"><div class="history-doc-type">PDF</div><div><div class="history-doc-name">이전 대학 성적표</div><div class="history-doc-meta">0.7MB · 검토 완료</div></div><div class="history-doc-actions"><button class="history-doc-action" onclick="openHistoryDoc('이전 대학 성적표.pdf','0.7MB · 2025.01.18 업로드');event.stopPropagation();">보기</button><button class="history-doc-action primary" onclick="downloadHistoryDoc('이전 대학 성적표.pdf');event.stopPropagation();">다운</button></div></div></div>
+          </div>
+        </div>
+        <div class="history-entry" data-history="samsung">
+          <div class="history-item" onclick="toggleHistoryDocs(this)">
+            <div class="h-badge work">경력</div><div class="h-content"><div class="h-title">삼성물산 인턴십 (글로벌사업부)</div><div class="h-sub">무역 &amp; 물류 보조 업무 · 서울</div></div><div class="h-period">2023.07 – 2023.08</div>
+          </div>
+          <div class="history-doc-panel">
+            <div class="history-doc-head"><div><div class="history-doc-title">삼성물산 인턴십 관련 문서</div><div class="history-doc-sub">경력 증명, 추천서, 포트폴리오의 이력별 관리.</div></div><button class="history-doc-upload" onclick="openHistoryUpload('삼성물산 인턴십');event.stopPropagation();">+ 관련 문서 업로드</button></div>
+            <div class="history-doc-list"><div class="history-doc-card" onclick="openHistoryDoc('인턴십 수료 확인서.pdf','1.0MB · 2025.03.05 업로드')"><div class="history-doc-type">PDF</div><div><div class="history-doc-name">인턴십 수료 확인서</div><div class="history-doc-meta">1.0MB · 검토 완료</div></div><div class="history-doc-actions"><button class="history-doc-action" onclick="openHistoryDoc('인턴십 수료 확인서.pdf','1.0MB · 2025.03.05 업로드');event.stopPropagation();">보기</button><button class="history-doc-action primary" onclick="downloadHistoryDoc('인턴십 수료 확인서.pdf');event.stopPropagation();">다운</button></div></div></div>
+          </div>
+        </div>
+        <div class="history-entry" data-history="office">
+          <div class="history-item" onclick="toggleHistoryDocs(this)">
+            <div class="h-badge work">경력</div><div class="h-content"><div class="h-title">경희대 국제처 학생 도우미</div><div class="h-sub">유학생 상담 및 행정 지원</div></div><div class="h-period">2022.03 – 2022.12</div>
+          </div>
+          <div class="history-doc-panel"><div class="history-doc-head"><div><div class="history-doc-title">경희대 국제처 활동 문서</div><div class="history-doc-sub">아직 연결된 문서 없음. 활동 확인서나 추천서 추가 가능.</div></div><button class="history-doc-upload" onclick="openHistoryUpload('경희대 국제처 학생 도우미');event.stopPropagation();">+ 관련 문서 업로드</button></div><div class="history-empty-doc">등록된 문서 없음. 업로드 시 해당 이력 연결 문서로 등록.</div></div>
+        </div>
+        <div class="history-entry" data-history="topik">
+          <div class="history-item" onclick="toggleHistoryDocs(this)">
+            <div class="h-badge cert">자격</div><div class="h-content"><div class="h-title">TOPIK 5급 취득</div><div class="h-sub">한국어능력시험 고급 · 국립국제교육원</div></div><div class="h-period">2023.04</div>
+          </div>
+          <div class="history-doc-panel"><div class="history-doc-head"><div><div class="history-doc-title">TOPIK 5급 관련 문서</div><div class="history-doc-sub">어학 성적표 확인 및 기업/학교 담당자 공개 설정.</div></div><button class="history-doc-upload" onclick="openHistoryUpload('TOPIK 5급');event.stopPropagation();">+ 관련 문서 업로드</button></div><div class="history-doc-list"><div class="history-doc-card" onclick="openHistoryDoc('TOPIK 성적표.pdf','0.5MB · 2025.02.01 업로드')"><div class="history-doc-type">PDF</div><div><div class="history-doc-name">TOPIK 성적표</div><div class="history-doc-meta">0.5MB · 검토 완료</div></div><div class="history-doc-actions"><button class="history-doc-action" onclick="openHistoryDoc('TOPIK 성적표.pdf','0.5MB · 2025.02.01 업로드');event.stopPropagation();">보기</button><button class="history-doc-action primary" onclick="downloadHistoryDoc('TOPIK 성적표.pdf');event.stopPropagation();">다운</button></div></div></div></div>
+        </div>
+      </div>
+      <button class="add-history-btn" onclick="openModal('addHistoryModal')">+ 새 이력 추가하기</button>
+
+      <div class="banner" style="margin-top:18px" onclick="void(0)">
+        <div class="banner-text">
+          <div class="b-label">Advertisement</div>
+          <div class="b-title">잡코리아 × Career Bridge 제휴 채용 공고</div>
+          <div class="b-sub">외국인 우대 기업 100개사 · 바로 확인</div>
+        </div>
+        <div class="banner-more">자세히 보기</div>
+      </div>
+    </div>
+
+    <!-- DOCS -->
+    <div class="tab-panel" id="panel-docs">
+      <div class="section-header">
+        <h3>문서 관리</h3>
+        <button class="add-btn" onclick="openModal('uploadDocModal')">+ 문서 등록</button>
+      </div>
+
+
+      <div class="chain-flow-strip" aria-label="DID 지갑에서 블록체인 기록까지의 인증 흐름">
+        <div class="chain-flow-step done"><div class="chain-flow-k">01 AI Verified</div><div class="chain-flow-t">Credential 검증</div><div class="chain-flow-d">학위·자격·어학·경력 검증 완료</div><div class="chain-flow-icon">AI</div></div>
+        <div class="chain-flow-step hot"><div class="chain-flow-k">02 Signature</div><div class="chain-flow-t">Career Wallet 서명</div><div class="chain-flow-d">사용자 DID로 발급 동의</div><div class="chain-flow-icon">◈</div></div>
+        <div class="chain-flow-step"><div class="chain-flow-k">03 Contract</div><div class="chain-flow-t">Smart Contract 호출</div><div class="chain-flow-d">SBT Mint 함수 실행 준비</div><div class="chain-flow-icon">SC</div></div>
+        <div class="chain-flow-step"><div class="chain-flow-k">04 Transaction</div><div class="chain-flow-t">Mint Tx 생성</div><div class="chain-flow-d">0x8fd2...91ab 기록</div><div class="chain-flow-icon">TX</div></div>
+        <div class="chain-flow-step"><div class="chain-flow-k">05 Block</div><div class="chain-flow-t">Block Confirmed</div><div class="chain-flow-d">#19,482,351 위변조 불가</div><div class="chain-flow-icon">BLK</div></div>
+      </div>
+
+
+      <div class="bc-card" id="sbtIssueCard">
+        <div class="bc-head">
+          <div>
+            <div class="bc-kicker">AI Verified Credential → Wallet Signature → Smart Contract</div>
+            <div class="bc-title">학위 인증 SBT를 발급하시겠습니까?</div>
+            <div class="bc-desc">AI 검증이 끝난 Credential을 Career Wallet 서명으로 승인하면 Smart Contract가 Mint Transaction을 생성하고 블록 확정 후 지갑에 인증서가 추가됩니다.</div>
+          </div>
+          <div class="bc-status">AI 검증 완료</div>
+        </div>
+        <div class="sbt-checks">
+          <label class="sbt-option"><input type="checkbox" name="sbtType" value="학위 인증 SBT" checked> 학위 인증 SBT</label>
+          <label class="sbt-option"><input type="checkbox" name="sbtType" value="자격증 인증 SBT" checked> 자격증 인증 SBT</label>
+          <label class="sbt-option"><input type="checkbox" name="sbtType" value="어학 성적 SBT" checked> 어학 성적 SBT</label>
+          <label class="sbt-option"><input type="checkbox" name="sbtType" value="경력 인증 SBT" checked> 경력 인증 SBT</label>
+        </div>
+        <button class="bc-btn" onclick="openWalletSignatureModal()">지갑으로 인증하고 SBT Mint</button>
+        <div class="bc-stepper" id="sbtStepper" aria-label="SBT 발급 진행 상태">
+          <div class="bc-step" data-step="1">AI 검증 완료</div>
+          <div class="bc-step" data-step="2">MetaMask Signature</div>
+          <div class="bc-step" data-step="3">Smart Contract 호출</div>
+          <div class="bc-step" data-step="4">Mint Transaction 생성</div>
+          <div class="bc-step" data-step="5">Block Confirmation</div>
+        </div>
+        <div class="sbt-mint-panel" id="sbtMintPanel">
+          <div class="mint-title">On-chain Minting</div>
+          <div class="mint-row"><span>Network</span><span>Ethereum</span></div>
+          <div class="mint-row"><span>Smart Contract</span><span>0xE7A1...91C3</span></div>
+          <div class="mint-row"><span>Mint Tx</span><span>0x8fd2...91ab</span></div>
+          <div class="mint-row"><span>Block</span><span>#19482351 Confirmed</span></div>
+        </div>
+        <div class="certificate-card" id="sbtCertificateCard">
+          <div class="cert-kicker">Soulbound Certificate</div>
+          <div class="cert-title">Degree SBT · Career Credential #000128</div>
+          <div class="cert-grid">
+            <div class="cert-field"><div class="cert-label">Owner</div><div class="cert-value">did:career:0xA91F...82C3</div></div>
+            <div class="cert-field"><div class="cert-label">Issuer</div><div class="cert-value">금오공과대학교</div></div>
+            <div class="cert-field"><div class="cert-label">Token ID</div><div class="cert-value">#2194 / SBT-2026-000128</div></div>
+            <div class="cert-field"><div class="cert-label">Mint Tx</div><div class="cert-value">0x8fd2a9c4e7b891ab</div></div>
+          </div>
+          <div class="cert-valid">Verified · Tamper-proof · View on Explorer</div>
+        </div>
+        <div class="bc-ledger" id="sbtLedger" style="display:none;">
+          <div class="bc-field"><div class="bc-label">인증 유형</div><div class="bc-value" id="ledgerCredentialType">학위 인증 SBT</div></div>
+          <div class="bc-field"><div class="bc-label">발급기관</div><div class="bc-value">금오공과대학교</div></div>
+          <div class="bc-field"><div class="bc-label">소유자 DID</div><div class="bc-value">did:career:0xA91F...82C3</div></div>
+          <div class="bc-field"><div class="bc-label">Token ID</div><div class="bc-value">SBT-2026-000128</div></div>
+          <div class="bc-field"><div class="bc-label">Contract Address</div><div class="bc-value">0xE7A1B4F9C2D8A0B91C3</div></div>
+          <div class="bc-field"><div class="bc-label">Transaction Hash</div><div class="bc-value">0x8fd2a9c4e7b891ab</div></div>
+          <div class="bc-field"><div class="bc-label">Block Number</div><div class="bc-value">19,482,351</div></div>
+          <div class="bc-field"><div class="bc-label">발급 시간</div><div class="bc-value">2026.06.08 14:30</div></div>
+        </div>
+        <div class="bc-valid" id="sbtValidState" style="display:none;">SBT Mint Complete · Career Wallet에 인증서 추가 완료</div>
+      </div>
+      <div class="doc-grid">
+        <div class="doc-card" onclick="openModal('docViewModal')">
+          <div class="doc-type">PDF</div>
+          <div class="doc-name">이력서 (Resume)</div>
+          <div class="doc-meta">2.4MB · 2025.03.10 업로드</div>
+          <div class="doc-status verified">검토 완료</div>
+        </div>
+        <div class="doc-card" onclick="openModal('docViewModal')">
+          <div class="doc-type">DOCX</div>
+          <div class="doc-name">자기소개서 (Cover Letter)</div>
+          <div class="doc-meta">1.1MB · 2025.03.10 업로드</div>
+          <div class="doc-status verified">검토 완료</div>
+        </div>
+        <div class="doc-card" onclick="openModal('docViewModal')">
+          <div class="doc-type">PDF</div>
+          <div class="doc-name">성적 증명서</div>
+          <div class="doc-meta">0.8MB · 2025.02.20 업로드</div>
+          <div class="doc-status pending">검토 중</div>
+        </div>
+        <div class="upload-card" onclick="openModal('uploadDocModal')">
+          <div class="plus-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          </div>
+          <p>문서 업로드</p>
+          <p style="font-size:11px;color:#A0BCDB;margin-top:3px">PDF, DOCX, JPG 지원</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div class="tab-panel" id="panel-privacy">
+      <div class="privacy-box">
+        <h3>프로필 공개 설정</h3>
+        <p>항목별 기업/학교 담당자 공개 범위 설정.</p>
+        <div class="privacy-row">
+          <div><div class="pr-label">기본 정보 (이름, 국적, 학교, 전공)</div><div class="pr-desc">열람 가능 대상 설정</div></div>
+          <div class="toggle-grp">
+            <div class="toggle-opt active" onclick="setToggle(this)">전체</div>
+            <div class="toggle-opt" onclick="setToggle(this)">일부</div>
+            <div class="toggle-opt" onclick="setToggle(this)">비공개</div>
+          </div>
+        </div>
+        <div class="privacy-row">
+          <div><div class="pr-label">이력 정보 (학력, 경력, 자격)</div><div class="pr-desc">기업/학교 담당자 열람 권한</div></div>
+          <div class="toggle-grp">
+            <div class="toggle-opt" onclick="setToggle(this)">전체</div>
+            <div class="toggle-opt active" onclick="setToggle(this)">일부</div>
+            <div class="toggle-opt" onclick="setToggle(this)">비공개</div>
+          </div>
+        </div>
+        <div class="privacy-row">
+          <div><div class="pr-label">문서 파일 (이력서, 자기소개서)</div><div class="pr-desc">문서 다운로드 권한 설정</div></div>
+          <div class="toggle-grp">
+            <div class="toggle-opt" onclick="setToggle(this)">전체</div>
+            <div class="toggle-opt" onclick="setToggle(this)">일부</div>
+            <div class="toggle-opt active" onclick="setToggle(this)">비공개</div>
+          </div>
+        </div>
+        <div class="privacy-row">
+          <div><div class="pr-label">연락처 (이메일, 전화번호)</div><div class="pr-desc">메시지 수신 허용 여부</div></div>
+          <div class="toggle-grp">
+            <div class="toggle-opt" onclick="setToggle(this)">전체</div>
+            <div class="toggle-opt active" onclick="setToggle(this)">일부</div>
+            <div class="toggle-opt" onclick="setToggle(this)">비공개</div>
+          </div>
+        </div>
+        <div class="privacy-row">
+          <div><div class="pr-label">관심 분야 / 취업 계획</div><div class="pr-desc">채용 담당자 대상 공개 여부</div></div>
+          <div class="toggle-grp">
+            <div class="toggle-opt active" onclick="setToggle(this)">전체</div>
+            <div class="toggle-opt" onclick="setToggle(this)">일부</div>
+            <div class="toggle-opt" onclick="setToggle(this)">비공개</div>
+          </div>
+        </div>
+      </div>
+      <div class="privacy-box">
+        <h3>검색 노출 설정</h3>
+        <p>활성화 시 기업/학교 담당자 조건 검색 노출.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;">
+          <div>
+            <div class="pr-label">검색 노출 허용</div>
+            <div class="pr-desc">담당자 필터 검색 대상 포함</div>
+          </div>
+          <div id="searchToggle" style="width:46px;height:24px;background:#2563EB;border-radius:12px;cursor:pointer;position:relative;transition:all 0.2s;" onclick="toggleSearch(this)">
+            <div style="width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;right:4px;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPANIES (B page for students) -->
+    <div class="tab-panel" id="panel-companies">
+      <div class="company-filter">
+        <div class="cf-title">기업 검색 필터</div>
+        <div class="cf-grid">
+          <div class="cf-group">
+            <label>업종</label>
+            <select><option>전체 업종</option><option>전자/IT</option><option>식품/유통</option><option>금융/은행</option><option>무역/물류</option><option>컨설팅</option></select>
+          </div>
+          <div class="cf-group">
+            <label>기업 유형</label>
+            <select><option>전체</option><option>대기업</option><option>중견기업</option><option>공공기관</option><option>스타트업</option></select>
+          </div>
+          <div class="cf-group">
+            <label>우대 언어</label>
+            <select><option>전체</option><option>중국어 우대</option><option>영어 우대</option><option>한국어 필수</option></select>
+          </div>
+          <button class="search-btn" onclick="doCompanySearch()">검색</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;color:#1A3A6B;">검색 결과 <span id="companyResultCnt" style="color:#2563EB;">6개 기업</span></div>
+        <select style="padding:6px 11px;border:1.5px solid #BFDBFE;border-radius:7px;font-size:12px;color:#4A78C4;background:white;outline:none;"><option>최신 등록순</option><option>기업명 순</option></select>
+      </div>
+
+      <div class="search-state-note" id="companySearchNote">조건 선택 후 기업 목록 갱신</div>
+      <div class="company-grid" id="companyGrid">
+        <div class="company-card" onclick="openCompanyModal(0)">
+          <div class="cc-logo">SE</div>
+          <div class="cc-name">삼성전자</div>
+          <div class="cc-type">대기업 · 전자/IT</div>
+          <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">글로벌 마케팅 인턴</span></div>
+          <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">중국어, 영어</span></div>
+          <span class="cc-tag">외국인 우대</span><span class="cc-tag">정규직 전환</span>
+          <div class="cc-foot">
+            <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(0)">상세 보기</button>
+            <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('삼성전자')">메시지</button>
+          </div>
+        </div>
+        <div class="company-card" onclick="openCompanyModal(1)">
+          <div class="cc-logo">LG</div>
+          <div class="cc-name">LG전자</div>
+          <div class="cc-type">대기업 · 전자/IT</div>
+          <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">해외 영업 인턴</span></div>
+          <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">영어, 중국어</span></div>
+          <span class="cc-tag">외국인 우대</span>
+          <div class="cc-foot">
+            <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(1)">상세 보기</button>
+            <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('LG전자')">메시지</button>
+          </div>
+        </div>
+        <div class="company-card" onclick="openCompanyModal(2)">
+          <div class="cc-logo">CJ</div>
+          <div class="cc-name">CJ제일제당</div>
+          <div class="cc-type">대기업 · 식품/유통</div>
+          <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">글로벌 전략 인턴</span></div>
+          <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">중국어 필수</span></div>
+          <span class="cc-tag">중국어 필수</span><span class="cc-tag">인턴</span>
+          <div class="cc-foot">
+            <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(2)">상세 보기</button>
+            <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('CJ제일제당')">메시지</button>
+          </div>
+        </div>
+        <div class="company-card" onclick="openCompanyModal(3)">
+          <div class="cc-logo">KT</div>
+          <div class="cc-name">코트라(KOTRA)</div>
+          <div class="cc-type">공공기관 · 무역/투자</div>
+          <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">무역 지원 인턴</span></div>
+          <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">한국어 필수</span></div>
+          <span class="cc-tag">공공기관</span><span class="cc-tag">외국인 우대</span>
+          <div class="cc-foot">
+            <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(3)">상세 보기</button>
+            <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('코트라(KOTRA)')">메시지</button>
+          </div>
+        </div>
+        <div class="company-card" onclick="openCompanyModal(4)">
+          <div class="cc-logo">KK</div>
+          <div class="cc-name">카카오</div>
+          <div class="cc-type">대기업 · IT/플랫폼</div>
+          <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">글로벌 PM 인턴</span></div>
+          <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">영어 필수</span></div>
+          <span class="cc-tag">영어 필수</span><span class="cc-tag">IT</span>
+          <div class="cc-foot">
+            <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(4)">상세 보기</button>
+            <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('카카오')">메시지</button>
+          </div>
+        </div>
+        <div class="company-card" onclick="openCompanyModal(5)">
+          <div class="cc-logo">HN</div>
+          <div class="cc-name">하나은행</div>
+          <div class="cc-type">금융기관 · 금융/은행</div>
+          <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">글로벌 뱅킹 인턴</span></div>
+          <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">중국어 우대</span></div>
+          <span class="cc-tag">중국어 우대</span><span class="cc-tag">금융</span>
+          <div class="cc-foot">
+            <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(5)">상세 보기</button>
+            <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('하나은행')">메시지</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="banner" style="margin-top:18px">
+        <div class="banner-text">
+          <div class="b-label">Partner Service</div>
+          <div class="b-title">DeepL × Career Bridge — 이력서 전문 번역 서비스</div>
+          <div class="b-sub">한국어 이력서를 영어/중국어로 · 전문가 검수 포함</div>
+        </div>
+        <div class="banner-more">자세히 보기</div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-community">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div class="comm-cat-bar">
+          <button class="comm-cat-btn active" data-cat="all" onclick="commFilter('all')">전체</button>
+          <button class="comm-cat-btn" data-cat="job" onclick="commFilter('job')">취업정보 공유</button>
+          <button class="comm-cat-btn" data-cat="qna" onclick="commFilter('qna')">Q&amp;A</button>
+          <button class="comm-cat-btn" data-cat="poll" onclick="commFilter('poll')">투표</button>
+        </div>
+        <button class="add-btn" onclick="openModal('writePostModal')">+ 글쓰기</button>
+      </div>
+      <div class="filter-box">
+        <select id="commCountry" onchange="renderCommList()"><option value="">국가 전체</option><option>중국</option><option>베트남</option><option>몽골</option><option>우즈베키스탄</option></select>
+        <select id="commSchool" onchange="renderCommList()"><option value="">학교 전체</option><option>경희대학교</option><option>연세대학교</option><option>한양대학교</option><option>고려대학교</option></select>
+      </div>
+      <div class="comm-layout">
+        <div>
+          <div id="commList"></div>
+          <div id="commPollList" style="display:none;"></div>
+        </div>
+        <div class="insight-card">
+          <h3>인기글 TOP 3</h3>
+          <div class="rank-item"><span class="rn">1. OPT 인턴십 후기 공유합니다</span><span class="rc">482</span></div>
+          <div class="rank-item"><span class="rn">2. 비자 연장 절차 아시는 분 계신가요?</span><span class="rc">356</span></div>
+          <div class="rank-item"><span class="rn">3. 경희대 국제처 채용설명회 후기</span><span class="rc">298</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Post Detail Modal -->
+<div class="modal-overlay" id="postDetailModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3 id="postDetailTitle"></h3><p id="postDetailMeta"></p></div><button class="close-btn" onclick="closeModal('postDetailModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-body">
+      <div id="postDetailContent" style="font-size:13px;color:#1A3A6B;line-height:1.6;margin-bottom:16px;"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <button onclick="toggleLike()" style="display:flex;align-items:center;gap:5px;background:#F0F6FF;border:1px solid #BFDBFE;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#2563EB;cursor:pointer;">❤ 좋아요 <span id="postLikeCount">0</span></button>
+        <span style="font-size:12px;color:#8AABDB;">댓글 <span id="postCmtCount">0</span></span>
+      </div>
+      <div id="postCommentList" style="margin-bottom:12px;"></div>
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="postCommentInput" placeholder="댓글을 입력하세요" style="flex:1;padding:9px 12px;border:1.5px solid #BFDBFE;border-radius:8px;font-size:12px;">
+        <button class="btn-confirm" style="flex:none;padding:9px 16px;font-size:12px;" onclick="addComment()">등록</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Write Post Modal -->
+<div class="modal-overlay" id="writePostModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3>글 작성</h3><p>커뮤니티에 새 글을 등록합니다</p></div><button class="close-btn" onclick="closeModal('writePostModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-body">
+      <div class="fg"><label>카테고리</label><select id="postCatSelect"><option value="job">취업정보 공유</option><option value="qna">Q&amp;A</option></select></div>
+      <div class="fg"><label>제목</label><input type="text" id="postTitleInput" placeholder="제목을 입력하세요"></div>
+      <div class="fg"><label>내용</label><textarea id="postContentInput" rows="5" placeholder="내용을 입력하세요"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('writePostModal')">취소</button>
+      <button class="btn-confirm" onclick="submitPost()">등록하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Poll Vote Modal -->
+<div class="modal-overlay" id="pollModal">
+  <div class="modal">
+    <div class="modal-head"><div><h3 id="pollModalTitle">투표</h3><p id="pollModalSub"></p></div><button class="close-btn" onclick="closeModal('pollModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-body" id="pollModalBody"></div>
+    <div class="modal-foot"><button class="btn-confirm" id="pollVoteBtn" style="flex:1;" onclick="castVote()">투표하기</button></div>
+  </div>
+</div>
+
+<!-- Edit Profile -->
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>프로필 편집</h3><p>기본 정보 수정</p></div>
+      <button class="close-btn" onclick="closeModal('editProfileModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="fg"><label>이름 (한국어)</label><input value="왕샤오밍"></div>
+        <div class="fg"><label>이름 (영문)</label><input value="Wang Xiaoming"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>국적</label><select><option selected>중국</option><option>베트남</option><option>몽골</option><option>우즈베키스탄</option></select></div>
+        <div class="fg"><label>학교</label><input value="경희대학교"></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label>전공</label><input value="경영학과"></div>
+        <div class="fg"><label>학년</label><select><option>1학년</option><option>2학년</option><option>3학년</option><option selected>4학년</option><option>졸업생</option></select></div>
+      </div>
+      <div class="fg"><label>관심 분야</label><input value="마케팅, 무역, 컨설팅"></div>
+      <div class="form-row">
+        <div class="fg"><label>진학 계획</label><select><option>없음</option><option selected>국내 대학원 고려</option><option>해외 대학원</option></select></div>
+        <div class="fg"><label>한국 정주 의사</label><select><option selected>희망</option><option>미정</option><option>희망 없음</option></select></div>
+      </div>
+      <div class="fg"><label>자기소개</label><textarea>중국 출신 경영학 전공 유학생. 한국 기업의 글로벌 비즈니스 분야 관심.</textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('editProfileModal')">취소</button>
+      <button class="btn-confirm" onclick="closeModal('editProfileModal')">저장하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add History -->
+<div class="modal-overlay" id="addHistoryModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>이력 추가</h3><p>학력, 경력, 자격 등록</p></div>
+      <button class="close-btn" onclick="closeModal('addHistoryModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>이력 유형</label><select><option>학력</option><option>경력/인턴십</option><option>자격/수료</option><option>수상</option><option>봉사활동</option></select></div>
+      <div class="fg"><label>기관명 / 회사명</label><input placeholder="예: 경희대학교, 삼성전자"></div>
+      <div class="fg"><label>역할 / 전공</label><input placeholder="예: 마케팅 인턴, 경영학과"></div>
+      <div class="form-row">
+        <div class="fg"><label>시작 연월</label><input type="month"></div>
+        <div class="fg"><label>종료 연월</label><input type="month" placeholder="재직/재학 중이면 공란"></div>
+      </div>
+      <div class="fg"><label>설명 (선택)</label><textarea placeholder="담당 업무와 성과 간단 기재"></textarea></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('addHistoryModal')">취소</button>
+      <button class="btn-confirm" onclick="closeModal('addHistoryModal')">추가하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Doc -->
+<div class="modal-overlay" id="uploadDocModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>문서 등록</h3><p>파일 업로드와 공개 범위 설정</p></div>
+      <button class="close-btn" onclick="closeModal('uploadDocModal');resetDocUpload()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>문서 유형</label><select id="docTypeSelect"><option>이력서</option><option>자기소개서</option><option>성적증명서</option><option>재학증명서</option><option>어학 성적표</option><option>기타</option></select></div>
+      <div id="docUploadBox" onclick="simulateOcr()" style="border:2px dashed #C5D8F5;border-radius:11px;padding:28px;text-align:center;cursor:pointer;background:#F8FBFF;margin-bottom:12px;">
+        <svg style="width:36px;height:36px;fill:#4A78C4;margin-bottom:8px;display:block;margin:0 auto 8px;" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+        <div style="font-size:13px;font-weight:600;color:#4A78C4;">클릭하여 파일 업로드</div>
+        <div style="font-size:11px;color:#A0BCDB;margin-top:4px;">PDF, DOCX, JPG, PNG (최대 10MB)</div>
+      </div>
+      <div id="docUploadLoading" style="display:none;text-align:center;padding:28px;color:#4A78C4;font-size:13px;font-weight:600;">AI가 문서를 분석하는 중...</div>
+      <div id="ocrResult" style="display:none;">
+        <div class="ocr-card">
+          <div class="ocr-card-head">✨ AI 인식 결과</div>
+          <div class="ocr-card-body" id="ocrCardBody"></div>
+        </div>
+        <div id="ocrConfirmRow" style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#F0F6FF;border:1px solid #D6E6FB;border-radius:9px;padding:11px 14px;margin-bottom:14px;">
+          <span style="font-size:12px;font-weight:600;color:#1E3A5F;">이대로 입력하시겠습니까?</span>
+          <div style="display:flex;gap:6px;flex:none;">
+            <button type="button" class="btn-cancel" style="flex:none;padding:7px 14px;font-size:12px;" onclick="manualFillFields()">직접입력</button>
+            <button type="button" class="btn-confirm" style="flex:none;padding:7px 16px;font-size:12px;" onclick="confirmOcrFill()">확인</button>
+          </div>
+        </div>
+        <div id="autoFieldsWrap" style="display:none;">
+          <div class="auto-label">입력된 정보 (확인 후 등록)</div>
+          <div id="autoFieldsBody"></div>
+        </div>
+      </div>
+      <div class="fg"><label>공개 설정</label><select><option>전체 공개</option><option>학교/기업 담당자만</option><option>비공개</option></select></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('uploadDocModal');resetDocUpload()">취소</button>
+      <button class="btn-confirm" onclick="closeModal('uploadDocModal');resetDocUpload();window.demoToast&&window.demoToast('문서가 등록되었습니다.')">등록하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Doc View -->
+<div class="modal-overlay" id="docViewModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>문서 상세</h3></div>
+      <button class="close-btn" onclick="closeModal('docViewModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#F0F7FF;border-radius:12px;padding:22px;text-align:center;margin-bottom:16px;border:1px solid #BFDBFE;">
+        <div style="width:60px;height:60px;background:#2563EB;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;"><svg style="width:28px;height:28px;fill:white" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg></div>
+        <div id="docViewName" style="font-size:15px;font-weight:700;color:#1A3A6B;">이력서 (Resume).pdf</div>
+        <div id="docViewMeta" style="font-size:11px;color:#8AABDB;margin-top:4px;">2.4MB · 2025.03.10 업로드</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div id="docDownloadBtn" onclick="downloadHistoryDoc(document.getElementById('docViewName').textContent)" style="padding:11px;background:#F5F9FF;border-radius:9px;text-align:center;cursor:pointer;border:1.5px solid #BFDBFE;font-size:12px;font-weight:600;color:#2563EB;">다운로드</div>
+        <div style="padding:11px;background:#F5F9FF;border-radius:9px;text-align:center;cursor:pointer;border:1.5px solid #BFDBFE;font-size:12px;font-weight:600;color:#2563EB;">링크 공유</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Company Detail Modal -->
+<div class="modal-overlay" id="companyDetailModal">
+  <div class="modal">
+    <div class="comp-detail-header" style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <h3 id="cd-name">삼성전자</h3>
+        <p id="cd-type">대기업 · 전자/IT · 서울</p>
+      </div>
+      <button onclick="closeModal('companyDetailModal')" style="width:28px;height:28px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.28);border-radius:7px;cursor:pointer;color:white;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="comp-detail-grid">
+        <div class="cd-item"><div class="dk">모집 포지션</div><div class="dv" id="cd-pos">글로벌 마케팅 인턴</div></div>
+        <div class="cd-item"><div class="dk">근무 형태</div><div class="dv">인턴십 (6개월)</div></div>
+        <div class="cd-item"><div class="dk">우대 언어</div><div class="dv" id="cd-lang">중국어, 영어</div></div>
+        <div class="cd-item"><div class="dk">정규직 전환</div><div class="dv">가능</div></div>
+        <div class="cd-item"><div class="dk">비자 지원</div><div class="dv">D-10, E-7 지원</div></div>
+        <div class="cd-item"><div class="dk">외국인 우대</div><div class="dv">적극 우대</div></div>
+      </div>
+      <div style="background:#F5F9FF;border-radius:10px;padding:14px;margin-bottom:14px;border:1px solid #BFDBFE;">
+        <div style="font-size:11px;font-weight:700;color:#4A78C4;margin-bottom:7px;text-transform:uppercase;">채용 공고 요약</div>
+        <p style="font-size:12px;color:#4A78C4;line-height:1.7;" id="cd-desc">글로벌 사업부 한국-중국 무역 마케팅 인턴 모집. 중국어 또는 영어 역량 우대, 성과 우수자 정규직 전환 기회.</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button style="flex:1;padding:11px;background:#2563EB;border:none;border-radius:9px;color:white;font-size:13px;font-weight:700;cursor:pointer;" onclick="closeModal('companyDetailModal');openStudentMsgModalFromDetail()">메시지 보내기</button>
+        <button style="flex:1;padding:11px;background:#F0F7FF;border:1.5px solid #BFDBFE;border-radius:9px;color:#2563EB;font-size:13px;font-weight:600;cursor:pointer;" onclick="closeModal('companyDetailModal')">관심 기업 저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Student Message to Company -->
+<div class="modal-overlay" id="studentMsgModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>메시지 보내기</h3><p id="sMsgTo">삼성전자 담당자에게</p></div>
+      <button class="close-btn" onclick="closeModal('studentMsgModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="fg"><label>제목</label><input placeholder="메시지 제목 입력" value="채용 관련 문의드립니다"></div>
+      <div class="fg"><label>내용</label><textarea>안녕하세요. Career Bridge를 통해 연락드립니다. 채용 공고를 보고 관심이 생겨 문의드립니다.</textarea></div>
+      <div class="fg"><label>발송 언어</label><select><option>한국어</option><option>영어</option><option>중국어 (AI 번역)</option></select></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('studentMsgModal')">취소</button>
+      <button class="btn-confirm" onclick="closeModal('studentMsgModal');setTimeout(()=>alert('메시지 발송 완료.'),100)">발송하기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Career Wallet Signature Modal -->
+<div class="modal-overlay wallet-auth-modal" id="walletSignatureModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h3>Career Wallet 인증 요청</h3><p>학위 인증 SBT 발급을 위한 지갑 서명</p></div>
+      <button class="close-btn" onclick="closeModal('walletSignatureModal')"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="auth-sheet">
+        <div class="auth-wallet-icon">◈</div>
+        <div class="auth-main">학위 인증 SBT를 발급합니다.</div>
+        <div class="auth-sub">Career Wallet에서 사용자 서명을 완료하면 Smart Contract 호출과 Mint Transaction 생성이 진행됩니다.</div>
+        <div class="auth-info">
+          <div class="auth-info-row"><span>발급기관</span><span>금오공과대학교</span></div>
+          <div class="auth-info-row"><span>Network</span><span>Ethereum</span></div>
+          <div class="auth-info-row"><span>예상 Gas</span><span>0.00012 ETH</span></div>
+          <div class="auth-info-row"><span>Credential</span><span>Degree SBT</span></div>
+        </div>
+        <div class="signature-box" id="signatureBox">
+          <div class="sig-line"><b>MetaMask</b><span id="signatureState">Waiting for Signature...</span></div>
+          <div class="sig-line"><b>DID</b><span>did:career:0xA91F...82C3</span></div>
+          <div class="sig-line"><b>Request</b><span>Mint Degree SBT</span></div>
+          <div class="sig-loader"><span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal('walletSignatureModal')">취소</button>
+      <button class="btn-confirm" id="walletSignBtn" onclick="startWalletSignature()">서명하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const BLOCKCHAIN_MOCK = {
+  did: 'did:career:0xA91F...82C3',
+  walletAddress: '0xA91F4B72C8D93F1A82C3',
+  tokenId: 'SBT-2026-000128',
+  contractAddress: '0xE7A1B4F9C2D8A0B91C3',
+  txHash: '0x8fd2a9c4e7b891ab',
+  blockNumber: '19,482,351',
+  issuer: '금오공과대학교',
+  credentialType: '학위 인증 SBT',
+  issuedAt: '2026.06.08 14:30',
+  verificationStatus: 'valid'
+};
+function addBlockchainActivity(time, text){
+  const list=document.getElementById('activityList');
+  if(!list) return;
+  const div=document.createElement('div');
+  div.className='activity-item';
+  div.innerHTML='<div class="activity-time">'+time+'</div><div class="activity-text">'+text+'</div>';
+  list.appendChild(div);
+}
+function connectDidWallet(){
+  document.getElementById('didStatus').textContent='Wallet Connected';
+  document.getElementById('walletStatus').textContent='Career Wallet';
+  document.getElementById('walletName').textContent='KYC · Student Verified';
+  document.getElementById('didAddress').textContent=BLOCKCHAIN_MOCK.did;
+  var btn=document.getElementById('didDoneBtn'); if(btn) btn.textContent='Signature Ready';
+  window.demoToast&&window.demoToast('Career Wallet이 연결되었습니다.');
+}
+function openWalletSignatureModal(){
+  connectDidWallet();
+  const box=document.getElementById('signatureBox');
+  const state=document.getElementById('signatureState');
+  const btn=document.getElementById('walletSignBtn');
+  if(box) box.classList.remove('show');
+  if(state) state.textContent='Waiting for Signature...';
+  if(btn) { btn.disabled=false; btn.textContent='서명하기'; }
+  openModal('walletSignatureModal');
+}
+function startWalletSignature(){
+  const selected=Array.from(document.querySelectorAll('input[name="sbtType"]:checked')).map(i=>i.value);
+  if(!selected.length){ window.demoToast&&window.demoToast('발급할 SBT 항목을 선택해주세요.'); return; }
+  const box=document.getElementById('signatureBox');
+  const state=document.getElementById('signatureState');
+  const btn=document.getElementById('walletSignBtn');
+  if(box) box.classList.add('show');
+  if(btn){ btn.disabled=true; btn.textContent='서명 대기 중'; }
+  if(state) state.textContent='Waiting for Signature...';
+  addBlockchainActivity('14:31','Career Wallet 서명 요청 전송');
+  setTimeout(()=>{ if(state) state.textContent='Signature Success'; addBlockchainActivity('14:31','MetaMask Signature Success'); },900);
+  setTimeout(()=>{ closeModal('walletSignatureModal'); issueSbt(true); },1450);
+}
+function issueSbt(fromSignature){
+  const selected=Array.from(document.querySelectorAll('input[name="sbtType"]:checked')).map(i=>i.value);
+  if(!selected.length){ window.demoToast&&window.demoToast('발급할 SBT 항목을 선택해주세요.'); return; }
+  if(!fromSignature){ openWalletSignatureModal(); return; }
+  document.getElementById('ledgerCredentialType').textContent=selected.join(' · ');
+  const steps=Array.from(document.querySelectorAll('#sbtStepper .bc-step'));
+  steps.forEach(step=>step.classList.remove('active','done'));
+  document.getElementById('sbtLedger').style.display='none';
+  document.getElementById('sbtValidState').style.display='none';
+  document.getElementById('sbtMintPanel').classList.remove('show');
+  document.getElementById('sbtCertificateCard').classList.remove('show');
+  const activity=['AI 검증 완료','DID Signature 확인','Smart Contract 호출','Mint Transaction 생성','Block #19482351 생성'];
+  steps.forEach((step,i)=>{
+    setTimeout(()=>{
+      steps.forEach((s,k)=>{ s.classList.toggle('done',k<i); s.classList.toggle('active',k===i); });
+      addBlockchainActivity(i<2?'14:31':'14:32', activity[i]);
+      if(i===2) document.getElementById('sbtMintPanel').classList.add('show');
+      if(i===steps.length-1){
+        step.classList.remove('active'); step.classList.add('done');
+        document.getElementById('sbtLedger').style.display='grid';
+        document.getElementById('sbtValidState').style.display='flex';
+        document.getElementById('sbtCertificateCard').classList.add('show');
+        addBlockchainActivity('14:32','SBT Mint Complete · Career Wallet Updated');
+        addBlockchainActivity('14:40','기업 검증 요청 · Verification Complete');
+        window.demoToast&&window.demoToast('SBT Mint Complete. Career Wallet에 인증서가 추가되었습니다.');
+      }
+    }, i*620);
+  });
+}
+
+const pageTitles = { profile:'내 프로필', history:'이력 관리', docs:'문서 관리', privacy:'공개 설정', companies:'기업 검색', community:'커뮤니티' };
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  const tb = document.getElementById('tab-' + tab); if (tb) tb.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[tab] || '';
+  // 사이드바 nav 싱크: 탭 순서와 nav-item 순서 일치
+  const tabOrder = ['profile','history','docs','privacy','companies','community'];
+  const idx = tabOrder.indexOf(tab);
+  document.querySelectorAll('.nav-item').forEach((n, i) => n.classList.toggle('active', i === idx));
+  if (tab === 'community') renderCommList();
+}
+
+function setNav(el, tab) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  switchTab(tab);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+const COMM_POSTS=[
+  {cat:'job',tag:'취업정보',title:'OPT 인턴십 후기 공유합니다',by:'Li Wei · 연세대',country:'중국',school:'연세대학교',views:482,cmt:24,content:'최근 OPT 인턴십을 마치고 후기를 남깁니다. 비자 처리부터 출근 첫날까지의 과정을 공유합니다.'},
+  {cat:'qna',tag:'Q&A',title:'비자 연장 절차 아시는 분 계신가요?',by:'Nguyen Van A · 경희대',country:'베트남',school:'경희대학교',views:356,cmt:18,content:'비자 연장을 앞두고 있는데 필요한 서류와 절차를 아시는 분 계신가요? 경험 공유 부탁드립니다.'},
+  {cat:'job',tag:'취업정보',title:'경희대 국제처 채용설명회 후기',by:'Aliya · 한양대',country:'우즈베키스탄',school:'한양대학교',views:298,cmt:11,content:'경희대 국제교류처에서 진행한 채용설명회에 다녀왔습니다. 주요 내용을 정리해 공유합니다.'},
+  {cat:'qna',tag:'Q&A',title:'기숙사 vs 자취, 1학년 추천해주세요',by:'Tran Thi B · 고려대',country:'베트남',school:'고려대학교',views:201,cmt:9,content:'1학년 신입생인데 기숙사와 자취 중 고민입니다. 선배님들의 경험담 부탁드려요.'},
+  {cat:'job',tag:'취업정보',title:'삼성전자 서류 합격 자기소개서 팁',by:'Wang Lei · 연세대',country:'중국',school:'연세대학교',views:188,cmt:14,content:'삼성전자 서류 전형에 합격한 자기소개서 작성 팁을 공유합니다.'}
+];
+const COMM_POLLS=[
+  {q:'2026학년도 기숙사 만족도 조사',badge:'univ',badgeLabel:'대학 공식',org:'경희대학교 국제교류처',cnt:128,dday:5,opts:[{l:'매우 만족',v:42},{l:'만족',v:51},{l:'보통',v:23},{l:'불만족',v:12}]},
+  {q:'신입생 환영회 선호 요일',badge:'student',badgeLabel:'학생 대표',org:'유학생 과대',cnt:45,dday:2,opts:[{l:'금요일',v:21},{l:'토요일',v:17},{l:'일요일',v:7}]},
+  {q:'인턴십 만족도 질문',badge:'company',badgeLabel:'기업 공식',org:'삼성전자 인사팀',cnt:72,dday:10,opts:[{l:'매우 만족',v:30},{l:'만족',v:28},{l:'보통',v:10},{l:'불만족',v:4}]}
+];
+function submitPost(){
+  const cat=document.getElementById('postCatSelect').value;
+  const title=document.getElementById('postTitleInput').value.trim();
+  if(!title){ window.demoToast&&window.demoToast('제목을 입력해주세요.'); return; }
+  const content=document.getElementById('postContentInput').value.trim();
+  COMM_POSTS.unshift({cat, tag:cat==='job'?'취업정보':'Q&A', title, by:'Wang Xiaoming · 나', country:'', school:'', views:0, cmt:0, content});
+  document.getElementById('postTitleInput').value='';
+  document.getElementById('postContentInput').value='';
+  closeModal('writePostModal');
+  renderCommList();
+  window.demoToast&&window.demoToast('게시글이 등록되었습니다.');
+}
+function commFilter(cat){
+  document.querySelectorAll('.comm-cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));
+  renderCommList(cat);
+}
+function renderCommList(cat){
+  const f=cat||(document.querySelector('.comm-cat-btn.active')?document.querySelector('.comm-cat-btn.active').dataset.cat:'all');
+  if(f==='poll'){document.getElementById('commList').style.display='none';document.getElementById('commPollList').style.display='block';renderPolls();return;}
+  document.getElementById('commList').style.display='block';document.getElementById('commPollList').style.display='none';
+  const country=document.getElementById('commCountry').value,school=document.getElementById('commSchool').value;
+  const list=COMM_POSTS.map((p,i)=>({...p,_i:i})).filter(p=>(f==='all'||p.cat===f)&&(!country||p.country===country)&&(!school||p.school===school));
+  document.getElementById('commList').innerHTML=list.map(p=>`
+    <div class="comm-post" onclick="openPost(${p._i})">
+      <div><span class="comm-post-tag ${p.cat}">${p.tag}</span><div class="comm-post-title">${p.title}</div><div class="comm-post-meta">${p.by} · 조회 ${p.views} · 댓글 ${p.cmt}</div></div>
+    </div>`).join('')||'<div style="padding:30px;text-align:center;color:#8AABDB;font-size:13px;">조건에 맞는 게시글이 없습니다.</div>';
+}
+let _openPostIdx=null;
+function openPost(i){
+  _openPostIdx=i;
+  const p=COMM_POSTS[i];
+  document.getElementById('postDetailTitle').textContent=p.title;
+  document.getElementById('postDetailMeta').textContent=p.by+' · 조회 '+p.views;
+  document.getElementById('postDetailContent').textContent=p.content||p.title;
+  document.getElementById('postLikeCount').textContent=p.likes||0;
+  renderComments(p);
+  openModal('postDetailModal');
+}
+function toggleLike(){
+  const p=COMM_POSTS[_openPostIdx];
+  p.liked=!p.liked;
+  p.likes=(p.likes||0)+(p.liked?1:-1);
+  document.getElementById('postLikeCount').textContent=p.likes;
+}
+function addComment(){
+  const input=document.getElementById('postCommentInput');
+  const text=input.value.trim();
+  if(!text) return;
+  const p=COMM_POSTS[_openPostIdx];
+  if(!p.comments) p.comments=[];
+  p.comments.push(text);
+  p.cmt=(p.cmt||0)+1;
+  input.value='';
+  renderComments(p);
+  renderCommList();
+}
+function renderComments(p){
+  document.getElementById('postCmtCount').textContent=p.cmt||0;
+  document.getElementById('postCommentList').innerHTML=(p.comments||[]).map(c=>`<div style="padding:8px 0;border-bottom:1px solid #EFF6FF;font-size:12px;color:#1A3A6B;">${c}</div>`).join('')||'<div style="font-size:12px;color:#8AABDB;padding:8px 0;">첫 댓글을 남겨보세요.</div>';
+}
+function renderPolls(){
+  document.getElementById('commPollList').innerHTML=COMM_POLLS.map((p,i)=>`
+    <div class="poll-card">
+      <div class="poll-q" onclick="openPoll(${i})">${p.q}</div>
+      <span class="poll-badge ${p.badge}">${p.badgeLabel}</span><span style="font-size:11px;color:#8AABDB;">${p.org}</span>
+      <div class="poll-meta"><span>참여 ${p.cnt}명</span><span>D-${p.dday}</span><button class="poll-vote-btn" onclick="openPoll(${i})">투표하기</button></div>
+    </div>`).join('');
+}
+let pollOpenIdx=null, pollSelectedIdx=null;
+function openPoll(i){
+  pollOpenIdx=i; pollSelectedIdx=null;
+  const p=COMM_POLLS[i];
+  document.getElementById('pollModalTitle').textContent=p.q;
+  document.getElementById('pollModalSub').innerHTML=`<span class="poll-badge ${p.badge}">${p.badgeLabel}</span>${p.org} · 참여 ${p.cnt}명 · D-${p.dday}`;
+  renderPollModalBody();
+  openModal('pollModal');
+}
+function selectPollOption(i){
+  if(COMM_POLLS[pollOpenIdx].voted) return;
+  pollSelectedIdx=i;
+  renderPollModalBody();
+}
+function renderPollModalBody(){
+  const p=COMM_POLLS[pollOpenIdx];
+  const total=p.opts.reduce((s,o)=>s+o.v,0);
+  document.getElementById('pollModalBody').innerHTML=p.opts.map((o,i)=>{
+    const pct=Math.round(o.v/total*100);
+    const cls='poll-bar-row'+(p.voted?'':' selectable')+(pollSelectedIdx===i?' selected':'');
+    const click=p.voted?'':` onclick="selectPollOption(${i})"`;
+    return `<div class="${cls}"${click}><div class="poll-bar-label"><span>${o.l}</span><span>${pct}% (${o.v}명)</span></div><div class="poll-bar-track"><div class="poll-bar-fill" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+  const btn=document.getElementById('pollVoteBtn');
+  btn.textContent=p.voted?'투표 완료':'투표하기';
+  btn.disabled=!!p.voted;
+}
+function castVote(){
+  const p=COMM_POLLS[pollOpenIdx];
+  if(p.voted){ closeModal('pollModal'); return; }
+  if(pollSelectedIdx===null){ window.demoToast&&window.demoToast('선택지를 먼저 선택해주세요.'); return; }
+  p.opts[pollSelectedIdx].v++; p.cnt++; p.voted=true;
+  document.getElementById('pollModalSub').innerHTML=`<span class="poll-badge ${p.badge}">${p.badgeLabel}</span>${p.org} · 참여 ${p.cnt}명 · D-${p.dday}`;
+  renderPollModalBody();
+  renderPolls();
+  window.demoToast&&window.demoToast('투표가 반영되었습니다. (데모)');
+}
+function toggleHistoryDocs(item) {
+  const entry = item.closest('.history-entry');
+  if (!entry) return;
+  const isOpen = entry.classList.contains('open');
+  document.querySelectorAll('.history-entry.open').forEach(el => {
+    if (el !== entry) el.classList.remove('open');
+  });
+  entry.classList.toggle('open', !isOpen);
+}
+
+const OCR_TEMPLATES = {
+  '이력서': [{l:'성명',v:'NGUYEN VAN A'},{l:'최종학력',v:'OO대학교 경영학과'},{l:'경력',v:'2건'},{l:'보유자격',v:'TOPIK 5급'}],
+  '자기소개서': [{l:'성명',v:'NGUYEN VAN A'},{l:'분량',v:'1,200자'},{l:'주요 키워드',v:'글로벌, 도전정신, 협업'}],
+  '성적증명서': [{l:'성명',v:'NGUYEN VAN A'},{l:'학교명',v:'OO대학교'},{l:'전공',v:'경영학과'},{l:'평점',v:'3.8 / 4.5'}],
+  '재학증명서': [{l:'성명',v:'NGUYEN VAN A'},{l:'학교명',v:'OO대학교'},{l:'학번',v:'2022XXXXXX'},{l:'재학상태',v:'재학중',pill:true}],
+  '어학 성적표': [{l:'성명',v:'NGUYEN VAN A'},{l:'시험명',v:'TOPIK'},{l:'등급',v:'5급'},{l:'점수',v:'187 / 300'}],
+  '기타': null
+};
+function simulateOcr(){
+  const type=document.getElementById('docTypeSelect').value;
+  document.getElementById('docUploadBox').style.display='none';
+  const loading=document.getElementById('docUploadLoading');
+  loading.textContent='AI가 문서를 분석하는 중...';
+  loading.style.display='block';
+  setTimeout(()=>{
+    loading.style.display='none';
+    renderOcrResult(type);
+  }, 900);
+}
+let _ocrPendingFields=null;
+function renderOcrResult(type){
+  const fields=OCR_TEMPLATES[type];
+  const cardBody=document.getElementById('ocrCardBody');
+  document.getElementById('autoFieldsWrap').style.display='none';
+  if(!fields){
+    cardBody.innerHTML='<div>이 문서 유형은 자동 인식을 지원하지 않습니다.<br>정보를 직접 입력해주세요.</div>';
+    document.getElementById('ocrConfirmRow').style.display='none';
+    _ocrPendingFields=null;
+  } else {
+    cardBody.innerHTML='<div>'+type+'</div>'+fields.map(f=>`<div>${f.l} : ${f.v}</div>`).join('');
+    document.getElementById('ocrConfirmRow').style.display='flex';
+    _ocrPendingFields=fields;
+  }
+  document.getElementById('ocrResult').style.display='block';
+}
+function confirmOcrFill(){
+  if(!_ocrPendingFields) return;
+  document.getElementById('autoFieldsBody').innerHTML=_ocrPendingFields.map(f=>`<div class="auto-field"><label>${f.l}</label><div class="auto-val">${f.pill?'<span class="status-pill">'+f.v+'</span>':f.v}</div></div>`).join('');
+  document.getElementById('ocrConfirmRow').style.display='none';
+  document.getElementById('autoFieldsWrap').style.display='block';
+}
+function manualFillFields(){
+  if(!_ocrPendingFields) return;
+  document.getElementById('autoFieldsBody').innerHTML=_ocrPendingFields.map(f=>`<div class="auto-field"><label>${f.l}</label><input class="auto-val-input" placeholder="직접 입력"></div>`).join('');
+  document.getElementById('ocrConfirmRow').style.display='none';
+  document.getElementById('autoFieldsWrap').style.display='block';
+}
+function resetDocUpload(){
+  document.getElementById('docUploadBox').style.display='block';
+  document.getElementById('docUploadLoading').style.display='none';
+  document.getElementById('ocrResult').style.display='none';
+  document.getElementById('autoFieldsWrap').style.display='none';
+  _ocrPendingFields=null;
+}
+function openHistoryUpload(historyName) {
+  const modal = document.getElementById('uploadDocModal');
+  const head = modal ? modal.querySelector('.modal-head h3') : null;
+  const sub = modal ? modal.querySelector('.modal-head p') : null;
+  if (head) head.textContent = '관련 문서 등록';
+  if (sub) sub.textContent = historyName + ' 이력 연결 문서 업로드';
+  openModal('uploadDocModal');
+}
+
+function openHistoryDoc(name, meta) {
+  const nameEl = document.getElementById('docViewName');
+  const metaEl = document.getElementById('docViewMeta');
+  if (nameEl) nameEl.textContent = name || '관련 문서.pdf';
+  if (metaEl) metaEl.textContent = meta || '업로드된 문서';
+  openModal('docViewModal');
+}
+
+function downloadHistoryDoc(name) {
+  const message = (name || '관련 문서') + ' 다운로드가 준비되었습니다.';
+  if (window.demoToast) { window.demoToast(message); return; }
+  const el = document.createElement('div');
+  el.className = 'demo-toast show';
+  el.textContent = message;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1800);
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function setToggle(el) {
+  el.closest('.toggle-grp').querySelectorAll('.toggle-opt').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleSearch(el) {
+  const dot = el.querySelector('div');
+  const isOn = el.dataset.on !== 'false';
+  el.dataset.on = isOn ? 'false' : 'true';
+  el.style.background = isOn ? '#BFDBFE' : '#2563EB';
+  dot.style.left = isOn ? '3px' : 'auto';
+  dot.style.right = isOn ? 'auto' : '3px';
+}
+
+const companies = [
+  { name:'삼성전자', type:'대기업 · 전자/IT · 서울', pos:'글로벌 마케팅 인턴', lang:'중국어, 영어', desc:'글로벌 사업부 한국-중국 무역 마케팅 인턴 모집.' },
+  { name:'LG전자', type:'대기업 · 전자/IT · 서울', pos:'해외 영업 인턴', lang:'영어, 중국어', desc:'해외영업팀 글로벌 파트너 관리 지원 인턴 모집.' },
+  { name:'CJ제일제당', type:'대기업 · 식품/유통 · 서울', pos:'글로벌 전략 인턴', lang:'중국어 필수', desc:'글로벌전략팀 중국 시장 분석 및 전략 수립 지원 인턴 모집.' },
+  { name:'코트라(KOTRA)', type:'공공기관 · 무역/투자 · 서울', pos:'무역 지원 인턴', lang:'한국어 필수', desc:'해외 진출 지원 업무와 무역 상담 지원 인턴 모집.' },
+  { name:'카카오', type:'대기업 · IT/플랫폼 · 성남', pos:'글로벌 PM 인턴', lang:'영어 필수', desc:'글로벌 서비스 기획 및 프로덕트 매니지먼트 지원 인턴 모집.' },
+  { name:'하나은행', type:'금융기관 · 금융/은행 · 서울', pos:'글로벌 뱅킹 인턴', lang:'중국어 우대', desc:'글로벌금융부 중국 기업 고객 대응 및 금융 서비스 지원 인턴 모집.' },
+];
+let lastCompany = '';
+
+
+function renderCompanyResults(list) {
+  const grid = document.getElementById('companyGrid');
+  const cnt = document.getElementById('companyResultCnt');
+  if (!grid) return;
+  if (cnt) cnt.textContent = list.length + '개 기업';
+  grid.innerHTML = list.map((c) => {
+    const idx = companies.indexOf(c);
+    const logo = c.name.indexOf('삼성') > -1 ? 'SE' : c.name.indexOf('LG') > -1 ? 'LG' : c.name.indexOf('CJ') > -1 ? 'CJ' : c.name.indexOf('코트라') > -1 ? 'KT' : c.name.indexOf('카카오') > -1 ? 'KK' : 'HN';
+    const typeParts = c.type.split(' · ');
+    const shortType = typeParts.slice(0,2).join(' · ');
+    return `<div class="company-card" onclick="openCompanyModal(${idx})">
+      <div class="cc-logo">${logo}</div>
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-type">${shortType}</div>
+      <div class="cc-field"><span class="cfl">모집 포지션: </span><span class="cfv">${c.pos}</span></div>
+      <div class="cc-field"><span class="cfl">우대 언어: </span><span class="cfv">${c.lang}</span></div>
+      <span class="cc-tag">외국인 우대</span><span class="cc-tag">채용 검토</span>
+      <div class="cc-foot">
+        <button class="cc-btn primary" onclick="event.stopPropagation();openCompanyModal(${idx})">상세 보기</button>
+        <button class="cc-btn secondary" onclick="event.stopPropagation();openStudentMsgModal('${c.name}')">메시지</button>
+      </div>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.company-card').forEach((card, idx) => { card.classList.add('search-hit'); card.style.animationDelay = (idx * 40) + 'ms'; });
+}
+
+function doCompanySearch() {
+  const panel = document.getElementById('panel-companies');
+  const btn = panel ? panel.querySelector('.search-btn') : null;
+  const grid = document.getElementById('companyGrid');
+  const note = document.getElementById('companySearchNote');
+  const selects = panel ? Array.from(panel.querySelectorAll('.company-filter select')) : [];
+  const industry = selects[0] ? selects[0].value : '전체 업종';
+  const companyType = selects[1] ? selects[1].value : '전체';
+  const lang = selects[2] ? selects[2].value : '전체';
+  if (btn) { btn.classList.add('is-loading'); btn.textContent = '검색 중'; }
+  if (grid) grid.classList.add('search-refreshing');
+  if (note) { note.classList.add('show'); note.textContent = '선택 조건 기준 채용 기업 조회 중'; }
+  setTimeout(() => {
+    let result = companies.filter(c => {
+      const matchIndustry = industry.indexOf('전체') > -1 || c.type.indexOf(industry.replace('/','')) > -1 || c.type.indexOf(industry.split('/')[0]) > -1 || c.type.indexOf(industry.split('/')[1] || '') > -1;
+      const matchType = companyType === '전체' || c.type.indexOf(companyType) > -1;
+      const matchLang = lang === '전체' || c.lang.indexOf(lang.replace(' 우대','').replace(' 필수','')) > -1;
+      return matchIndustry && matchType && matchLang;
+    });
+    if (result.length < 2) result = companies.filter(c => c.lang.indexOf('중국어') > -1 || c.lang.indexOf('영어') > -1).slice(0,4);
+    renderCompanyResults(result);
+    if (grid) grid.classList.remove('search-refreshing');
+    if (btn) { btn.classList.remove('is-loading'); btn.textContent = '검색'; }
+    if (note) note.textContent = `${industry}, ${companyType}, ${lang} 조건이 적용되어 ${result.length}개 기업이 표시되었습니다.`;
+    if (window.demoToast) window.demoToast('기업 검색 결과 갱신 완료.');
+  }, 520);
+}
+function openCompanyModal(i) {
+  const c = companies[i];
+  lastCompany = c.name;
+  document.getElementById('cd-name').textContent = c.name;
+  document.getElementById('cd-type').textContent = c.type;
+  document.getElementById('cd-pos').textContent = c.pos;
+  document.getElementById('cd-lang').textContent = c.lang;
+  document.getElementById('cd-desc').textContent = c.desc;
+  openModal('companyDetailModal');
+}
+
+function openStudentMsgModal(company) {
+  lastCompany = company;
+  document.getElementById('sMsgTo').textContent = company + ' 담당자에게';
+  openModal('studentMsgModal');
+}
+
+function openStudentMsgModalFromDetail() {
+  openStudentMsgModal(lastCompany);
+}
+
+function setLang(el, lang) {
+  document.querySelectorAll('.lang-sw span').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  if(lang==='en') alert('Language switched to English (Demo)');
+  else if(lang==='zh') alert('语言已切换为中文（演示）');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('show'); }));
+
+// URL 파라미터로 초기 탭 설정
+const urlTab = new URLSearchParams(window.location.search).get('tab');
+if (urlTab && ['profile','history','docs','privacy','companies','community'].includes(urlTab)) {
+  switchTab(urlTab);
+}
+
+function goToPoll(){ switchTab('community'); openPoll(0); }
+(function(){
+  const track=document.getElementById('adTrack'); if(!track) return;
+  const slides=Array.from(track.children); const total=slides.length; if(total<2) return;
+  track.appendChild(slides[0].cloneNode(true));
+  const dotsEl=document.getElementById('adDots'); let idx=0, animating=false;
+  for(let i=0;i<total;i++){ const d=document.createElement('div'); d.className='ad-dot'+(i===0?' active':''); d.onclick=()=>{ if(!animating) goAd(i); }; dotsEl.appendChild(d); }
+  function setDots(i){ dotsEl.querySelectorAll('.ad-dot').forEach((d,k)=>d.classList.toggle('active',k===i)); }
+  function goAd(n){
+    if(animating) return;
+    track.style.transition='transform .5s cubic-bezier(.4,0,.2,1)';
+    if(n>=total){
+      animating=true;
+      track.style.transform='translateX(-'+(total*100)+'%)';
+      setDots(0);
+      setTimeout(()=>{ track.style.transition='none'; track.style.transform='translateX(0)'; idx=0; void track.offsetWidth; animating=false; },520);
+    } else {
+      idx=n; track.style.transform='translateX(-'+(idx*100)+'%)'; setDots(idx);
+    }
+  }
+  setInterval(()=>goAd(idx+1), 4500);
+})();
+</script>
+
+<script>
+(function(){
+  if (window.__careerBridgeDemoPatch) return;
+  window.__careerBridgeDemoPatch = true;
+
+  function toast(message) {
+    var el = document.getElementById('demoToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'demoToast';
+      el.className = 'demo-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(window.__demoToastTimer);
+    window.__demoToastTimer = setTimeout(function(){ el.classList.remove('show'); }, 1800);
+  }
+
+  function ensureNote(parent, id, text) {
+    if (!parent) return;
+    var note = document.getElementById(id);
+    if (!note) {
+      note = document.createElement('div');
+      note.id = id;
+      note.className = 'demo-state-note';
+      parent.appendChild(note);
+    }
+    note.textContent = text;
+    note.classList.add('show');
+  }
+
+  window.demoToast = toast;
+
+  var page = location.pathname.split('/').pop() || 'index.html';
+
+  if (page === 'login.html') {
+    document.querySelectorAll('button, .login-btn, .role-card').forEach(function(el){
+      var text = (el.textContent || '').trim();
+      if (!el.dataset.demoBound && text) {
+        el.dataset.demoBound = '1';
+        el.addEventListener('click', function(){ toast('선택한 사용자 유형의 시연 화면 이동.'); });
+      }
+    });
+  }
+
+  if (page === 'institution.html') {
+    var qs = new URLSearchParams(location.search);
+    var role = qs.get('role') || 'company';
+    var title = document.getElementById('pageTitle');
+    if (title && !title.querySelector('.demo-mode-pill')) {
+      var pill = document.createElement('span');
+      pill.className = 'demo-mode-pill';
+      pill.textContent = role === 'school' ? '학교 담당자 모드' : '기업 담당자 모드';
+      title.appendChild(pill);
+    }
+    if (role === 'school') {
+      document.querySelectorAll('.sc-btn.secondary, .act-btn.primary, .bulk-btn').forEach(function(btn){
+        if ((btn.textContent || '').indexOf('메시지') >= 0 || (btn.textContent || '').indexOf('硫') >= 0) {
+          btn.style.opacity = '0.45';
+          btn.title = '학교 담당자 시연의 정보 조회 중심 흐름.';
+          btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toast('학교 담당자 모드의 학생 정보 조회 흐름 시연.'); }, true);
+        }
+      });
+    }
+    var oldSearch = window.doSearch;
+    window.doSearch = function(){
+      if (typeof oldSearch === 'function') oldSearch();
+      var box = document.querySelector('.filter-box');
+      ensureNote(box, 'searchDemoNote', '필터 조건 적용 후 추천 학생 목록 갱신 상태. 실제 검색 DB 미연결 시연 화면.');
+      toast('검색 결과 갱신 완료.');
+    };
+    var oldDetail = window.openDetailModal;
+    window.openDetailModal = function(i){
+      if (typeof oldDetail === 'function') oldDetail(i);
+      setTimeout(function(){
+        var body = document.querySelector('#studentDetailModal .modal-body');
+        if (body && !document.getElementById('demoDetailExtra')) {
+          var div = document.createElement('div');
+          div.id = 'demoDetailExtra';
+          div.className = 'detail-sec';
+          div.innerHTML = '<h4>관심 분야 / 취업 계획 / 문서</h4><div class="history-mini"><div class="hm-item"><div class="hm-badge cert">관심</div><div><div class="hm-title">글로벌 마케팅, 무역, 콘텐츠 현지화</div><div class="hm-sub">기업 담당자 검토용 핵심 관심 분야</div></div><span class="demo-status">공개</span></div><div class="hm-item"><div class="hm-badge work">계획</div><div><div class="hm-title">2025년 하반기 국내 취업 희망</div><div class="hm-sub">E-7 비자 전환 및 장기 정주 의사 있음</div></div><span class="demo-status">검토</span></div><div class="hm-item"><div class="hm-badge edu">문서</div><div><div class="hm-title">이력서, 자기소개서, 추천서 등록 완료</div><div class="hm-sub">실제 파일 업로드 없이 등록 상태만 표현</div></div><span class="demo-status">3건</span></div></div>';
+          var actions = body.querySelector('.action-btns');
+          body.insertBefore(div, actions || null);
+        }
+      }, 0);
+    };
+    var oldSend = window.sendMsg;
+    window.sendMsg = function(){ if (typeof oldSend === 'function') oldSend(); toast('메시지 발송 완료 상태가 반영되었습니다.'); };
+    var oldBulk = window.sendBulkMsg;
+    window.sendBulkMsg = function(){ if (typeof oldBulk === 'function') oldBulk(); toast('선택 학생에게 일괄 메시지를 발송한 상태입니다.'); };
+  }
+
+  if (page === 'student.html') {
+    document.querySelectorAll('.btn-confirm').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        var txt = (btn.textContent || '').trim();
+        if (txt) toast('등록/저장 완료 상태 반영.');
+      });
+    });
+    document.querySelectorAll('.toggle-opt').forEach(function(opt){
+      if (opt.dataset.demoBound) return;
+      opt.dataset.demoBound = '1';
+      opt.addEventListener('click', function(){ toast('공개 범위 변경 완료.'); });
+    });
+    var oldCompanyMsg = window.openStudentMsgModal;
+    window.openStudentMsgModal = function(company){ if (typeof oldCompanyMsg === 'function') oldCompanyMsg(company); toast('기업 담당자 대상 메시지 작성.'); };
+  }
+
+  if (page === 'messages.html' || page === 'inst-messages.html' || page === 'company-messages.html') {
+    var oldMsg = window.sendMsg;
+    window.sendMsg = function(){
+      if (typeof oldMsg === 'function') oldMsg();
+      toast('메시지 발송 완료. 받은/보낸 메시지 시연 상태.');
+    };
+    document.querySelectorAll('.i-tab').forEach(function(tab){
+      if (tab.dataset.demoBound) return;
+      tab.dataset.demoBound = '1';
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.i-tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+        toast((tab.textContent || '메시지함').trim() + ' 목록으로 전환되었습니다.');
+      });
+    });
+  }
+
+  if (page === 'translation.html') {
+    document.querySelectorAll('.lang-sw span, .lang-select-btn').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.lang-sw span').forEach(function(s){ s.classList.remove('active'); });
+        if (btn.parentElement && btn.parentElement.classList.contains('lang-sw')) btn.classList.add('active');
+        toast('미리 준비된 다국어 화면으로 전환된 상태입니다.');
+      });
+    });
+  }
+})();
+</script>
+
+
+
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

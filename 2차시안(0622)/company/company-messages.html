@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 기업 담당자 메시지</title>
+<style>
+/* 공통: work-tool.css + portal-components.css · 레거시 블록 정리 */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI','Malgun Gothic',sans-serif; background:#EFF6FF; height:100vh; overflow:hidden; }
+body:not(.work-tool) .msg-layout {
+  margin-left: var(--cb-sidebar-w) !important;
+  margin-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  height: calc(100vh - var(--cb-topbar-h)) !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.bottom-ad-showcase,
+.banner,
+.cta-section:not(.brand-cta-section) {
+  background:#4f7fc8 !important;
+  border: 1px solid var(--cb-line-soft) !important;
+  color: var(--cb-text-main) !important;
+  box-shadow: 0 18px 46px rgba(57, 103, 142, 0.10) !important;
+}
+.bottom-ad-showcase *,
+.banner *,
+.cta-section:not(.brand-cta-section) * {
+  color: inherit;
+}
+.bottom-ad-eyebrow,
+.bottom-ad-tag,
+.banner .badge,
+.cta-section:not(.brand-cta-section) .badge {
+  background: #DDEFFA !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #C5DFEF !important;
+}
+.bottom-ad-title,
+.bottom-ad-showcase h2,
+.bottom-ad-showcase h3,
+.banner h2,
+.banner h3,
+.cta-section:not(.brand-cta-section) h2,
+.cta-section:not(.brand-cta-section) h3 {
+  color: var(--cb-text-main) !important;
+}
+.bottom-ad-desc,
+.bottom-ad-showcase p,
+.banner p,
+.cta-section:not(.brand-cta-section) p {
+  color: var(--cb-text-sub) !important;
+}
+.bottom-ad-btn.primary,
+.bottom-ad-showcase .primary,
+.banner .primary,
+.cta-section:not(.brand-cta-section) .primary,
+.cta-section:not(.brand-cta-section) .cta-btn-white {
+  background: var(--cb-point-strong) !important;
+  color: #FFFFFF !important;
+  border-color: var(--cb-point-strong) !important;
+}
+.bottom-ad-btn.secondary,
+.bottom-ad-showcase .secondary,
+.banner .secondary,
+.cta-section:not(.brand-cta-section) .secondary,
+.cta-section:not(.brand-cta-section) .cta-btn-outline {
+  background: #FFFFFF !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #BCD9EE !important;
+}
+@media (max-width: 1180px), (orientation: portrait) {
+  .sidebar {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cb-line-soft) !important;
+    box-shadow: none !important;
+  }
+  .topbar {
+    position: sticky !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 58px !important;
+  }
+  .main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+  }
+  .main .content,
+  .content {
+    max-width: 100% !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  body:not(.work-tool) .msg-layout {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .main .content,
+  .content {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* Final readable badge correction */
+.p-tag,
+.sc-tag,
+.cc-tag,
+.doc-status,
+.demo-status,
+.demo-mode-pill,
+.user-type-badge,
+.qc-type,
+.qc-lang,
+.mock-tag,
+.th-langs,
+.b-mini-tag,
+.b-badge,
+.banner-more,
+.translation-badge,
+.profile-card .p-tag {
+  background: #DDEFFA !important;
+  color: #2E638F !important;
+  border: 1px solid #C2DBEF !important;
+  box-shadow: none !important;
+}
+.p-tag.accent,
+.sc-tag.accent,
+.doc-status.verified,
+.demo-status.strong,
+.user-type-badge.c {
+  background: #CFE6F7 !important;
+  color: #214E74 !important;
+  border-color: #B8D6EA !important;
+}
+.profile-card .p-tag,
+.comp-detail-header .p-tag,
+.modal .p-tag {
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+.bubble.me .translation-badge {
+  background: rgba(255,255,255,0.92) !important;
+  color: #2E638F !important;
+  border-color: rgba(255,255,255,0.72) !important;
+}
+</style>
+<link rel="stylesheet" href="../work-tool.css">
+<link rel="stylesheet" href="../portal-components.css">
+<script src="../work-tool.js" defer></script>
+<script src="../work-tool-actions.js" defer></script>
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+</head>
+<body class="portal-company-message work-tool">
+<main class="wt-window">
+  <header class="wt-titlebar">
+    <div>Career Bridge · 기업 메시지</div>
+    <div class="lang-sw wt-titlebar-lang" aria-label="언어 선택"><span class="active" data-lang="ko">KO</span><span data-lang="en">EN</span><span data-lang="zh">ZH</span></div>
+  </header>
+  <section class="wt-toolbar wt-toolbar-core" aria-label="빠른 도구">
+    <button type="button" class="wt-action-btn" onclick="wtApprove()">승인처리</button>
+    <button type="button" class="wt-action-btn" onclick="wtAddOrg()">기관추가</button>
+    <button type="button" class="wt-tool-btn" onclick="wtExport()">내보내기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtPreview()">미리보기</button>
+    <button type="button" class="wt-tool-btn" onclick="wtViewDetail()">자세히 보기</button>
+  </section>
+  <section class="wt-workspace wt-msg-workspace">
+    <aside class="wt-left-panel">
+      <div class="wt-panel-title">업무 바로가기</div>
+      <div class="wt-tree">
+        <div class="wt-tree-item" onclick="window.location.href='company.html'">▣ 대시보드</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-search.html'">　├ 인재 검색</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-talent.html'">　├ AI 추천·비교</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-recruit.html'">　├ 채용·면접</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-report.html'">　├ 채용 성과</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-insight.html'">　├ 인사이트 분석</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-community.html'">　├ 커뮤니티</div>
+        <div class="wt-tree-item active" onclick="window.location.href='company-messages.html'">　├ 메시지 관리</div>
+        <div class="wt-tree-item" onclick="window.location.href='company-translation.html'">　└ 번역 서비스</div>
+      </div>
+      <form class="wt-quick-form" onsubmit="return false">
+        <div class="wt-field"><label>기업명</label><input type="text" value="삼성전자" readonly></div>
+        <div class="wt-field"><label>담당자</label><input type="text" value="이수진 과장" readonly></div>
+        <div class="wt-field"><label>처리 상태</label><select><option selected>회신 대기</option><option>완료</option></select></div>
+        <button type="button" class="wt-action-btn" onclick="window.location.href='../index.html'">로그아웃</button>
+      </form>
+    </aside>
+
+<div class="msg-layout">
+  <div class="inbox">
+    <div class="inbox-top">
+      <h3>지원자 메시지함</h3>
+      <div class="inbox-search">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input placeholder="지원자 검색...">
+      </div>
+    </div>
+    <div class="inbox-tabs">
+      <div class="i-tab active">전체</div>
+      <div class="i-tab">받은 메시지</div>
+      <div class="i-tab">보낸 메시지</div>
+    </div>
+    <div class="msg-list">
+      <div class="msg-item unread active" onclick="openChat(0)">
+        <div class="msg-avatar" style="background:#2563EB">WX</div>
+        <div class="msg-info">
+          <div class="msg-sender">왕샤오밍 (Wang Xiaoming)</div>
+          <div class="msg-subject">면접 일정 회신</div>
+          <div class="msg-preview">이수진 과장님, 면접 일정 확인했습니다...</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">오늘 10:15</span><div class="unread-dot"></div></div>
+      </div>
+      <div class="msg-item unread" onclick="openChat(1)">
+        <div class="msg-avatar" style="background:#1D4ED8">NL</div>
+        <div class="msg-info">
+          <div class="msg-sender">응웬티란 (Nguyen Thi Lan)</div>
+          <div class="msg-subject">채용 공고 문의</div>
+          <div class="msg-preview">안녕하세요. 채용 공고 관련 문의드립니다...</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">어제 14:30</span><div class="unread-dot"></div></div>
+      </div>
+      <div class="msg-item" onclick="openChat(2)">
+        <div class="msg-avatar" style="background:#3B82F6">DY</div>
+        <div class="msg-info">
+          <div class="msg-sender">딜노자 유수포바</div>
+          <div class="msg-subject">자기소개서 첨부</div>
+          <div class="msg-preview">요청하신 자기소개서 첨부드립니다...</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">2일 전</span></div>
+      </div>
+      <div class="msg-item" onclick="openChat(3)">
+        <div class="msg-avatar" style="background:#60A5FA">CJ</div>
+        <div class="msg-info">
+          <div class="msg-sender">천지아이 (Chen Jiayi)</div>
+          <div class="msg-subject">인턴십 지원 의향</div>
+          <div class="msg-preview">귀사 인턴십 프로그램에 지원하고 싶어...</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">5일 전</span></div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar" style="background:#0EA5E9">KM</div>
+        <div class="msg-info">
+          <div class="msg-sender">김민준 (Kim Minjun)</div>
+          <div class="msg-subject">서류 보완 요청</div>
+          <div class="msg-preview">TOPIK 성적표 재업로드 부탁드립니다.</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">6일 전</span></div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar" style="background:#6366F1">PS</div>
+        <div class="msg-info">
+          <div class="msg-sender">파트리샤 실바</div>
+          <div class="msg-subject">비자 관련 문의</div>
+          <div class="msg-preview">D-10 비자 전환 가능 여부 확인 부탁...</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">1주 전</span></div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar" style="background:#8B5CF6">AR</div>
+        <div class="msg-info">
+          <div class="msg-sender">아리프 라흐만</div>
+          <div class="msg-subject">면접 피드백 요청</div>
+          <div class="msg-preview">지난 면접 결과 관련하여 문의드립니다.</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">1주 전</span></div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar" style="background:#EC4899">SJ</div>
+        <div class="msg-info">
+          <div class="msg-sender">소피아 장</div>
+          <div class="msg-subject">추천서 제출</div>
+          <div class="msg-preview">교수님 추천서를 첨부했습니다.</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">2주 전</span></div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar" style="background:#F59E0B">HT</div>
+        <div class="msg-info">
+          <div class="msg-sender">호앙 티엔</div>
+          <div class="msg-subject">채용 공고 재문의</div>
+          <div class="msg-preview">마감일 연장 가능한지 알고 싶습니다.</div>
+        </div>
+        <div class="msg-meta"><span class="msg-time">2주 전</span></div>
+      </div>
+    </div>
+    <button class="compose-btn">새 메시지 작성</button>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header">
+      <div class="chat-avatar" id="chatAvatar" style="background:#2563EB">WX</div>
+      <div>
+        <div class="chat-name" id="chatName">왕샤오밍 (Wang Xiaoming)</div>
+        <div class="chat-sub" id="chatSub">유학생 · 경희대학교 경영학과 · 중국</div>
+      </div>
+      <div class="chat-actions">
+        <button class="chat-action">프로필 보기</button>
+        <button class="chat-action">고정</button>
+      </div>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <div class="input-wrap">
+        <input placeholder="메시지 입력..." id="chatInput" onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="send-btn" onclick="sendMsg()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="context-panel" aria-label="업무 컨텍스트">
+    <div class="context-panel-title">지원자 업무 패널</div>
+    <div class="context-panel-body">
+    <div class="context-block">
+      <div class="context-kv"><span class="k">지원자</span><span class="v" id="ctxName">왕샤오밍</span></div>
+      <div class="context-kv"><span class="k">소속</span><span class="v" id="ctxSchool">경희대학교</span></div>
+      <div class="context-kv"><span class="k">진행</span><span class="v"><span class="grid-pill warn" id="ctxStatus">면접 일정 확인</span></span></div>
+    </div>
+    <div class="context-block">
+      <label for="ctxState">처리 상태</label>
+      <select id="ctxState">
+        <option>검토중</option>
+        <option selected>면접 확정</option>
+        <option>서류 요청</option>
+        <option>보류</option>
+      </select>
+    </div>
+    <div class="context-block">
+      <label for="ctxMemo">담당자 메모</label>
+      <textarea id="ctxMemo">화상 면접 링크 전달 예정. TOPIK 5급, 경영학 전공.</textarea>
+    </div>
+    <div class="context-block">
+      <label for="ctxTranslate">번역 보기</label>
+      <select id="ctxTranslate">
+        <option>원문 / 한국어</option>
+        <option>영어 번역</option>
+        <option>중국어 번역</option>
+      </select>
+      <div class="context-actions">
+        <button class="grid-btn primary" type="button">번역 토글</button>
+        <button class="grid-btn" type="button">프로필 보기</button>
+      </div>
+    </div>
+    <div class="context-block">
+      <div class="context-kv"><span class="k">처리</span><span class="v">오늘 10:15</span></div>
+      <div class="context-kv"><span class="k">문서</span><span class="v">이력서 · 자기소개서 공개</span></div>
+    </div>
+    </div>
+  </aside>
+</div>
+  </section>
+  <footer class="wt-statusbar">
+    <span>준비</span>
+    <span>기업 메시지</span>
+    <span>마지막 저장: 09:12</span>
+  </footer>
+</main>
+
+<script>
+const chats = [
+  { avatar:'WX', color:'#2563EB', name:'왕샤오밍 (Wang Xiaoming)', sub:'유학생 · 경희대학교 경영학과 · 중국',
+    msgs:[
+      {from:'me',text:'안녕하세요, 왕샤오밍 님. 삼성전자 인사팀 이수진 과장입니다. 글로벌 사업부 채용에 관심이 있으신지 문의드립니다.'},
+      {from:'them',text:'안녕하세요, 이수진 과장님. 연락 주셔서 감사합니다. 매우 관심이 있습니다.'},
+      {from:'me',text:'이번 주 목요일 오후 2시 화상 면접 가능하실까요?'},
+      {from:'them',text:'이수진 과장님, 면접 일정 확인했습니다. 가능합니다. 감사합니다.'},
+      {from:'me',text:'감사합니다. 화상 면접 링크는 전날 오후에 보내드리겠습니다. TOPIK 성적표와 이력서도 미리 준비 부탁드립니다.'},
+      {from:'them',text:'네, 알겠습니다. 성적표와 이력서는 이미 프로필에 등록해 두었습니다.'},
+      {from:'me',text:'확인했습니다. 면접은 한국어로 진행되며, 글로벌 마케팅 직무 관련 경험 위주로 질문드릴 예정입니다.'},
+      {from:'them',text:'좋습니다. 중국-한국 무역 인턴 경험이 있어 해당 분야 질문에 답변드리겠습니다.'},
+      {from:'me',text:'참고로 면접 소요 시간은 약 40분입니다. 기술 질문과 인성 질문이 함께 진행됩니다.'},
+      {from:'them',text:'이해했습니다. 그때 뵙겠습니다!'},
+    ]},
+  { avatar:'NL', color:'#1D4ED8', name:'응웬티란 (Nguyen Thi Lan)', sub:'유학생 · 연세대학교 컴퓨터공학 · 베트남',
+    msgs:[
+      {from:'them',text:'안녕하세요. 채용 공고 관련 문의드립니다. 베트남 출신도 지원 가능한지 알고 싶습니다.'},
+    ]},
+  { avatar:'DY', color:'#3B82F6', name:'딜노자 유수포바', sub:'유학생 · 한양대학교 경제학 · 우즈베키스탄',
+    msgs:[
+      {from:'me',text:'안녕하세요. 자기소개서를 보내주실 수 있을까요?'},
+      {from:'them',text:'요청하신 자기소개서 첨부드립니다. 검토 부탁드립니다.'},
+    ]},
+  { avatar:'CJ', color:'#60A5FA', name:'천지아이 (Chen Jiayi)', sub:'유학생 · 고려대학교 미디어학과 · 중국',
+    msgs:[
+      {from:'them',text:'안녕하세요. 귀사 인턴십 프로그램에 지원하고 싶어 연락드립니다.'},
+    ]},
+];
+
+function renderMessages(i) {
+  const el = document.getElementById('chatMessages');
+  el.innerHTML = '<div class="chat-date">2025년 6월 18일</div>';
+  chats[i].msgs.forEach(m => {
+    const bw = document.createElement('div');
+    bw.className = 'bw' + (m.from==='me'?' me':'');
+    if(m.from==='them') {
+      bw.innerHTML = `<div class="b-avatar" style="background:${chats[i].color}">${chats[i].avatar}</div><div><div class="bubble them">${m.text}</div></div>`;
+    } else {
+      bw.innerHTML = `<div class="b-avatar" style="background:#1D4ED8">이수</div><div><div class="bubble me">${m.text}</div></div>`;
+    }
+    el.appendChild(bw);
+  });
+  el.scrollTop = el.scrollHeight;
+}
+
+const ctxMeta = [
+  { status:'면접 일정 확인', memo:'화상 면접 링크 전달 예정. TOPIK 5급, 경영학 전공.' },
+  { status:'채용 공고 문의', memo:'베트남 출신 지원 가능 여부 확인 요청.' },
+  { status:'서류 검토', memo:'자기소개서 첨부 완료. HR 검토 대기.' },
+  { status:'인턴십 지원', memo:'인턴십 프로그램 관심 표명. 후속 연락 필요.' },
+];
+
+function updateContextPanel(i) {
+  const chat = chats[i];
+  const meta = ctxMeta[i] || ctxMeta[0];
+  const nameEl = document.getElementById('ctxName');
+  const schoolEl = document.getElementById('ctxSchool');
+  const statusEl = document.getElementById('ctxStatus');
+  const memoEl = document.getElementById('ctxMemo');
+  if (nameEl) nameEl.textContent = chat.name.split('(')[0].trim();
+  if (schoolEl) schoolEl.textContent = (chat.sub.split('·')[1] || chat.sub).trim();
+  if (statusEl) statusEl.textContent = meta.status;
+  if (memoEl) memoEl.value = meta.memo;
+}
+
+function openChat(i) {
+  document.querySelectorAll('.msg-item').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.msg-item')[i].classList.add('active');
+  document.getElementById('chatAvatar').textContent = chats[i].avatar;
+  document.getElementById('chatAvatar').style.background = chats[i].color;
+  document.getElementById('chatName').textContent = chats[i].name;
+  document.getElementById('chatSub').textContent = chats[i].sub;
+  renderMessages(i);
+  updateContextPanel(i);
+}
+
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  if(!input.value.trim()) return;
+  const el = document.getElementById('chatMessages');
+  const bw = document.createElement('div');
+  bw.className = 'bw me';
+  bw.innerHTML = `<div class="b-avatar" style="background:#1D4ED8">이수</div><div><div class="bubble me">${input.value}</div></div>`;
+  el.appendChild(bw);
+  el.scrollTop = el.scrollHeight;
+  input.value = '';
+}
+
+renderMessages(0);
+updateContextPanel(0);
+
+
+/* 툴바 버튼: work-tool-actions.js 에서 처리 */
+</script>
+
+<script>
+(function(){
+  if (window.__careerBridgeDemoPatch) return;
+  window.__careerBridgeDemoPatch = true;
+
+  function toast(message) {
+    var el = document.getElementById('demoToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'demoToast';
+      el.className = 'demo-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(window.__demoToastTimer);
+    window.__demoToastTimer = setTimeout(function(){ el.classList.remove('show'); }, 1800);
+  }
+
+  function ensureNote(parent, id, text) {
+    if (!parent) return;
+    var note = document.getElementById(id);
+    if (!note) {
+      note = document.createElement('div');
+      note.id = id;
+      note.className = 'demo-state-note';
+      parent.appendChild(note);
+    }
+    note.textContent = text;
+    note.classList.add('show');
+  }
+
+  window.demoToast = toast;
+
+  var page = location.pathname.split('/').pop() || 'index.html';
+
+  if (page === 'login.html') {
+    document.querySelectorAll('button, .login-btn, .role-card').forEach(function(el){
+      var text = (el.textContent || '').trim();
+      if (!el.dataset.demoBound && text) {
+        el.dataset.demoBound = '1';
+        el.addEventListener('click', function(){ toast('선택한 사용자 유형의 시연 화면 이동.'); });
+      }
+    });
+  }
+
+  if (page === 'institution.html' || page === 'company.html') {
+    var qs = new URLSearchParams(location.search);
+    var role = 'company';
+    var title = document.getElementById('pageTitle');
+    if (title && !title.querySelector('.demo-mode-pill')) {
+      var pill = document.createElement('span');
+      pill.className = 'demo-mode-pill';
+      pill.textContent = '기업 담당자 모드';
+      title.appendChild(pill);
+    }
+    if (false) {
+      document.querySelectorAll('.sc-btn.secondary, .act-btn.primary, .bulk-btn').forEach(function(btn){
+        if ((btn.textContent || '').indexOf('메시지') >= 0 || (btn.textContent || '').indexOf('硫') >= 0) {
+          btn.style.opacity = '0.45';
+          btn.title = '학교 담당자 시연의 정보 조회 중심 흐름.';
+          btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toast('학교 담당자 모드의 학생 정보 조회 흐름 시연.'); }, true);
+        }
+      });
+    }
+    var oldSearch = window.doSearch;
+    window.doSearch = function(){
+      if (typeof oldSearch === 'function') oldSearch();
+      var box = document.querySelector('.filter-box');
+      ensureNote(box, 'searchDemoNote', '필터 조건 적용 후 추천 학생 목록 갱신 상태. 실제 검색 DB 미연결 시연 화면.');
+      toast('검색 결과 갱신 완료.');
+    };
+    var oldDetail = window.openDetailModal;
+    window.openDetailModal = function(i){
+      if (typeof oldDetail === 'function') oldDetail(i);
+      setTimeout(function(){
+        var body = document.querySelector('#studentDetailModal .modal-body');
+        if (body && !document.getElementById('demoDetailExtra')) {
+          var div = document.createElement('div');
+          div.id = 'demoDetailExtra';
+          div.className = 'detail-sec';
+          div.innerHTML = '<h4>관심 분야 / 취업 계획 / 문서</h4><div class="history-mini"><div class="hm-item"><div class="hm-badge cert">관심</div><div><div class="hm-title">글로벌 마케팅, 무역, 콘텐츠 현지화</div><div class="hm-sub">기업 담당자 검토용 핵심 관심 분야</div></div><span class="demo-status">공개</span></div><div class="hm-item"><div class="hm-badge work">계획</div><div><div class="hm-title">2025년 하반기 국내 취업 희망</div><div class="hm-sub">E-7 비자 전환 및 장기 정주 의사 있음</div></div><span class="demo-status">검토</span></div><div class="hm-item"><div class="hm-badge edu">문서</div><div><div class="hm-title">이력서, 자기소개서, 추천서 등록 완료</div><div class="hm-sub">실제 파일 업로드 없이 등록 상태만 표현</div></div><span class="demo-status">3건</span></div></div>';
+          var actions = body.querySelector('.action-btns');
+          body.insertBefore(div, actions || null);
+        }
+      }, 0);
+    };
+    var oldSend = window.sendMsg;
+    window.sendMsg = function(){ if (typeof oldSend === 'function') oldSend(); toast('메시지 발송 완료 상태가 반영되었습니다.'); };
+    var oldBulk = window.sendBulkMsg;
+    window.sendBulkMsg = function(){ if (typeof oldBulk === 'function') oldBulk(); toast('선택 학생에게 일괄 메시지를 발송한 상태입니다.'); };
+  }
+
+  if (page === 'student.html') {
+    document.querySelectorAll('.btn-confirm').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        var txt = (btn.textContent || '').trim();
+        if (txt) toast('등록/저장 완료 상태 반영.');
+      });
+    });
+    document.querySelectorAll('.toggle-opt').forEach(function(opt){
+      if (opt.dataset.demoBound) return;
+      opt.dataset.demoBound = '1';
+      opt.addEventListener('click', function(){ toast('공개 범위 변경 완료.'); });
+    });
+    var oldCompanyMsg = window.openStudentMsgModal;
+    window.openStudentMsgModal = function(company){ if (typeof oldCompanyMsg === 'function') oldCompanyMsg(company); toast('기업 담당자 대상 메시지 작성.'); };
+  }
+
+  if (page === 'company-messages.html') {
+    var oldMsg = window.sendMsg;
+    window.sendMsg = function(){
+      if (typeof oldMsg === 'function') oldMsg();
+      toast('메시지 발송 완료. 받은/보낸 메시지 시연 상태.');
+    };
+    document.querySelectorAll('.i-tab').forEach(function(tab){
+      if (tab.dataset.demoBound) return;
+      tab.dataset.demoBound = '1';
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.i-tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+        toast((tab.textContent || '메시지함').trim() + ' 목록으로 전환되었습니다.');
+      });
+    });
+  }
+
+  if (page === 'company-translation.html') {
+    document.querySelectorAll('.lang-sw span, .lang-select-btn').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.lang-sw span').forEach(function(s){ s.classList.remove('active'); });
+        if (btn.parentElement && btn.parentElement.classList.contains('lang-sw')) btn.classList.add('active');
+        toast('미리 준비된 다국어 화면으로 전환된 상태입니다.');
+      });
+    });
+  }
+})();
+</script>
+
+<!-- Inline message translation demo -->
+<script>
+(function(){
+  function cleanText(value) {
+    return (value || '').replace(/<br\s*\/?\>/gi, '\n').replace(/<[^>]+>/g, '').replace(/\s+\n/g, '\n').trim();
+  }
+
+  function htmlText(value) {
+    return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+  }
+
+  function getDemoTranslation(text, isMine) {
+    var source = cleanText(text);
+    if (source.indexOf('코트라') >= 0 || source.indexOf('취업박람회') >= 0) {
+      return 'Hello, Wang Xiaoming. This is Jeong Yujin from KOTRA. We would like to invite you to the International Student Job Fair on June 28.';
+    }
+    if (source.indexOf('삼성전자') >= 0 || source.indexOf('글로벌 사업부') >= 0) {
+      return 'Hello, Wang Xiaoming. This is Lee Sujin from Samsung Electronics HR. We would like to ask if you are interested in a global business position.';
+    }
+    if (source.indexOf('한·중 무역') >= 0 || source.indexOf('TOPIK 5급') >= 0) {
+      return 'Your Korea-China trade internship experience and TOPIK level 5 match the talent profile we are looking for.';
+    }
+    if (source.indexOf('관심') >= 0 && source.indexOf('감사') >= 0) {
+      return 'Hello. Thank you for contacting me. I am very interested and would like to join the interview.';
+    }
+    if (source.indexOf('면접 일정 확인') >= 0 || source.indexOf('가능합니다') >= 0) {
+      return 'I have confirmed the interview schedule. I am available. Thank you.';
+    }
+    if (source.indexOf('화상 면접') >= 0 || source.indexOf('면접') >= 0) {
+      return 'Would you be available for a video interview this Thursday at 2 PM?';
+    }
+    if (source.indexOf('자기소개서') >= 0 || source.indexOf('첨부') >= 0) {
+      return 'I have attached the requested cover letter. Please review it.';
+    }
+    if (source.indexOf('채용 공고') >= 0 || source.indexOf('지원 가능') >= 0) {
+      return 'Hello. I have a question about the job posting. I would like to know whether students from Vietnam can apply.';
+    }
+    if (source.indexOf('인턴십 프로그램') >= 0 || source.indexOf('지원하고 싶어') >= 0) {
+      return 'Hello. I am contacting you because I would like to apply for your internship program.';
+    }
+    if (source.indexOf('감사') >= 0) {
+      return 'Thank you. I have confirmed the message and will prepare accordingly.';
+    }
+    return isMine ? 'Translated outgoing message for the recipient.' : 'Translated incoming message for quick review.';
+  }
+  function toggleBubbleTranslation(bubble, button) {
+    if (!bubble || !button) return;
+    if (bubble.dataset.translated === '1') {
+      bubble.innerHTML = bubble.dataset.originalHtml || bubble.innerHTML;
+      bubble.dataset.translated = '0';
+      bubble.classList.remove('translated');
+      button.textContent = '(번역)';
+      return;
+    }
+    var translated = bubble.dataset.translationText || getDemoTranslation(bubble.dataset.originalHtml || bubble.innerHTML, bubble.classList.contains('me'));
+    bubble.innerHTML = htmlText(translated) + '<span class="translation-badge">번역됨</span>';
+    bubble.dataset.translated = '1';
+    bubble.classList.add('translated');
+    button.textContent = '(원문)';
+    if (window.demoToast) window.demoToast('메시지가 번역되었습니다.');
+  }
+
+  function setupMessageTranslation() {
+    document.querySelectorAll('.bubble').forEach(function(bubble){
+      if (bubble.dataset.translationReady === '1') return;
+      bubble.dataset.translationReady = '1';
+      bubble.dataset.originalHtml = bubble.innerHTML;
+      bubble.dataset.translationText = getDemoTranslation(bubble.innerHTML, bubble.classList.contains('me'));
+
+      var holder = bubble.parentElement;
+      if (!holder) return;
+      holder.classList.add('bubble-wrap');
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'msg-translate-btn';
+      button.textContent = '(번역)';
+      button.addEventListener('click', function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        toggleBubbleTranslation(bubble, button);
+      });
+      holder.insertBefore(button, bubble.nextSibling);
+    });
+  }
+
+  window.setupMessageTranslation = setupMessageTranslation;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMessageTranslation);
+  } else {
+    setupMessageTranslation();
+  }
+  var target = document.getElementById('chatMessages') || document.body;
+  if (target && !window.__messageTranslateObserver) {
+    window.__messageTranslateObserver = new MutationObserver(function(){ setupMessageTranslation(); });
+    window.__messageTranslateObserver.observe(target, { childList:true, subtree:true });
+  }
+})();
+</script>
+<!-- Organized inbox tabs demo -->
+<script>
+(function(){
+  if (window.__organizedInboxPatch) return;
+  window.__organizedInboxPatch = true;
+  if (!document.querySelector('.msg-layout') || typeof chats === 'undefined') return;
+
+  var page = location.pathname.split('/').pop() || '';
+  var currentThreadIndex = 0;
+  var currentFolder = 'all';
+  var folderMap = page === 'company-messages.html'
+    ? ['in','sent','in','in']
+    : ['in','in','sent','in'];
+
+  function folderFromTabText(text) {
+    text = (text || '').trim();
+    if (text.indexOf('받은') >= 0 || text.toLowerCase().indexOf('inbox') >= 0 || text.indexOf('收件') >= 0) return 'in';
+    if (text.indexOf('보낸') >= 0 || text.toLowerCase().indexOf('sent') >= 0 || text.indexOf('发送') >= 0 || text.indexOf('已发送') >= 0) return 'sent';
+    return 'all';
+  }
+
+  function lastMessage(thread) {
+    var msgs = thread.msgs || [];
+    return msgs[msgs.length - 1] || { from:'them', text:'' };
+  }
+
+  function stripHtml(value) {
+    var div = document.createElement('div');
+    div.innerHTML = value || '';
+    return (div.textContent || div.innerText || '').trim();
+  }
+
+  function threadSubject(thread, idx) {
+    var name = thread.name || '';
+    if (name.indexOf('삼성') >= 0) return page === 'company-messages.html' ? '글로벌 사업부 채용 문의' : '면접 일정 회신';
+    if (name.indexOf('경희') >= 0 || name.indexOf('박준혁') >= 0) return '취업지원 프로그램 안내';
+    if (name.indexOf('LG') >= 0) return '인턴십 프로그램 안내';
+    if (name.indexOf('코트라') >= 0 || name.indexOf('KOTRA') >= 0) return '취업박람회 초청';
+    if (name.indexOf('응웬') >= 0) return '채용 공고 문의';
+    if (name.indexOf('딜노자') >= 0) return '자기소개서 첨부';
+    if (name.indexOf('천지') >= 0) return '인턴십 지원 의향';
+    return '커리어 상담 메시지';
+  }
+
+  function renderThreadList(folder) {
+    currentFolder = folder || currentFolder || 'all';
+    var list = document.querySelector('.msg-list');
+    if (!list) return;
+    var indexes = chats.map(function(_, i){ return i; }).filter(function(i){ return currentFolder === 'all' || (folderMap[i] || 'in') === currentFolder; });
+    if (!indexes.length) {
+      list.innerHTML = '<div class="msg-list-empty">해당 메시지 없음.</div>';
+      return;
+    }
+    list.innerHTML = indexes.map(function(i, order){
+      var thread = chats[i];
+      var folderName = (folderMap[i] || 'in') === 'sent' ? '보낸 메시지' : '받은 메시지';
+      var last = lastMessage(thread);
+      var preview = stripHtml(last.text || '').slice(0, 42);
+      var unread = (folderMap[i] || 'in') === 'in' && order < 2;
+      return '<div class="msg-item '+(unread?'unread ':'')+(i===currentThreadIndex?'active':'')+'" data-thread-index="'+i+'">'
+        + '<div class="msg-avatar" style="background:'+thread.color+'">'+thread.avatar+'</div>'
+        + '<div class="msg-info"><div class="msg-sender">'+thread.name+'</div><div class="msg-subject">'+threadSubject(thread, i)+'</div><div class="msg-preview">'+preview+'</div><div class="msg-folder-pill '+((folderMap[i] || 'in') === 'sent' ? 'sent' : '')+'">'+folderName+'</div></div>'
+        + '<div class="msg-meta"><span class="msg-time">'+(order===0?'오늘':order===1?'어제':(order+1)+'일 전')+'</span>'+(unread?'<div class="unread-dot"></div>':'')+'</div>'
+        + '</div>';
+    }).join('');
+    list.querySelectorAll('.msg-item').forEach(function(item){
+      item.addEventListener('click', function(){ window.openChat(Number(item.dataset.threadIndex)); });
+    });
+    if (indexes.indexOf(currentThreadIndex) < 0) window.openChat(indexes[0]);
+  }
+
+  window.openChat = function(i) {
+    currentThreadIndex = i;
+    var thread = chats[i];
+    if (!thread) return;
+    var avatar = document.getElementById('chatAvatarEl') || document.getElementById('chatAvatar');
+    if (avatar) {
+      avatar.textContent = thread.avatar;
+      avatar.style.background = thread.color;
+    }
+    var name = document.getElementById('chatName');
+    var sub = document.getElementById('chatSub');
+    if (name) name.textContent = thread.name;
+    if (sub) sub.textContent = thread.sub;
+    if (typeof renderMessages === 'function') renderMessages(i);
+    document.querySelectorAll('.msg-item').forEach(function(item){ item.classList.toggle('active', Number(item.dataset.threadIndex) === i); });
+  };
+
+  window.setTab = function(el) {
+    document.querySelectorAll('.i-tab').forEach(function(t){ t.classList.remove('active'); });
+    if (el) el.classList.add('active');
+    renderThreadList(folderFromTabText(el ? el.textContent : '전체'));
+    if (window.demoToast) window.demoToast((el ? el.textContent.trim() : '전체') + ' 목록으로 정리되었습니다.');
+  };
+
+  document.querySelectorAll('.i-tab').forEach(function(tab){
+    tab.onclick = function(){ window.setTab(tab); };
+  });
+  renderThreadList('all');
+})();
+</script>
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

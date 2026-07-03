@@ -1,0 +1,29 @@
+  <div class="wt-section-layout wt-stack-layout">
+    <div class="wt-panel-summary">
+      <div class="section-lead"><h2>상담 이력 관리</h2><p>취업 · 비자 · 생활 · 학업 상담 기록 (목업)</p></div>
+      <div class="filter-box">
+        <div class="filter-title">조회 필터</div>
+        <div class="filter-row2">
+          <div class="fg"><label>상담 유형</label><select><option>전체</option><option>취업</option><option>비자</option><option>생활</option><option>학업</option></select></div>
+          <div class="fg"><label>상태</label><select><option>전체</option><option>예정</option><option>완료</option><option>재상담 필요</option></select></div>
+          <button class="search-btn" type="button" onclick="window.demoToast&&window.demoToast('상담 이력 조회 (목업)')">조회하기</button>
+        </div>
+      </div>
+    </div>
+    <div class="wt-sheet-zone">
+      <div class="wt-sheet-zone-head"><strong>상담 이력</strong><span>최근 30일 · 47건</span></div>
+      <div class="wt-mock-table-wrap wt-sheet-scroll">
+        <table class="wt-mock-table">
+          <thead><tr><th>학생</th><th>유형</th><th>최근 상담</th><th>다음 예정</th><th>담당</th><th>상태</th></tr></thead>
+          <tbody>
+            <tr><td>Wang Xiaoming</td><td>취업</td><td>2026-06-18</td><td>2026-06-25</td><td>정유진</td><td><span class="wt-mock-badge info">예정</span></td></tr>
+            <tr><td>Nguyen Van A</td><td>비자</td><td>2026-06-15</td><td>—</td><td>정유진</td><td><span class="wt-mock-badge urgent">재상담 필요</span></td></tr>
+            <tr><td>Aliya K.</td><td>학업</td><td>2026-06-10</td><td>2026-07-02</td><td>김민수</td><td><span class="wt-mock-badge ok">완료</span></td></tr>
+            <tr><td>Tran Thi B</td><td>생활</td><td>2026-06-08</td><td>2026-06-22</td><td>김민수</td><td><span class="wt-mock-badge info">예정</span></td></tr>
+            <tr><td>Li Wei</td><td>취업</td><td>2026-06-05</td><td>—</td><td>정유진</td><td><span class="wt-mock-badge ok">완료</span></td></tr>
+            <tr><td>Patel R.</td><td>비자</td><td>2026-06-01</td><td>2026-06-28</td><td>정유진</td><td><span class="wt-mock-badge warn">확인 필요</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

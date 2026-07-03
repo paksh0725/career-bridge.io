@@ -1,0 +1,144 @@
+{
+  "admin/admin.html": {
+    "weeklySignups": {
+      "ariaLabel": "주간 신규 가입 추이",
+      "labels": ["월", "화", "수", "목", "금", "토"],
+      "series": [{ "name": "신규 가입", "color": "#4F83B8", "values": [21, 34, 28, 45, 38, 19] }],
+      "suffix": "명",
+      "note": "최근 6일간 일별 가입 변화"
+    },
+    "coreKpi": {
+      "ariaLabel": "핵심 지표 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "인증 완료율", "color": "#4F83B8", "values": [84, 86, 88, 89, 91, 92] },
+        { "name": "AI 매칭 성사율", "color": "#3F8F78", "values": [58, 61, 63, 65, 66, 68] },
+        { "name": "프로필 완성률", "color": "#9A7B36", "values": [79, 81, 83, 84, 86, 87] }
+      ],
+      "suffix": "%",
+      "note": "월별 핵심 KPI 변화 · 우측 끝 값이 현재 수치"
+    }
+  },
+  "admin/admin-kpi.html": {
+    "mrr": {
+      "ariaLabel": "MRR",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "MRR(백만)", "values": [38, 40, 42, 44, 46, 48.2], "color": "#4f7fc8" }],
+      "suffix": "",
+      "note": "월별 MRR 추이"
+    },
+    "paidConversion": {
+      "ariaLabel": "유료 전환",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "전환율", "values": [9.2, 9.8, 10.5, 11.1, 11.8, 12.4], "color": "#3f8f78" }],
+      "suffix": "%",
+      "note": "유료 전환율 추이"
+    }
+  },
+  "admin/admin-sla.html": {
+    "sla": {
+      "ariaLabel": "SLA",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "SLA", "values": [96.1, 96.8, 97.2, 97.6, 98, 98.2], "color": "#4f7fc8" }],
+      "suffix": "%"
+    },
+    "ocrFail": {
+      "ariaLabel": "OCR 실패",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "실패율", "values": [3.8, 3.2, 2.9, 2.6, 2.3, 2.1], "color": "#c05f6a" }],
+      "suffix": "%"
+    }
+  },
+  "admin/admin-marketing.html": {
+    "signupConversion": {
+      "ariaLabel": "가입 전환",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "전환", "values": [6.2, 6.8, 7.1, 7.6, 8.1, 8.6], "color": "#4f7fc8" }],
+      "suffix": "%"
+    }
+  },
+  "admin/admin-billing.html": {
+    "mrrBreakdown": {
+      "ariaLabel": "MRR 구성",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "기업", "values": [28, 29, 31, 32, 34, 35.8], "color": "#4f7fc8" },
+        { "name": "기관", "values": [8, 9, 9.5, 10.2, 11.5, 12.4], "color": "#3f8f78" }
+      ],
+      "suffix": "백만"
+    }
+  },
+  "admin/admin-matching.html": {
+    "matchScore": {
+      "ariaLabel": "Match Score",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "Score", "values": [68, 69, 71, 72, 73, 74.6], "color": "#4f7fc8" }],
+      "suffix": ""
+    },
+    "hires": {
+      "ariaLabel": "채용 확정",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "건수", "values": [52, 58, 64, 71, 78, 89], "color": "#3f8f78" }],
+      "suffix": "건"
+    }
+  },
+  "admin/admin-ocr-quality.html": {
+    "ocrAccuracy": {
+      "ariaLabel": "OCR 인식률",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "인식률", "values": [95.2, 95.8, 96.4, 97, 97.5, 97.9], "color": "#4f7fc8" }],
+      "suffix": "%"
+    }
+  },
+  "admin/admin-stats.html": {
+    "monthlySignups": {
+      "ariaLabel": "월별 가입자 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [{ "name": "신규 가입", "color": "#4F83B8", "values": [142, 188, 231, 274, 318, 356] }],
+      "suffix": "명"
+    },
+    "studentsByNation": {
+      "ariaLabel": "국가별 유학생 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "중국", "color": "#4F83B8", "values": [468, 482, 495, 502, 508, 512] },
+        { "name": "베트남", "color": "#3F8F78", "values": [268, 275, 282, 288, 293, 298] },
+        { "name": "몽골", "color": "#9A7B36", "values": [128, 132, 135, 138, 140, 141] },
+        { "name": "우즈벡", "color": "#7B6CB8", "values": [86, 88, 91, 93, 95, 96] }
+      ],
+      "suffix": "명"
+    },
+    "certificationRate": {
+      "ariaLabel": "인증 완료율 6개월 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "학력 인증", "color": "#4F83B8", "values": [86, 88, 89, 90, 91, 92] },
+        { "name": "경력 인증", "color": "#3F8F78", "values": [72, 74, 75, 76, 77, 78] },
+        { "name": "어학 인증", "color": "#9A7B36", "values": [80, 81, 82, 83, 84, 85] }
+      ],
+      "suffix": "%"
+    },
+    "matchingFunnel": {
+      "ariaLabel": "AI 매칭 단계별 추이",
+      "labels": ["1월", "2월", "3월", "4월", "5월", "6월"],
+      "series": [
+        { "name": "추천 매칭", "color": "#4F83B8", "values": [62, 64, 65, 66, 67, 68] },
+        { "name": "메시지 연결", "color": "#3F8F78", "values": [48, 50, 51, 52, 53, 54] },
+        { "name": "면접 진행", "color": "#9A7B36", "values": [26, 27, 28, 29, 30, 31] },
+        { "name": "채용 성사", "color": "#C05F6A", "values": [9, 10, 10, 11, 11, 12] }
+      ],
+      "suffix": "%"
+    }
+  },
+  "admin/admin-partners.html": {
+    "agencyNetwork": {
+      "ariaLabel": "유학원 네트워크 분기 추이",
+      "labels": ["1분기", "2분기", "3분기", "4분기"],
+      "series": [
+        { "name": "중국", "color": "#4F83B8", "values": [280, 298, 312, 320] },
+        { "name": "베트남", "color": "#3F8F78", "values": [42, 48, 52, 56] }
+      ],
+      "suffix": "곳"
+    }
+  }
+}

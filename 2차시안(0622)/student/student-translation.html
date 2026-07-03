@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Bridge - 학생 번역</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI','Malgun Gothic',sans-serif; background:#EFF6FF; min-height:100vh; }
+.sidebar { position:fixed; left:0; top:0; bottom:0; width:240px; background:#2563EB; display:flex; flex-direction:column; z-index:100; }
+.sb-logo { padding:22px 20px 16px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.sb-brand { font-size:18px; font-weight:800; color:white; letter-spacing:-0.3px; }
+.sb-sub { font-size:11px; color:rgba(255,255,255,0.5); margin-top:3px; }
+.sb-user { padding:16px 20px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.sb-avatar { width:42px; height:42px; border-radius:11px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.22); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:white; margin-bottom:8px; }
+.sb-name { font-size:13px; font-weight:700; color:white; }
+.sb-role { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.sb-badge { display:inline-block; margin-top:5px; padding:2px 8px; background:rgba(255,255,255,0.12); border-radius:8px; font-size:10px; color:rgba(255,255,255,0.7); font-weight:600; }
+nav { flex:1; padding:8px 0; overflow-y:auto; }
+.nav-sec { padding:10px 20px 5px; font-size:10px; font-weight:700; color:rgba(255,255,255,0.32); text-transform:uppercase; letter-spacing:1px; }
+.nav-item { display:flex; align-items:center; gap:9px; padding:9px 20px; cursor:pointer; color:rgba(255,255,255,0.62); font-size:13px; font-weight:500; transition:all 0.14s; border-left:2px solid transparent; }
+.nav-item svg { width:15px; height:15px; flex-shrink:0; fill:currentColor; }
+.nav-item:hover { background:rgba(255,255,255,0.07); color:white; }
+.nav-item.active { background:rgba(255,255,255,0.12); color:white; border-left-color:rgba(255,255,255,0.55); }
+.sb-bottom { padding:14px 20px; border-top:1px solid rgba(255,255,255,0.1); }
+.sb-logout { width:100%; padding:8px; border:1px solid rgba(255,255,255,0.18); border-radius:7px; background:rgba(255,255,255,0.05); color:rgba(255,255,255,0.6); font-size:12px; cursor:pointer; }
+.topbar { position:fixed; left:240px; right:0; top:0; height:60px; background:white; border-bottom:1px solid #BFDBFE; display:flex; align-items:center; justify-content:space-between; padding:0 24px; z-index:99; }
+.tb-title { font-size:16px; font-weight:700; color:#1E3A5F; }
+.tb-right { display:flex; align-items:center; gap:10px; }
+.lang-sw { display:flex; background:#EFF6FF; border-radius:7px; padding:3px; }
+.lang-sw span { padding:4px 9px; border-radius:5px; font-size:11px; font-weight:600; cursor:pointer; color:#2563EB; }
+.lang-sw span.active { background:#2563EB; color:white; }
+.tb-notif { width:34px; height:34px; border:1px solid #BFDBFE; border-radius:8px; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.tb-notif svg { width:16px; height:16px; fill:#2563EB; }
+.main { margin-left:240px; padding-top:60px; min-height:100vh; }
+.content { padding:24px; padding-bottom:40px; }
+.hero { background:#2563EB; border-radius:16px; padding:28px; color:white; margin-bottom:20px; }
+.hero h2 { font-size:20px; font-weight:800; margin-bottom:6px; }
+.hero p { font-size:13px; opacity:0.78; margin-bottom:14px; line-height:1.6; }
+.lang-chips { display:flex; gap:8px; flex-wrap:wrap; }
+.lang-chip { padding:5px 12px; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); border-radius:16px; font-size:12px; font-weight:600; }
+.translator { background:white; border-radius:14px; border:1px solid #BFDBFE; overflow:hidden; margin-bottom:18px; }
+.trans-toolbar { display:flex; align-items:center; padding:12px 18px; border-bottom:1px solid #EFF6FF; gap:10px; flex-wrap:wrap; }
+.lang-select-btn { padding:7px 14px; border-radius:8px; border:1.5px solid #BFDBFE; background:white; font-size:13px; font-weight:600; color:#1E3A5F; cursor:pointer; }
+.lang-select-btn.active { background:#2563EB; border-color:#2563EB; color:white; }
+.swap-btn { width:32px; height:32px; border-radius:8px; background:#EFF6FF; border:none; cursor:pointer; font-size:14px; color:#2563EB; }
+.swap-btn:hover { background:#2563EB; color:white; }
+.ai-status { margin-left:auto; display:flex; align-items:center; gap:6px; font-size:11px; color:#2563EB; background:#DBEAFE; padding:5px 11px; border-radius:14px; }
+.ai-dot { width:6px; height:6px; background:#2563EB; border-radius:50%; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+.trans-grid { display:grid; grid-template-columns:1fr 1fr; min-height:180px; }
+.trans-panel { padding:18px; }
+.trans-panel:first-child { border-right:1px solid #EFF6FF; }
+.tp-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.tp-lang { font-size:11px; font-weight:700; color:#2563EB; text-transform:uppercase; letter-spacing:0.5px; }
+.trans-input { width:100%; border:none; outline:none; resize:none; font-size:14px; line-height:1.7; color:#1E3A5F; font-family:inherit; background:transparent; min-height:120px; }
+.trans-output { width:100%; border:none; resize:none; font-size:14px; line-height:1.7; color:#1E3A5F; font-family:inherit; background:#F8FBFF; border-radius:8px; padding:8px; min-height:120px; }
+.trans-footer { padding:11px 18px; border-top:1px solid #EFF6FF; display:flex; align-items:center; justify-content:space-between; }
+.char-count { font-size:11px; color:#6B8CC4; }
+.trans-btn { padding:9px 20px; background:#2563EB; border:none; border-radius:8px; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+.trans-btn:hover { background:#1D4ED8; }
+.section-title { font-size:14px; font-weight:700; color:#1E3A5F; margin-bottom:12px; }
+.quick-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
+.quick-card { background:white; border-radius:12px; padding:16px; border:1.5px solid #BFDBFE; cursor:pointer; }
+.quick-card:hover { border-color:#2563EB; }
+.qc-type { display:inline-block; padding:3px 8px; background:#2563EB; color:white; border-radius:5px; font-size:10px; font-weight:700; margin-bottom:8px; }
+.qc-title { font-size:13px; font-weight:700; color:#1E3A5F; margin-bottom:3px; }
+.qc-desc { font-size:11px; color:#6B8CC4; margin-bottom:8px; }
+.qc-lang { font-size:10px; padding:2px 7px; background:#DBEAFE; border-radius:6px; color:#2563EB; font-weight:600; margin-right:3px; }
+.profile-trans { background:white; border-radius:14px; padding:22px; border:1px solid #BFDBFE; margin-bottom:18px; }
+.profile-trans h3 { font-size:14px; font-weight:700; color:#1E3A5F; margin-bottom:4px; }
+.profile-trans > p { font-size:12px; color:#6B8CC4; margin-bottom:16px; }
+.pt-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+.pt-card { background:#F5F9FF; border-radius:10px; padding:14px; border:1px solid #BFDBFE; }
+.pt-lang { font-size:10px; font-weight:700; color:#2563EB; text-transform:uppercase; margin-bottom:7px; }
+.pt-text { font-size:12px; color:#1E3A5F; line-height:1.65; }
+.pt-text.empty { color:#6B8CC4; font-style:italic; }
+.pt-btn { width:100%; padding:11px; margin-top:14px; background:#2563EB; border:none; border-radius:9px; color:white; font-size:13px; font-weight:700; cursor:pointer; }
+.pt-btn:hover { background:#1D4ED8; }
+.history-card { background:white; border-radius:14px; padding:20px; border:1px solid #BFDBFE; margin-bottom:18px; }
+.history-card h3 { font-size:14px; font-weight:700; color:#1E3A5F; margin-bottom:14px; }
+.th-row { display:flex; align-items:center; gap:12px; padding:9px 0; border-bottom:1px solid #EFF6FF; }
+.th-row:last-child { border-bottom:none; }
+.th-langs { font-size:11px; font-weight:600; color:#2563EB; background:#DBEAFE; padding:4px 9px; border-radius:7px; white-space:nowrap; }
+.th-text { flex:1; font-size:12px; color:#1E3A5F; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.th-time { font-size:10px; color:#6B8CC4; flex-shrink:0; }
+
+/* Large screen layout guard */
+@media (min-width: 1200px) {
+  body { overflow-x:hidden; }
+  .nav { padding-left:clamp(48px, 5vw, 72px); padding-right:clamp(48px, 5vw, 72px); }
+  .hero, .section, .users-section, .stats-section, .cta-section { padding-left:64px; padding-right:64px; }
+  .hero-inner, .section-inner, .users-grid, .stats-grid { max-width:1180px; }
+  .hero .hero-inner[style] { max-width:840px !important; }
+  .hero h1 { font-size:44px; line-height:1.18; }
+  .section-title, .cta-section h2 { font-size:30px; line-height:1.28; }
+  .section-desc, .hero p { max-width:640px; }
+  .features-grid, .users-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:stretch; }
+  .feat-card, .user-card { min-height:100%; }
+  .feat-title, .user-card h3, .b-title { line-height:1.35; }
+  .btn-primary, .btn-secondary, .cta-btn-white, .cta-btn-outline { min-width:160px; max-width:260px; }
+  .banner-slide { padding-left:max(64px, calc((100vw - 1180px) / 2)); padding-right:max(64px, calc((100vw - 1180px) / 2)); }
+  .main .content, .content { max-width:1240px; margin-left:auto; margin-right:auto; }
+  .profile-card, .stats-row, .info-grid, .company-filter, .company-grid, .doc-grid, .translator, .quick-grid, .pt-grid, .history-card, .msg-layout, .messages-layout { max-width:100%; }
+  .company-grid, .doc-grid, .quick-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); align-items:stretch; }
+  .stats-row { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .info-grid, .trans-grid, .comp-detail-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  .company-card, .doc-card, .quick-card, .info-card, .stat-card { min-width:0; }
+  .cc-name, .doc-name, .qc-title, .h-title, .tb-title, .profile-info h2, .modal-head h3 { line-height:1.35; }
+  .cc-name, .doc-name, .qc-title, .h-title { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .cc-type, .doc-meta, .qc-desc, .h-sub { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+}
+
+@media (min-width: 1600px) {
+  .hero, .section, .users-section, .stats-section, .cta-section { padding-left:72px; padding-right:72px; }
+  .hero-inner, .section-inner, .users-grid, .stats-grid { max-width:1200px; }
+  .main .content, .content { max-width:1280px; }
+  .hero h1 { font-size:44px; }
+  .section-title, .cta-section h2 { font-size:30px; }
+}
+
+/* Demo interaction states */
+.demo-toast { position:fixed; right:24px; bottom:24px; z-index:3000; background:#1E3A5F; color:white; border-radius:10px; padding:12px 16px; font-size:13px; font-weight:700; box-shadow:0 10px 30px rgba(30,58,95,0.18); opacity:0; transform:translateY(10px); pointer-events:none; transition:all 0.2s ease; }
+.demo-toast.show { opacity:1; transform:translateY(0); }
+.demo-state-note { margin-top:10px; padding:10px 12px; border-radius:9px; background:#DBEAFE; color:#1D4ED8; border:1px solid #BFDBFE; font-size:12px; font-weight:700; display:none; }
+.demo-state-note.show { display:block; }
+.demo-mode-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; background:#DBEAFE; color:#2563EB; font-size:11px; font-weight:800; margin-left:8px; vertical-align:middle; }
+.demo-status { display:inline-flex; padding:3px 8px; border-radius:999px; background:#EFF6FF; border:1px solid #BFDBFE; color:#2563EB; font-size:10px; font-weight:800; }
+
+/* Reference-inspired clean light blue theme */
+:root {
+  --cb-ink:#18395F;
+  --cb-muted:#6E8CAF;
+  --cb-soft:#F6FAFF;
+  --cb-panel:#FFFFFF;
+  --cb-line:#D8E7F5;
+  --cb-blue:#8FB6D9;
+  --cb-blue-strong:#4B78AA;
+  --cb-blue-dark:#2F5F95;
+  --cb-blue-pale:#EEF6FD;
+  --cb-shadow:0 10px 30px rgba(86, 132, 176, 0.11);
+}
+body { color:var(--cb-ink); background:var(--cb-soft); }
+.nav, .topbar, .card, .modal, .inbox, .chat-header, .chat-input-area,
+.filter-box, .stat-card, .student-card, .insight-card, .profile-card,
+.info-card, .history-item, .doc-card, .privacy-box, .company-filter,
+.company-card, .quick-card, .profile-trans, .history-card, .translator,
+.user-card, .mock-profile, .mock-stat {
+  border-color:var(--cb-line) !important;
+  box-shadow:var(--cb-shadow);
+}
+.nav, .topbar, .card, .modal, .inbox, .chat-header, .chat-input-area,
+.filter-box, .stat-card, .student-card, .insight-card, .info-card,
+.history-item, .doc-card, .privacy-box, .company-filter, .company-card,
+.quick-card, .profile-trans, .history-card, .translator, .user-card,
+.mock-profile, .mock-stat { background:rgba(255,255,255,0.96) !important; }
+.sidebar, .cta-section, .bulk-bar, .banner, .modal-head-blue,
+.comp-detail-header, .profile-card, .hero-badge, .btn-primary,
+.nav-signup, .search-btn, .tab-btn.active, .compose-btn, .send-btn,
+.btn-confirm, .add-btn, .cc-btn.primary, .sc-btn.primary, .act-btn.primary,
+.trans-btn, .pt-btn, .lang-sw span.active, .toggle-opt.active,
+.student-card.selected .sc-check, .mock-avatar, .feat-icon {
+  background:var(--cb-blue-strong) !important;
+}
+.sidebar { background:linear-gradient(180deg, #8FB6D9 0%, #4B78AA 100%) !important; box-shadow:8px 0 28px rgba(86,132,176,0.16) !important; }
+.hero { background:linear-gradient(155deg, #F6FAFF 0%, #FFFFFF 62%) !important; }
+.users-section, .hero-visual, .feat-card, .s3-item, .input-wrap,
+.inbox-search, .lang-sw, .toggle-grp, .d-item, .hm-item, .cd-item,
+.upload-card, .trans-output, .demo-state-note { background:var(--cb-blue-pale) !important; }
+.bs-1,.bs-2,.bs-3,.bs-4,.bs-5,.bs-6 { background:linear-gradient(135deg, #5F8FBE 0%, #A8C7E3 100%) !important; }
+.cta-section { background:linear-gradient(135deg, #4B78AA 0%, #8FB6D9 100%) !important; }
+.footer { background:#2B496A !important; }
+.nav-logo, .nav-logo span, .hero h1 span, .section-label,
+.lang-sw span, .fg label, .results-count span, .stat-card .num,
+.sc-tag, .cc-tag, .rank-item .rc, .bar-val, .uf-item,
+.modal-foot-link a, .chat-action, .trans-hint span,
+.tb-notif svg, .close-btn-dark svg, .mock-stat .mn {
+  color:var(--cb-blue-strong) !important;
+}
+.hero h1, .section-title, .cta-section h2, .tb-title, .filter-title,
+.sc-name, .cc-name, .profile-info h2, .modal h3, .modal-head h3,
+.chat-name, .msg-sender, .info-row .iv, .h-title, .doc-name,
+.qc-title, .profile-trans h3, .history-card h3, .logo-title,
+.card h2 { color:var(--cb-ink) !important; }
+.hero p, .section-desc, .feat-desc, .user-card p, .sc-sub, .cc-type,
+.card > p, .logo-sub, .msg-preview, .chat-sub, .info-row .ik,
+.h-sub, .doc-meta, .qc-desc, .profile-trans > p, .modal-head p,
+.modal > p { color:var(--cb-muted) !important; }
+.btn-secondary, .nav-login, .cta-btn-outline, .sc-btn.secondary,
+.cc-btn.secondary, .act-btn.secondary, .chat-action, .btn-cancel,
+.lang-select-btn, .close-btn-dark {
+  color:var(--cb-blue-strong) !important;
+  border-color:var(--cb-line) !important;
+  background:#FFFFFF !important;
+}
+.btn-primary:hover, .nav-signup:hover, .search-btn:hover, .compose-btn:hover,
+.send-btn:hover, .btn-confirm:hover, .add-btn:hover, .cc-btn.primary:hover,
+.sc-btn.primary:hover { background:var(--cb-blue-dark) !important; }
+.fg input, .fg select, .fg textarea, .trans-input, .trans-output,
+.inbox-search input, .input-wrap input {
+  border-color:var(--cb-line) !important;
+  background:#F8FBFF !important;
+  color:var(--cb-ink) !important;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus {
+  border-color:var(--cb-blue) !important;
+  background:#FFFFFF !important;
+}
+.sc-tag, .cc-tag, .user-type-badge, .mock-tag, .th-langs,
+.doc-status, .qc-type, .qc-lang, .demo-mode-pill, .demo-status {
+  background:#E8F2FB !important;
+  color:var(--cb-blue-strong) !important;
+  border-color:var(--cb-line) !important;
+}
+.progress, .chat-date { background:#E8F2FB !important; }
+.pf, .progress-fill, .bar, .unread-dot, .ndot, .uf-dot { background:var(--cb-blue-strong) !important; }
+.bubble.me { background:var(--cb-blue-strong) !important; }
+.bubble.them { background:#FFFFFF !important; color:var(--cb-ink) !important; box-shadow:0 6px 20px rgba(86,132,176,0.10) !important; }
+.demo-toast { background:#2B496A !important; box-shadow:0 12px 32px rgba(43,73,106,0.18) !important; }
+.modal-overlay { background:rgba(47,95,149,0.16) !important; }
+.student-card:hover, .company-card:hover, .doc-card:hover, .user-card:hover,
+.quick-card:hover { border-color:var(--cb-blue) !important; box-shadow:0 14px 36px rgba(86,132,176,0.16) !important; }
+
+/* Responsive layout refinement */
+@media (max-width: 1100px) {
+  body { overflow-x:hidden; }
+  .nav { padding-left:24px !important; padding-right:24px !important; }
+  .hero, .section, .users-section, .stats-section, .cta-section { padding-left:24px !important; padding-right:24px !important; }
+  .hero-inner, .features-grid, .users-grid, .stats-grid, .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .filter-grid, .stats-row { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .search-btn { width:100%; }
+  .sidebar { position:static !important; width:100% !important; min-height:auto !important; bottom:auto !important; box-shadow:none !important; }
+  .sidebar nav { display:flex; flex-wrap:wrap; gap:4px; padding:10px 14px !important; overflow:visible !important; }
+  .sb-logo, .sb-user, .sb-bottom { padding:14px 18px !important; }
+  .nav-sec { width:100%; padding:8px 4px 2px !important; }
+  .nav-item { border-left:0 !important; border-radius:8px; padding:9px 12px !important; }
+  .topbar { position:sticky !important; left:0 !important; right:auto !important; top:0 !important; width:100% !important; }
+  .main { margin-left:0 !important; padding-top:0 !important; }
+  .content { padding:18px !important; }
+  .msg-layout { margin-left:0 !important; margin-top:0 !important; height:calc(100vh - 60px) !important; grid-template-columns:minmax(260px, 36%) minmax(0, 1fr) !important; }
+  .bw { max-width:82% !important; }
+}
+
+@media (max-width: 760px) {
+  .nav { height:auto !important; min-height:62px; flex-wrap:wrap; gap:10px; padding-top:10px !important; padding-bottom:10px !important; }
+  .nav-right { width:100%; justify-content:flex-start; flex-wrap:wrap; }
+  .hero { padding-top:48px !important; padding-bottom:52px !important; }
+  .hero-inner, .features-grid, .users-grid, .stats-grid, .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid,
+  .info-grid, .detail-grid, .comp-detail-grid, .insight-row, .trans-grid, .filter-grid, .filter-row2, .cf-grid, .stats-row,
+  .form-row, .stat-3 { grid-template-columns:1fr !important; }
+  .banner-slide, .banner, .profile-card, .history-item, .privacy-row, .section-header, .results-header, .bulk-bar, .trans-footer { flex-direction:column !important; align-items:flex-start !important; gap:12px !important; }
+  .banner-slide { padding:28px 22px 52px !important; min-height:auto !important; }
+  .b-right { align-items:flex-start !important; }
+  .footer { flex-direction:column !important; align-items:flex-start !important; gap:12px !important; padding:26px 22px !important; }
+  .tab-bar { width:100% !important; overflow-x:auto; }
+  .tab-btn { flex:1 0 auto; }
+  .modal { width:calc(100% - 28px) !important; max-height:88vh !important; }
+  .modal-foot, .action-btns, .cc-foot, .cta-btns, .hero-btns { grid-template-columns:1fr !important; flex-direction:column !important; width:100%; }
+  .btn-primary, .btn-secondary, .cta-btn-white, .cta-btn-outline, .act-btn, .cc-btn, .sc-btn { width:100% !important; max-width:none !important; }
+  .msg-layout { display:block !important; height:auto !important; min-height:calc(100vh - 60px); }
+  .inbox { max-height:42vh; border-right:0 !important; border-bottom:1px solid var(--cb-line, #D8E7F5) !important; }
+  .chat-area { min-height:58vh; }
+  .chat-messages { min-height:320px; }
+  .bw { max-width:94% !important; }
+  .lang-swap { grid-template-columns:1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size:34px !important; }
+  .section-title, .cta-section h2 { font-size:24px !important; }
+  .content, .hero, .section, .users-section, .stats-section, .cta-section { padding-left:16px !important; padding-right:16px !important; }
+  .card { padding:24px !important; }
+  .sidebar nav { display:block; }
+  .nav-item { margin-bottom:4px; }
+}
+
+/* Presentation and large display optimization */
+@media (min-width: 1600px) {
+  .main .content, .content {
+    max-width:min(1680px, calc(100vw - 320px)) !important;
+    width:100% !important;
+    margin-left:0 !important;
+    margin-right:auto !important;
+    padding-left:32px !important;
+    padding-right:40px !important;
+  }
+  .topbar { padding-left:32px !important; padding-right:40px !important; }
+  .filter-box, .company-filter, .profile-card, .privacy-box,
+  .info-card, .history-item, .doc-card, .company-card, .student-card,
+  .stat-card, .insight-card, .translator, .profile-trans, .history-card,
+  .quick-card { box-shadow:0 14px 34px rgba(86,132,176,0.12) !important; }
+  .students-grid, .company-grid { gap:18px !important; }
+  .student-card, .company-card, .doc-card, .quick-card { padding:22px !important; }
+  .filter-box, .company-filter { padding:22px 24px !important; }
+  .stat-card { padding:17px 18px !important; }
+  .stat-card .num { font-size:28px !important; }
+  .stat-card .lbl { font-size:12px !important; }
+  .sc-name, .cc-name, .doc-name, .qc-title { font-size:15px !important; }
+  .sc-sub, .cc-type, .doc-meta, .qc-desc { font-size:12px !important; }
+  .sc-tag, .cc-tag, .doc-status, .demo-status { font-size:11px !important; }
+  .sc-btn, .cc-btn, .search-btn, .add-btn, .btn-confirm, .btn-cancel,
+  .chat-action, .compose-btn, .trans-btn, .pt-btn { min-height:34px; }
+  .fg label, .cf-group label { font-size:12px !important; }
+  .fg input, .fg select, .fg textarea, .cf-group select { font-size:14px !important; min-height:38px; }
+  .tab-btn { font-size:13px !important; padding:10px 20px !important; }
+  .tb-title { font-size:18px !important; }
+}
+
+@media (min-width: 1900px) {
+  .sidebar { width:220px !important; }
+  .topbar { left:220px !important; height:64px !important; }
+  .main { margin-left:220px !important; padding-top:64px !important; }
+  .msg-layout { margin-left:220px !important; margin-top:64px !important; height:calc(100vh - 64px) !important; grid-template-columns:360px minmax(0, 1fr) !important; }
+  .main .content, .content {
+    max-width:min(1780px, calc(100vw - 260px)) !important;
+    padding-left:28px !important;
+    padding-right:44px !important;
+  }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; }
+  .filter-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) auto !important; }
+  .stats-bar { grid-template-columns:repeat(5, minmax(0, 1fr)) !important; }
+  .stats-row { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .info-grid, .insight-row, .trans-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .student-card, .company-card { min-height:170px; }
+  .profile-card { padding:34px !important; }
+  .profile-avatar { width:82px !important; height:82px !important; }
+  .profile-info h2 { font-size:24px !important; }
+  .chat-messages { padding:24px 30px !important; }
+  .bubble { font-size:14px !important; }
+}
+
+@media (min-width: 2400px) {
+  .main .content, .content { max-width:1900px !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .student-card, .company-card, .doc-card { padding:24px !important; }
+  .sc-name, .cc-name { font-size:16px !important; }
+  .sc-sub, .cc-type { font-size:12px !important; }
+}
+
+/* Material 3 inspired tonal color system */
+:root {
+  --m3-primary:#5D8FBA;
+  --m3-on-primary:#FFFFFF;
+  --m3-primary-container:#E4F1FA;
+  --m3-on-primary-container:#214762;
+  --m3-secondary:#718799;
+  --m3-on-secondary:#FFFFFF;
+  --m3-secondary-container:#ECF3F8;
+  --m3-on-secondary-container:#2E4A5D;
+  --m3-tertiary:#6B6F91;
+  --m3-on-tertiary:#FFFFFF;
+  --m3-tertiary-container:#E7E8F6;
+  --m3-on-tertiary-container:#272B49;
+  --m3-error:#BA1A1A;
+  --m3-on-error:#FFFFFF;
+  --m3-error-container:#FFDAD6;
+  --m3-on-error-container:#410002;
+  --m3-background:#FBFDFF;
+  --m3-on-background:#182A38;
+  --m3-surface:#FFFFFF;
+  --m3-surface-dim:#F3F7FA;
+  --m3-surface-container-low:#FAFCFE;
+  --m3-surface-container:#F5F9FC;
+  --m3-surface-container-high:#EEF5FA;
+  --m3-on-surface:#182A38;
+  --m3-on-surface-variant:#5D6E7C;
+  --m3-outline:#CEDBE5;
+  --m3-outline-variant:#E5EDF3;
+  --m3-shadow:0 8px 24px rgba(38, 72, 102, 0.10);
+  --m3-shadow-strong:0 14px 36px rgba(38, 72, 102, 0.14);
+}
+
+body { background:var(--m3-background) !important; color:var(--m3-on-background) !important; }
+.hero, .cta-section, .sidebar, .banner, .modal-head-blue, .comp-detail-header,
+.profile-card, .bs-1, .bs-2, .bs-3, .bs-4, .bs-5, .bs-6 {
+  background:var(--m3-primary) !important;
+  background-image:none !important;
+}
+.hero { background:var(--m3-background) !important; }
+.cta-section, .banner, .modal-head-blue, .comp-detail-header, .profile-card,
+.sidebar { color:var(--m3-on-primary) !important; }
+.nav, .topbar, .card, .modal, .filter-box, .company-filter, .stat-card,
+.student-card, .company-card, .doc-card, .quick-card, .info-card,
+.insight-card, .privacy-box, .history-card, .history-item, .profile-trans,
+.translator, .inbox, .chat-header, .chat-input-area, .user-card,
+.mock-profile, .mock-stat, .feat-card {
+  background:var(--m3-surface) !important;
+  border-color:var(--m3-outline-variant) !important;
+  box-shadow:var(--m3-shadow) !important;
+}
+.users-section, .hero-visual, .lang-sw, .toggle-grp, .input-wrap,
+.inbox-search, .chat-area, .d-item, .hm-item, .cd-item, .s3-item,
+.upload-card, .trans-output, .demo-state-note, .mock-tag, .sc-tag,
+.cc-tag, .doc-status, .qc-lang, .user-type-badge, .demo-status,
+.demo-mode-pill, .rank-item .rc, .th-langs {
+  background:var(--m3-surface-container) !important;
+  border-color:var(--m3-outline-variant) !important;
+  color:var(--m3-on-surface-variant) !important;
+}
+.nav-logo, .nav-logo span, .hero h1 span, .section-label, .fg label,
+.cf-group label, .results-count span, .stat-card .num, .mock-stat .mn,
+.lang-sw span, .chat-action, .trans-hint span, .modal-foot-link a,
+.uf-item, .bar-val, .detail-sec h4, .tb-notif svg, .close-btn-dark svg {
+  color:var(--m3-primary) !important;
+}
+.hero h1, .section-title, .cta-section h2, .tb-title, .filter-title,
+.sc-name, .cc-name, .doc-name, .qc-title, .profile-info h2, .modal h3,
+.modal-head h3, .chat-name, .msg-sender, .info-row .iv, .h-title,
+.profile-trans h3, .history-card h3, .logo-title, .card h2,
+.results-count, .feat-title, .user-card h3, .mock-name {
+  color:var(--m3-on-surface) !important;
+}
+.hero p, .section-desc, .feat-desc, .user-card p, .sc-sub, .cc-type,
+.doc-meta, .qc-desc, .card > p, .logo-sub, .msg-preview, .chat-sub,
+.info-row .ik, .h-sub, .profile-trans > p, .modal-head p, .modal > p,
+.mock-sub, .stat-card .lbl, .rank-item .rn, .bar-lbl, .d-item .dk,
+.cd-item .dk, .th-text, .char-count {
+  color:var(--m3-on-surface-variant) !important;
+}
+.btn-primary, .nav-signup, .search-btn, .tab-btn.active, .compose-btn,
+.send-btn, .btn-confirm, .add-btn, .cc-btn.primary, .sc-btn.primary,
+.act-btn.primary, .trans-btn, .pt-btn, .lang-sw span.active,
+.toggle-opt.active, .student-card.selected .sc-check, .mock-avatar,
+.feat-icon, .pf, .progress-fill, .bar, .unread-dot, .ndot, .uf-dot,
+.bubble.me {
+  background:var(--m3-primary) !important;
+  background-image:none !important;
+  color:var(--m3-on-primary) !important;
+  border-color:var(--m3-primary) !important;
+}
+.btn-primary *, .nav-signup *, .search-btn *, .tab-btn.active *,
+.compose-btn *, .send-btn *, .btn-confirm *, .add-btn *, .cc-btn.primary *,
+.sc-btn.primary *, .act-btn.primary *, .trans-btn *, .pt-btn *,
+.lang-sw span.active *, .bubble.me * { color:var(--m3-on-primary) !important; }
+.btn-secondary, .nav-login, .cta-btn-outline, .cta-btn-white,
+.sc-btn.secondary, .cc-btn.secondary, .act-btn.secondary, .chat-action,
+.btn-cancel, .lang-select-btn, .close-btn-dark, .bulk-btn {
+  background:var(--m3-surface) !important;
+  color:var(--m3-primary) !important;
+  border-color:var(--m3-outline) !important;
+  background-image:none !important;
+}
+.btn-primary:hover, .nav-signup:hover, .search-btn:hover, .compose-btn:hover,
+.send-btn:hover, .btn-confirm:hover, .add-btn:hover, .cc-btn.primary:hover,
+.sc-btn.primary:hover, .act-btn.primary:hover, .trans-btn:hover, .pt-btn:hover {
+  background:#4F7FA8 !important;
+  border-color:#4F7FA8 !important;
+  color:var(--m3-on-primary) !important;
+}
+.btn-secondary:hover, .nav-login:hover, .cta-btn-outline:hover,
+.cta-btn-white:hover, .sc-btn.secondary:hover, .cc-btn.secondary:hover,
+.act-btn.secondary:hover, .chat-action:hover, .btn-cancel:hover,
+.lang-select-btn:hover, .bulk-btn:hover {
+  background:var(--m3-primary-container) !important;
+  color:var(--m3-on-primary-container) !important;
+  border-color:var(--m3-primary) !important;
+}
+.fg input, .fg select, .fg textarea, .cf-group select, .trans-input,
+.trans-output, .inbox-search input, .input-wrap input {
+  background:var(--m3-surface-container-low) !important;
+  color:var(--m3-on-surface) !important;
+  border-color:var(--m3-outline) !important;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus,
+.cf-group select:focus, .trans-input:focus {
+  background:var(--m3-surface) !important;
+  border-color:var(--m3-primary) !important;
+  box-shadow:0 0 0 3px rgba(69,111,147,0.14) !important;
+}
+.sc-avatar, .cc-logo, .h-badge, .hm-badge, .doc-type, .qc-type,
+.sb-avatar, .msg-avatar, .chat-avatar, .b-avatar, .logo-mark,
+.upload-card .plus-icon {
+  background:var(--m3-primary-container) !important;
+  color:var(--m3-on-primary-container) !important;
+  border-color:var(--m3-outline-variant) !important;
+}
+.sc-tag.accent, .doc-status.verified, .user-type-badge.c {
+  background:var(--m3-secondary-container) !important;
+  color:var(--m3-on-secondary-container) !important;
+}
+.progress, .chat-date { background:var(--m3-outline-variant) !important; color:var(--m3-on-surface-variant) !important; }
+.bubble.them { background:var(--m3-surface) !important; color:var(--m3-on-surface) !important; box-shadow:var(--m3-shadow) !important; }
+.demo-toast, .footer { background:#315470 !important; color:#FFFFFF !important; }
+.modal-overlay { background:rgba(24,42,56,0.22) !important; }
+.student-card:hover, .company-card:hover, .doc-card:hover, .user-card:hover,
+.quick-card:hover, .feat-card:hover {
+  border-color:var(--m3-primary) !important;
+  box-shadow:var(--m3-shadow-strong) !important;
+}
+.student-card.selected { background:var(--m3-primary-container) !important; border-color:var(--m3-primary) !important; }
+.banner .b-title, .banner .b-label, .banner .b-sub,
+.cta-section h2, .cta-section p, .modal-head-blue h3, .modal-head-blue p,
+.comp-detail-header h3, .comp-detail-header p, .profile-card h2,
+.profile-card .en-name, .profile-card .p-tag, .sidebar .sb-brand,
+.sidebar .sb-sub, .sidebar .sb-name, .sidebar .sb-role, .sidebar .sb-badge,
+.sidebar .nav-sec, .sidebar .nav-item, .sidebar .sb-logout {
+  color:var(--m3-on-primary) !important;
+}
+.sidebar .nav-item.active, .sidebar .nav-item:hover, .sidebar .sb-logout:hover {
+  background:rgba(255,255,255,0.16) !important;
+}
+.b-cta, .banner-more, .b-mini-tag, .b-badge, .p-tag {
+  background:rgba(255,255,255,0.14) !important;
+  border-color:rgba(255,255,255,0.26) !important;
+  color:var(--m3-on-primary) !important;
+}
+#loginError { background:var(--m3-error-container) !important; color:var(--m3-on-error-container) !important; border-color:#FFB4AB !important; }
+
+/* Multi-device responsive viewport patch */
+html { width:100%; min-width:0; -webkit-text-size-adjust:100%; }
+body { width:100%; min-width:0; overflow-x:hidden; }
+img, svg, video, canvas { max-width:100%; }
+button, input, select, textarea { font:inherit; min-width:0; }
+.main, .content, .topbar, .msg-layout, .messages-layout, .translator, .modal, .card,
+.filter-box, .company-filter, .profile-card, .history-card, .info-card, .insight-card,
+.student-card, .company-card, .doc-card, .quick-card, .privacy-box { min-width:0; }
+
+@media (min-width: 1200px) {
+  .sidebar { width:clamp(210px, 12.5vw, 240px) !important; }
+  .topbar { left:clamp(210px, 12.5vw, 240px) !important; height:clamp(58px, 3.4vw, 66px) !important; }
+  .main { margin-left:clamp(210px, 12.5vw, 240px) !important; padding-top:clamp(58px, 3.4vw, 66px) !important; }
+  .content { width:100% !important; max-width:min(1480px, calc(100vw - clamp(260px, 16vw, 340px))) !important; margin-left:auto !important; margin-right:auto !important; padding:clamp(22px, 1.8vw, 34px) !important; padding-bottom:clamp(72px, 5vw, 110px) !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important; }
+  .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important; }
+  .filter-grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .filter-row2, .cf-grid { grid-template-columns:repeat(3, minmax(0, 1fr)) auto !important; }
+  .stats-bar { grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)) !important; }
+  .stats-row { grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)) !important; }
+  .info-grid, .insight-row, .trans-grid, .comp-detail-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .tab-bar { max-width:100%; overflow-x:auto; }
+  .tb-title { font-size:clamp(16px, 1vw, 20px) !important; }
+  .filter-box, .company-filter, .profile-card, .history-card, .translator { border-radius:clamp(14px, 1vw, 18px) !important; }
+}
+
+@media (min-width: 1800px) {
+  .content { max-width:min(1700px, calc(100vw - 320px)) !important; }
+  .students-grid, .company-grid { grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)) !important; }
+  .doc-grid, .quick-grid { grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important; }
+  .filter-box, .company-filter, .profile-card, .history-card, .translator, .insight-card, .info-card { padding:clamp(20px, 1.25vw, 28px) !important; }
+}
+
+@media (max-width: 1199px) {
+  body { overflow-x:hidden !important; }
+  .sidebar { position:static !important; width:100% !important; min-height:0 !important; height:auto !important; bottom:auto !important; flex-direction:column !important; }
+  .sidebar nav { display:flex !important; flex-wrap:wrap !important; gap:4px !important; overflow:visible !important; padding:10px 14px !important; }
+  .sb-logo, .sb-user, .sb-bottom { padding:12px 18px !important; }
+  .sb-user { display:flex !important; align-items:center !important; gap:10px !important; flex-wrap:wrap !important; }
+  .sb-avatar { margin-bottom:0 !important; }
+  .sb-bottom { display:none !important; }
+  .nav-sec { width:100% !important; padding:8px 4px 2px !important; }
+  .nav-item { border-left:0 !important; border-radius:8px !important; padding:8px 12px !important; }
+  .topbar { position:sticky !important; left:0 !important; right:auto !important; top:0 !important; width:100% !important; height:auto !important; min-height:58px !important; padding:12px 18px !important; gap:10px !important; flex-wrap:wrap !important; }
+  .tb-right { margin-left:auto !important; flex-wrap:wrap !important; }
+  .main { margin-left:0 !important; padding-top:0 !important; width:100% !important; }
+  .content { width:100% !important; max-width:100% !important; padding:20px !important; padding-bottom:70px !important; }
+  .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .filter-grid, .filter-row2, .cf-grid, .stats-bar, .stats-row, .info-grid, .insight-row, .trans-grid, .comp-detail-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .search-btn { width:100% !important; }
+  .tab-bar { width:100% !important; overflow-x:auto !important; white-space:nowrap !important; }
+  .tab-btn { flex:0 0 auto !important; }
+  .profile-card { flex-wrap:wrap !important; }
+  .edit-btn { position:static !important; margin-left:auto !important; }
+  .bulk-bar, .banner, .results-header, .section-header { flex-wrap:wrap !important; gap:10px !important; }
+}
+
+@media (max-width: 760px) {
+  body { min-height:100vh !important; }
+  .content { padding:16px !important; }
+  .tb-title { width:100% !important; line-height:1.35 !important; }
+  .tb-right { width:100% !important; margin-left:0 !important; justify-content:flex-start !important; }
+  .students-grid, .company-grid, .doc-grid, .quick-grid, .pt-grid,
+  .filter-grid, .filter-row2, .cf-grid, .stats-bar, .stats-row, .info-grid, .insight-row, .trans-grid, .comp-detail-grid,
+  .form-row, .stat-3, .detail-grid, .lang-swap { grid-template-columns:1fr !important; }
+  .profile-card, .history-item, .privacy-row, .hm-item { align-items:flex-start !important; }
+  .profile-card, .history-item, .privacy-row, .hm-item, .modal-foot, .action-btns, .cc-foot, .sc-foot, .bulk-actions { flex-direction:column !important; }
+  .h-period, .hm-period, .edit-btn { margin-left:0 !important; }
+  .sc-btn, .cc-btn, .act-btn, .btn-cancel, .btn-confirm, .bulk-btn, .search-btn, .add-btn { width:100% !important; }
+  .modal-overlay { padding:14px !important; align-items:flex-start !important; overflow-y:auto !important; }
+  .modal { width:100% !important; max-width:none !important; max-height:calc(100vh - 28px) !important; }
+  .modal-head, .modal-head-blue, .modal-body, .modal-foot { padding-left:18px !important; padding-right:18px !important; }
+}
+
+@media (max-width: 760px), (orientation: portrait) and (max-width: 1024px) {
+  body:has(.msg-layout), body:has(.messages-layout) { height:auto !important; min-height:100vh !important; overflow:auto !important; }
+  .msg-layout, .messages-layout { margin-left:0 !important; margin-top:0 !important; height:auto !important; min-height:calc(100vh - 58px) !important; display:flex !important; flex-direction:column !important; grid-template-columns:1fr !important; }
+  .inbox { width:100% !important; max-height:38vh !important; border-right:0 !important; border-bottom:1px solid var(--cb-line, #D8E7F5) !important; }
+  .chat-area { min-height:62vh !important; }
+  .chat-header, .chat-input-area { padding-left:16px !important; padding-right:16px !important; }
+  .chat-actions { width:100% !important; margin-left:0 !important; flex-wrap:wrap !important; }
+  .chat-action { flex:1 1 auto !important; text-align:center !important; }
+  .chat-messages { padding:16px !important; }
+  .bw { max-width:94% !important; }
+}
+
+@media (max-width: 480px) {
+  .content { padding:12px !important; }
+  .sidebar nav { display:block !important; padding:8px 12px !important; }
+  .nav-item { width:100% !important; }
+  .lang-sw { max-width:100%; overflow-x:auto; }
+  .tab-btn { padding:8px 12px !important; font-size:11px !important; }
+  .stat-card .num, .s3-item .s3n { font-size:22px !important; }
+  .profile-info h2, .modal-head h3, .modal-head-blue h3 { font-size:17px !important; }
+  .student-card, .company-card, .doc-card, .info-card, .insight-card, .filter-box, .company-filter, .translator, .privacy-box { padding:16px !important; }
+}
+
+@media (min-width: 761px) and (max-width: 1199px) and (orientation: portrait) {
+  .students-grid, .company-grid, .doc-grid, .quick-grid { grid-template-columns:repeat(2, minmax(0, 1fr)) !important; }
+  .content { padding:22px !important; }
+}
+
+/* Minimal tool-style internal UI refresh */
+:root {
+  --tool-bg:#F7F9FC;
+  --tool-surface:#FFFFFF;
+  --tool-surface-2:#FAFBFD;
+  --tool-line:#E4EAF2;
+  --tool-line-strong:#D7E0EA;
+  --tool-text:#172B3A;
+  --tool-muted:#66788A;
+  --tool-blue:#4F83B8;
+  --tool-blue-soft:#EAF3FB;
+  --tool-blue-hover:#3E6F9F;
+  --tool-shadow:0 8px 22px rgba(21, 38, 54, 0.055);
+}
+html, body { background:var(--tool-bg) !important; color:var(--tool-text) !important; }
+.main, .content, .chat-area { background:var(--tool-bg) !important; }
+.sidebar {
+  background:var(--tool-surface) !important;
+  color:var(--tool-text) !important;
+  border-right:1px solid var(--tool-line) !important;
+  box-shadow:none !important;
+}
+.sb-logo, .sb-user, .sb-bottom { border-color:var(--tool-line) !important; }
+.sb-brand, .sb-name { color:var(--tool-text) !important; }
+.sb-sub, .sb-role, .nav-sec { color:var(--tool-muted) !important; }
+.sb-badge, .demo-mode-pill, .demo-status, .sc-tag, .cc-tag, .user-type-badge, .qc-type, .qc-lang, .doc-status {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  border:1px solid transparent !important;
+}
+.sb-avatar, .sc-avatar, .cc-logo, .msg-avatar, .chat-avatar, .b-avatar, .profile-avatar, .h-badge, .hm-badge, .feat-icon, .mock-avatar {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  border:1px solid #D8E9F7 !important;
+}
+.nav-item {
+  color:var(--tool-muted) !important;
+  border-left:0 !important;
+  border-radius:10px !important;
+  margin:2px 10px !important;
+  padding:10px 12px !important;
+}
+.nav-item:hover { background:var(--tool-surface-2) !important; color:var(--tool-text) !important; }
+.nav-item.active {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  box-shadow:inset 0 0 0 1px rgba(79,131,184,0.10) !important;
+}
+.sb-logout {
+  background:var(--tool-surface-2) !important;
+  color:var(--tool-muted) !important;
+  border:1px solid var(--tool-line) !important;
+}
+.topbar, .nav, .inbox, .chat-header, .chat-input-area {
+  background:rgba(255,255,255,0.94) !important;
+  border-color:var(--tool-line) !important;
+  box-shadow:none !important;
+  backdrop-filter:saturate(160%) blur(10px);
+}
+.tb-title, .filter-title, .section-header h3, .profile-info h2, .modal-head h3, .modal-head-blue h3,
+.sc-name, .cc-name, .doc-name, .qc-title, .h-title, .chat-name, .msg-sender, .info-row .iv, .results-count,
+.insight-card h3, .history-card h3, .profile-trans h3, .card h2 { color:var(--tool-text) !important; }
+.profile-info p, .modal-head p, .modal-head-blue p, .sc-sub, .cc-type, .doc-meta, .qc-desc, .h-sub,
+.msg-preview, .chat-sub, .info-row .ik, .stat-card .lbl, .bar-lbl, .section-desc, .portal-summary span { color:var(--tool-muted) !important; }
+.filter-box, .stat-card, .student-card, .insight-card, .profile-card, .info-card, .history-item, .history-doc-panel,
+.doc-card, .privacy-box, .company-filter, .company-card, .quick-card, .profile-trans, .history-card, .translator,
+.modal, .portal-summary, .bottom-ad-showcase, .card, .d-item, .hm-item, .cd-item, .s3-item {
+  background:var(--tool-surface) !important;
+  border:1px solid var(--tool-line) !important;
+  box-shadow:var(--tool-shadow) !important;
+}
+.filter-box, .student-card, .company-card, .doc-card, .quick-card, .history-card, .profile-trans, .translator,
+.privacy-box, .info-card, .insight-card, .portal-summary { border-radius:14px !important; }
+.student-card:hover, .company-card:hover, .doc-card:hover, .quick-card:hover, .history-item:hover {
+  border-color:#C8D8E8 !important;
+  box-shadow:0 12px 28px rgba(21,38,54,0.075) !important;
+  transform:translateY(-1px) !important;
+}
+.tab-bar, .lang-sw, .toggle-grp, .inbox-search, .input-wrap, .upload-card, .trans-output, .demo-state-note, .search-state-note {
+  background:var(--tool-surface-2) !important;
+  border:1px solid var(--tool-line) !important;
+  box-shadow:none !important;
+}
+.tab-btn, .lang-sw span, .toggle-opt, .chat-action, .btn-cancel, .btn-secondary, .cc-btn.secondary, .sc-btn.secondary,
+.act-btn.secondary, .history-doc-action, .bottom-ad-btn.secondary {
+  background:transparent !important;
+  color:var(--tool-muted) !important;
+  border-color:var(--tool-line) !important;
+}
+.tab-btn.active, .lang-sw span.active, .toggle-opt.active, .btn-primary, .nav-signup, .search-btn, .compose-btn,
+.send-btn, .btn-confirm, .add-btn, .cc-btn.primary, .sc-btn.primary, .act-btn.primary, .trans-btn, .pt-btn,
+.history-doc-action.primary, .bottom-ad-btn.primary, .student-card.selected .sc-check {
+  background:var(--tool-blue) !important;
+  color:#FFFFFF !important;
+  border-color:var(--tool-blue) !important;
+  box-shadow:none !important;
+}
+.btn-primary:hover, .nav-signup:hover, .search-btn:hover, .compose-btn:hover, .send-btn:hover, .btn-confirm:hover,
+.add-btn:hover, .cc-btn.primary:hover, .sc-btn.primary:hover, .act-btn.primary:hover, .trans-btn:hover,
+.pt-btn:hover, .bottom-ad-btn.primary:hover { background:var(--tool-blue-hover) !important; }
+.fg label, .cf-group label, .detail-sec h4, .results-count span, .stat-card .num, .rank-item .rc, .bar-val,
+.trans-hint span, .modal-foot-link a, .tb-notif svg, .close-btn-dark svg { color:var(--tool-blue) !important; }
+.fg input, .fg select, .fg textarea, .trans-input, .inbox-search input, .input-wrap input, select {
+  background:#FFFFFF !important;
+  color:var(--tool-text) !important;
+  border:1px solid var(--tool-line-strong) !important;
+  box-shadow:none !important;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus, .trans-input:focus {
+  border-color:var(--tool-blue) !important;
+  box-shadow:0 0 0 3px rgba(79,131,184,0.10) !important;
+}
+.bulk-bar, .banner, .modal-head-blue, .comp-detail-header, .profile-card {
+  background:var(--tool-surface) !important;
+  color:var(--tool-text) !important;
+  border:1px solid var(--tool-line) !important;
+  box-shadow:var(--tool-shadow) !important;
+}
+.banner .b-label, .banner .b-title, .banner .b-sub, .modal-head-blue h3, .modal-head-blue p,
+.comp-detail-header h3, .comp-detail-header p, .profile-card h2, .profile-card p { color:var(--tool-text) !important; }
+.banner-more, .b-cta, .b-mini-tag, .b-badge, .p-tag {
+  background:var(--tool-blue-soft) !important;
+  color:var(--tool-blue) !important;
+  border:1px solid #D8E9F7 !important;
+}
+.progress, .progress-fill, .pf, .bar, .unread-dot, .ndot, .uf-dot { background:var(--tool-blue) !important; }
+.progress { background:#EDF2F7 !important; }
+.bubble.me { background:var(--tool-blue) !important; color:#FFFFFF !important; }
+.bubble.them { background:#FFFFFF !important; color:var(--tool-text) !important; border:1px solid var(--tool-line) !important; box-shadow:var(--tool-shadow) !important; }
+.bottom-ad-inner { background:#FFFFFF !important; }
+.bottom-ad-visual { background:#F4F8FC !important; border-left:1px solid var(--tool-line) !important; }
+.bottom-ad-visual::before, .bottom-ad-visual::after { background:rgba(79,131,184,0.08) !important; }
+.bottom-ad-panel { background:#FFFFFF !important; border:1px solid var(--tool-line) !important; box-shadow:0 18px 34px rgba(21,38,54,0.09) !important; }
+.bottom-ad-panel-top { background:#EEF4FA !important; }
+.bottom-ad-badge { background:var(--tool-blue) !important; color:#FFFFFF !important; }
+.bottom-ad-title { color:var(--tool-text) !important; }
+.bottom-ad-desc { color:var(--tool-muted) !important; }
+@media (max-width:1100px){ .sidebar { border-right:0 !important; border-bottom:1px solid var(--tool-line) !important; } .nav-item { margin:2px !important; } }
+
+/* Final internal layout and banner color correction */
+:root {
+  --cb-sidebar-w: clamp(228px, 12.5vw, 248px);
+  --cb-topbar-h: clamp(58px, 3.4vw, 66px);
+  --cb-panel-bg: #F6FAFD;
+  --cb-surface: #FFFFFF;
+  --cb-line-soft: #DCEAF6;
+  --cb-point: #5F94C3;
+  --cb-point-strong: #376C9C;
+  --cb-point-soft: #EAF4FB;
+  --cb-text-main: #14293A;
+  --cb-text-sub: #5D7082;
+}
+.sidebar {
+  width: var(--cb-sidebar-w) !important;
+  background: var(--cb-surface) !important;
+  color: var(--cb-text-main) !important;
+  border-right: 1px solid var(--cb-line-soft) !important;
+  box-shadow: 10px 0 26px rgba(31, 71, 103, 0.05) !important;
+}
+.sidebar .sb-brand,
+.sidebar .sb-name,
+.sidebar .nav-item,
+.sidebar .sb-logout {
+  color: var(--cb-text-main) !important;
+}
+.sidebar .sb-sub,
+.sidebar .sb-role,
+.sidebar .nav-sec {
+  color: var(--cb-text-sub) !important;
+}
+.sidebar .sb-avatar,
+.sidebar .sb-badge {
+  background: var(--cb-point-soft) !important;
+  color: var(--cb-point-strong) !important;
+  border: 1px solid #CBE2F4 !important;
+}
+.sidebar .nav-item.active,
+.sidebar .nav-item:hover {
+  background: var(--cb-point-soft) !important;
+  color: var(--cb-point-strong) !important;
+  border-color: transparent !important;
+}
+.sidebar .nav-item svg,
+.sidebar .sb-logout svg {
+  fill: var(--cb-point-strong) !important;
+}
+.topbar {
+  left: var(--cb-sidebar-w) !important;
+  height: var(--cb-topbar-h) !important;
+  min-height: var(--cb-topbar-h) !important;
+  background: rgba(255,255,255,0.96) !important;
+  border-bottom: 1px solid var(--cb-line-soft) !important;
+}
+.main {
+  margin-left: var(--cb-sidebar-w) !important;
+  padding-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  min-width: 0 !important;
+  background: var(--cb-panel-bg) !important;
+}
+.main .content,
+.content {
+  width: 100% !important;
+  max-width: min(1480px, calc(100vw - var(--cb-sidebar-w) - 56px)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+.msg-layout {
+  margin-left: var(--cb-sidebar-w) !important;
+  margin-top: var(--cb-topbar-h) !important;
+  width: calc(100vw - var(--cb-sidebar-w)) !important;
+  height: calc(100vh - var(--cb-topbar-h)) !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+.bottom-ad-showcase,
+.banner,
+.cta-section:not(.brand-cta-section) {
+  background: linear-gradient(135deg, #F8FBFE 0%, #EAF4FB 100%) !important;
+  border: 1px solid var(--cb-line-soft) !important;
+  color: var(--cb-text-main) !important;
+  box-shadow: 0 18px 46px rgba(57, 103, 142, 0.10) !important;
+}
+.bottom-ad-showcase *,
+.banner *,
+.cta-section:not(.brand-cta-section) * {
+  color: inherit;
+}
+.bottom-ad-eyebrow,
+.bottom-ad-tag,
+.banner .badge,
+.cta-section:not(.brand-cta-section) .badge {
+  background: #DDEFFA !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #C5DFEF !important;
+}
+.bottom-ad-title,
+.bottom-ad-showcase h2,
+.bottom-ad-showcase h3,
+.banner h2,
+.banner h3,
+.cta-section:not(.brand-cta-section) h2,
+.cta-section:not(.brand-cta-section) h3 {
+  color: var(--cb-text-main) !important;
+}
+.bottom-ad-desc,
+.bottom-ad-showcase p,
+.banner p,
+.cta-section:not(.brand-cta-section) p {
+  color: var(--cb-text-sub) !important;
+}
+.bottom-ad-btn.primary,
+.bottom-ad-showcase .primary,
+.banner .primary,
+.cta-section:not(.brand-cta-section) .primary,
+.cta-section:not(.brand-cta-section) .cta-btn-white {
+  background: var(--cb-point-strong) !important;
+  color: #FFFFFF !important;
+  border-color: var(--cb-point-strong) !important;
+}
+.bottom-ad-btn.secondary,
+.bottom-ad-showcase .secondary,
+.banner .secondary,
+.cta-section:not(.brand-cta-section) .secondary,
+.cta-section:not(.brand-cta-section) .cta-btn-outline {
+  background: #FFFFFF !important;
+  color: var(--cb-point-strong) !important;
+  border-color: #BCD9EE !important;
+}
+@media (max-width: 1180px), (orientation: portrait) {
+  .sidebar {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid var(--cb-line-soft) !important;
+    box-shadow: none !important;
+  }
+  .topbar {
+    position: sticky !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 58px !important;
+  }
+  .main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+  }
+  .main .content,
+  .content {
+    max-width: 100% !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
+  .msg-layout {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+@media (max-width: 560px) {
+  .main .content,
+  .content {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+
+/* Final readable badge correction */
+.p-tag,
+.sc-tag,
+.cc-tag,
+.doc-status,
+.demo-status,
+.demo-mode-pill,
+.user-type-badge,
+.qc-type,
+.qc-lang,
+.mock-tag,
+.th-langs,
+.b-mini-tag,
+.b-badge,
+.banner-more,
+.translation-badge,
+.profile-card .p-tag {
+  background: #DDEFFA !important;
+  color: #2E638F !important;
+  border: 1px solid #C2DBEF !important;
+  box-shadow: none !important;
+}
+.p-tag.accent,
+.sc-tag.accent,
+.doc-status.verified,
+.demo-status.strong,
+.user-type-badge.c {
+  background: #CFE6F7 !important;
+  color: #214E74 !important;
+  border-color: #B8D6EA !important;
+}
+.profile-card .p-tag,
+.comp-detail-header .p-tag,
+.modal .p-tag {
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+.bubble.me .translation-badge {
+  background: rgba(255,255,255,0.92) !important;
+  color: #2E638F !important;
+  border-color: rgba(255,255,255,0.72) !important;
+}
+</style>
+<link rel="stylesheet" href="../work-tool.css">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sb-logo"><div class="sb-brand">Career Bridge</div><div class="sb-sub">유학생 커리어 플랫폼</div></div>
+  <div class="sb-user">
+    <div class="sb-avatar">WX</div>
+    <div class="sb-name">Wang Xiaoming</div>
+    <div class="sb-role">왕샤오밍 · 유학생</div>
+    <div class="sb-badge">유학생</div>
+  </div>
+  <nav>
+    <div class="nav-sec">내 정보</div>
+    <div class="nav-item" onclick="window.location.href='student.html?tab=profile'"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>내 프로필</div>
+    <div class="nav-item" onclick="window.location.href='student.html?tab=history'"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>이력 관리</div>
+    <div class="nav-item" onclick="window.location.href='student.html?tab=docs'"><svg viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>문서 관리</div>
+    <div class="nav-item" onclick="window.location.href='student.html?tab=privacy'"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>공개 설정</div>
+    <div class="nav-sec">탐색</div>
+    <div class="nav-item" onclick="window.location.href='student.html?tab=companies'"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10z"/></svg>기업 검색</div>
+    <div class="nav-sec">커뮤니케이션</div>
+    <div class="nav-item" onclick="window.location.href='student.html?tab=community'"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>커뮤니티</div>
+    <div class="nav-item" onclick="window.location.href='student-messages.html'"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>메시지</div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12z"/></svg>번역 서비스</div>
+  </nav>
+  <div class="sb-bottom"><button class="sb-logout" onclick="window.location.href='../index.html'">로그아웃</button></div>
+</div>
+
+<div class="topbar">
+  <div class="tb-title">번역 서비스</div>
+  <div class="tb-right">
+    <div class="lang-sw"><span class="active">KO</span><span>EN</span><span>ZH</span></div>
+    <div class="tb-notif"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
+  </div>
+</div>
+
+<div class="main"><div class="content">
+  <div class="hero">
+    <h2>다국어 번역 서비스</h2>
+    <p>한국어, 영어, 중국어 실시간 번역 지원<br>프로필, 이력서, 메시지의 다국어 자동 번역</p>
+    <div class="lang-chips"><span class="lang-chip">한국어 (KO)</span><span class="lang-chip">English (EN)</span><span class="lang-chip">中文 (ZH)</span><span class="lang-chip">AI 실시간 번역</span></div>
+  </div>
+
+  <div class="translator">
+    <div class="trans-toolbar">
+      <button class="lang-select-btn active">한국어</button>
+      <button class="swap-btn" onclick="swap()">⇄</button>
+      <button class="lang-select-btn" id="toBtn1" onclick="setTo(this,'영어')">영어</button>
+      <button class="lang-select-btn" id="toBtn2" onclick="setTo(this,'중국어')">중국어</button>
+      <div class="ai-status"><div class="ai-dot"></div>AI 번역 준비됨</div>
+    </div>
+    <div class="trans-grid">
+      <div class="trans-panel">
+        <div class="tp-header"><span class="tp-lang">한국어</span></div>
+        <textarea class="trans-input" id="transInput" placeholder="번역할 텍스트 입력..." oninput="updateCount()"></textarea>
+      </div>
+      <div class="trans-panel" style="background:#F8FBFF">
+        <div class="tp-header"><span class="tp-lang" id="toLabel">영어</span></div>
+        <textarea class="trans-output" id="transOutput" readonly placeholder="번역 결과 표시 영역"></textarea>
+      </div>
+    </div>
+    <div class="trans-footer">
+      <span class="char-count" id="charCount">0 / 2000자</span>
+      <button class="trans-btn" onclick="doTranslate()">번역하기</button>
+    </div>
+  </div>
+
+  <div class="section-title">빠른 번역 템플릿</div>
+  <div class="quick-grid">
+    <div class="quick-card" onclick="loadTemplate('resume')">
+      <div class="qc-type">이력서</div>
+      <div class="qc-title">이력서 번역</div>
+      <div class="qc-desc">한국어 이력서를 영어/중국어로</div>
+      <div><span class="qc-lang">KO</span><span style="color:#6B8CC4">→</span> <span class="qc-lang">EN</span><span class="qc-lang">ZH</span></div>
+    </div>
+    <div class="quick-card" onclick="loadTemplate('cover')">
+      <div class="qc-type">자기소개서</div>
+      <div class="qc-title">자기소개서 번역</div>
+      <div class="qc-desc">지원 동기 및 역량 소개 번역</div>
+      <div><span class="qc-lang">KO</span><span style="color:#6B8CC4">→</span> <span class="qc-lang">EN</span><span class="qc-lang">ZH</span></div>
+    </div>
+    <div class="quick-card" onclick="loadTemplate('message')">
+      <div class="qc-type">메시지</div>
+      <div class="qc-title">메시지 번역</div>
+      <div class="qc-desc">기업/학교와 소통을 위한 번역</div>
+      <div><span class="qc-lang">모든 언어</span></div>
+    </div>
+  </div>
+
+  <div class="profile-trans">
+    <h3>프로필 다국어 번역</h3>
+    <p>자기소개 3개 언어 동시 번역과 프로필 적용</p>
+    <div class="pt-grid">
+      <div class="pt-card"><div class="pt-lang">한국어 (원문)</div><div class="pt-text">중국 출신 경영학 전공 유학생. 한국 기업의 글로벌 비즈니스 분야 관심.</div></div>
+      <div class="pt-card"><div class="pt-lang">English</div><div class="pt-text empty" id="ptEn">번역 버튼으로 영어 번역 생성</div></div>
+      <div class="pt-card"><div class="pt-lang">中文</div><div class="pt-text empty" id="ptZh">번역 버튼으로 중국어 번역 생성</div></div>
+    </div>
+    <button class="pt-btn" id="ptBtn" onclick="translateProfile()">프로필 3개 언어 동시 번역</button>
+  </div>
+
+  <div class="history-card">
+    <h3>최근 번역 내역</h3>
+    <div class="th-row"><div class="th-langs">KO → ZH</div><div class="th-text">면접에 참여하고 싶습니다. 일정을 알려주시면 감사하겠습니다.</div><div class="th-time">오늘 09:45</div></div>
+    <div class="th-row"><div class="th-langs">KO → EN</div><div class="th-text">경희대학교 경영학과 4학년 재학 중입니다. 인턴십 경험 보유.</div><div class="th-time">어제 14:30</div></div>
+    <div class="th-row"><div class="th-langs">EN → KO</div><div class="th-text">We are pleased to invite you for an interview at our headquarters.</div><div class="th-time">3일 전</div></div>
+    <div class="th-row"><div class="th-langs">ZH → KO</div><div class="th-text">我对贵公司的全球业务部门非常感兴趣...</div><div class="th-time">1주 전</div></div>
+  </div>
+</div></div>
+
+<script>
+let currentTo = '영어';
+const templates = {
+  resume: '경희대학교 경영학과 4학년 재학 중. 삼성물산 인턴십 경험 보유. TOPIK 5급, TOEIC 820점.',
+  cover: '저는 한·중 비즈니스에 깊은 관심을 갖고 있으며, 귀사의 글로벌 사업 확장에 기여하고 싶습니다.',
+  message: '안녕하세요. Career Bridge를 통해 귀사의 채용 공고를 보고 지원 의향이 있어 연락드립니다.',
+};
+const results = {
+  '영어': 'I am a Business Administration student at Kyung Hee University, currently in my 4th year. I have internship experience at Samsung C&T and hold TOPIK Level 5 and TOEIC 820.',
+  '중국어': '我是庆熙大学工商管理专业四年级学生，曾在三星物产实习，持有 TOPIK 5 级及 TOEIC 820 分成绩。',
+};
+function setTo(el, lang) {
+  document.getElementById('toBtn1').classList.remove('active');
+  document.getElementById('toBtn2').classList.remove('active');
+  el.classList.add('active');
+  currentTo = lang;
+  document.getElementById('toLabel').textContent = lang;
+  document.getElementById('transOutput').value = '';
+}
+function swap() {
+  const i = document.getElementById('transInput'), o = document.getElementById('transOutput');
+  const t = i.value; i.value = o.value; o.value = t;
+}
+function updateCount() {
+  document.getElementById('charCount').textContent = document.getElementById('transInput').value.length + ' / 2000자';
+}
+function doTranslate() {
+  const inp = document.getElementById('transInput').value.trim();
+  if(!inp) { alert('번역할 텍스트 입력 필요.'); return; }
+  const o = document.getElementById('transOutput');
+  o.value = '번역 중...';
+  setTimeout(() => { o.value = results[currentTo] || '번역이 완료되었습니다.'; }, 800);
+}
+function loadTemplate(k) {
+  document.getElementById('transInput').value = templates[k];
+  updateCount();
+  document.getElementById('transOutput').value = '';
+}
+function translateProfile() {
+  const btn = document.getElementById('ptBtn');
+  btn.textContent = '번역 중...'; btn.disabled = true;
+  setTimeout(() => {
+    const en = document.getElementById('ptEn'), zh = document.getElementById('ptZh');
+    en.classList.remove('empty'); zh.classList.remove('empty');
+    en.textContent = 'I am an international student majoring in Business Administration from China. I am very interested in global business at Korean companies and wish to build my career in Korea-China trade and marketing.';
+    zh.textContent = '我是一名来自中国的工商管理专业留学生，对韩国企业的全球业务非常感兴趣，希望在韩中贸易及营销领域发展自己的职业生涯。';
+    btn.textContent = '번역 완료 — 프로필에 적용하기'; btn.disabled = false;
+  }, 1400);
+}
+</script>
+
+<script>
+(function(){
+  if (window.__careerBridgeDemoPatch) return;
+  window.__careerBridgeDemoPatch = true;
+
+  function toast(message) {
+    var el = document.getElementById('demoToast');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'demoToast';
+      el.className = 'demo-toast';
+      document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(window.__demoToastTimer);
+    window.__demoToastTimer = setTimeout(function(){ el.classList.remove('show'); }, 1800);
+  }
+
+  function ensureNote(parent, id, text) {
+    if (!parent) return;
+    var note = document.getElementById(id);
+    if (!note) {
+      note = document.createElement('div');
+      note.id = id;
+      note.className = 'demo-state-note';
+      parent.appendChild(note);
+    }
+    note.textContent = text;
+    note.classList.add('show');
+  }
+
+  window.demoToast = toast;
+
+  var page = location.pathname.split('/').pop() || 'index.html';
+
+  if (page === 'login.html') {
+    document.querySelectorAll('button, .login-btn, .role-card').forEach(function(el){
+      var text = (el.textContent || '').trim();
+      if (!el.dataset.demoBound && text) {
+        el.dataset.demoBound = '1';
+        el.addEventListener('click', function(){ toast('선택한 사용자 유형의 시연 화면 이동.'); });
+      }
+    });
+  }
+
+  if (page === 'institution.html') {
+    var qs = new URLSearchParams(location.search);
+    var role = qs.get('role') || 'company';
+    var title = document.getElementById('pageTitle');
+    if (title && !title.querySelector('.demo-mode-pill')) {
+      var pill = document.createElement('span');
+      pill.className = 'demo-mode-pill';
+      pill.textContent = role === 'school' ? '학교 담당자 모드' : '기업 담당자 모드';
+      title.appendChild(pill);
+    }
+    if (role === 'school') {
+      document.querySelectorAll('.sc-btn.secondary, .act-btn.primary, .bulk-btn').forEach(function(btn){
+        if ((btn.textContent || '').indexOf('메시지') >= 0 || (btn.textContent || '').indexOf('硫') >= 0) {
+          btn.style.opacity = '0.45';
+          btn.title = '학교 담당자 시연의 정보 조회 중심 흐름.';
+          btn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); toast('학교 담당자 모드의 학생 정보 조회 흐름 시연.'); }, true);
+        }
+      });
+    }
+    var oldSearch = window.doSearch;
+    window.doSearch = function(){
+      if (typeof oldSearch === 'function') oldSearch();
+      var box = document.querySelector('.filter-box');
+      ensureNote(box, 'searchDemoNote', '필터 조건 적용 후 추천 학생 목록 갱신 상태. 실제 검색 DB 미연결 시연 화면.');
+      toast('검색 결과 갱신 완료.');
+    };
+    var oldDetail = window.openDetailModal;
+    window.openDetailModal = function(i){
+      if (typeof oldDetail === 'function') oldDetail(i);
+      setTimeout(function(){
+        var body = document.querySelector('#studentDetailModal .modal-body');
+        if (body && !document.getElementById('demoDetailExtra')) {
+          var div = document.createElement('div');
+          div.id = 'demoDetailExtra';
+          div.className = 'detail-sec';
+          div.innerHTML = '<h4>관심 분야 / 취업 계획 / 문서</h4><div class="history-mini"><div class="hm-item"><div class="hm-badge cert">관심</div><div><div class="hm-title">글로벌 마케팅, 무역, 콘텐츠 현지화</div><div class="hm-sub">기업 담당자 검토용 핵심 관심 분야</div></div><span class="demo-status">공개</span></div><div class="hm-item"><div class="hm-badge work">계획</div><div><div class="hm-title">2025년 하반기 국내 취업 희망</div><div class="hm-sub">E-7 비자 전환 및 장기 정주 의사 있음</div></div><span class="demo-status">검토</span></div><div class="hm-item"><div class="hm-badge edu">문서</div><div><div class="hm-title">이력서, 자기소개서, 추천서 등록 완료</div><div class="hm-sub">실제 파일 업로드 없이 등록 상태만 표현</div></div><span class="demo-status">3건</span></div></div>';
+          var actions = body.querySelector('.action-btns');
+          body.insertBefore(div, actions || null);
+        }
+      }, 0);
+    };
+    var oldSend = window.sendMsg;
+    window.sendMsg = function(){ if (typeof oldSend === 'function') oldSend(); toast('메시지 발송 완료 상태가 반영되었습니다.'); };
+    var oldBulk = window.sendBulkMsg;
+    window.sendBulkMsg = function(){ if (typeof oldBulk === 'function') oldBulk(); toast('선택 학생에게 일괄 메시지를 발송한 상태입니다.'); };
+  }
+
+  if (page === 'student.html') {
+    document.querySelectorAll('.btn-confirm').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        var txt = (btn.textContent || '').trim();
+        if (txt) toast('등록/저장 완료 상태 반영.');
+      });
+    });
+    document.querySelectorAll('.toggle-opt').forEach(function(opt){
+      if (opt.dataset.demoBound) return;
+      opt.dataset.demoBound = '1';
+      opt.addEventListener('click', function(){ toast('공개 범위 변경 완료.'); });
+    });
+    var oldCompanyMsg = window.openStudentMsgModal;
+    window.openStudentMsgModal = function(company){ if (typeof oldCompanyMsg === 'function') oldCompanyMsg(company); toast('기업 담당자 대상 메시지 작성.'); };
+  }
+
+  if (page === 'student-messages.html' || page === 'inst-student-messages.html' || page === 'company-student-messages.html') {
+    var oldMsg = window.sendMsg;
+    window.sendMsg = function(){
+      if (typeof oldMsg === 'function') oldMsg();
+      toast('메시지 발송 완료. 받은/보낸 메시지 시연 상태.');
+    };
+    document.querySelectorAll('.i-tab').forEach(function(tab){
+      if (tab.dataset.demoBound) return;
+      tab.dataset.demoBound = '1';
+      tab.addEventListener('click', function(){
+        document.querySelectorAll('.i-tab').forEach(function(t){ t.classList.remove('active'); });
+        tab.classList.add('active');
+        toast((tab.textContent || '메시지함').trim() + ' 목록으로 전환되었습니다.');
+      });
+    });
+  }
+
+  if (page === 'student-translation.html') {
+    document.querySelectorAll('.lang-sw span, .lang-select-btn').forEach(function(btn){
+      if (btn.dataset.demoBound) return;
+      btn.dataset.demoBound = '1';
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.lang-sw span').forEach(function(s){ s.classList.remove('active'); });
+        if (btn.parentElement && btn.parentElement.classList.contains('lang-sw')) btn.classList.add('active');
+        toast('미리 준비된 다국어 화면으로 전환된 상태입니다.');
+      });
+    });
+  }
+})();
+</script>
+
+
+
+<script src="../Contents/contents-bundle.js" defer></script>
+<script src="../Contents/contents-apply.js" defer></script>
+<script src="../work-tool-charts.js" defer></script>
+<script src="../work-tool-i18n-dict.js" defer></script>
+<script src="../work-tool-i18n.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
