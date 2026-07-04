@@ -559,9 +559,39 @@
     });
   }
 
+  function wtIndexPath() {
+    var file = (location.pathname.split('/').pop() || '').toLowerCase();
+    if (file === 'index.html' || file === '') return 'index.html';
+    return '../index.html';
+  }
+
+  function wtLogout(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    try {
+      sessionStorage.removeItem('cbCurrentUser');
+      sessionStorage.removeItem('cbCurrentRole');
+      localStorage.removeItem('cbCurrentUser');
+      localStorage.removeItem('cbCurrentRole');
+    } catch (err) {}
+    window.location.href = wtIndexPath();
+  }
+  window.wtLogout = wtLogout;
+
+  function bindLogoutButtons() {
+    document.querySelectorAll('.sb-logout, button, a').forEach(function (el) {
+      var label = (el.textContent || '').trim().toLowerCase();
+      var onclick = (el.getAttribute('onclick') || '').toLowerCase();
+      var isLogout = el.classList.contains('sb-logout') || label === 'logout' || onclick.indexOf('logout') >= 0 || (onclick.indexOf('index.html') >= 0 && label.length <= 20);
+      if (!isLogout || el.dataset.wtLogoutBound === '1') return;
+      el.dataset.wtLogoutBound = '1';
+      el.addEventListener('click', wtLogout, true);
+      if (el.tagName === 'A') el.setAttribute('href', wtIndexPath());
+    });
+  }
   function init() {
     bindMessageInteractions();
     bindTableRowClicks();
+    bindLogoutButtons();
   }
 
   if (document.readyState === 'loading') {
@@ -573,6 +603,7 @@
   var observer = new MutationObserver(function () {
     bindMessageInteractions();
     bindTableRowClicks();
+    bindLogoutButtons();
   });
   observer.observe(document.body, { childList: true, subtree: true });
 })();
