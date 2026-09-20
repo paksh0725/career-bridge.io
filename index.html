@@ -128,9 +128,10 @@ body { font-family:'Segoe UI','Malgun Gothic',sans-serif; color:#1E3A5F; backgro
 .cta-btn-outline:hover { background:rgba(255,255,255,0.2); }
 
 /* FOOTER */
-.footer { background:#1E3A5F; padding:32px 48px; display:flex; align-items:center; justify-content:space-between; }
+.footer { background:#1E3A5F; padding:32px 48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px 28px; }
 .footer-brand { font-size:16px; font-weight:800; color:white; }
-.footer-text { font-size:12px; color:rgba(255,255,255,0.4); }
+.footer-text { flex:1 1 260px; min-width:220px; font-size:12px; color:rgba(255,255,255,0.4); }
+.footer-credit { white-space:nowrap; font-size:12px; color:rgba(255,255,255,0.62); font-weight:700; }
 .footer-langs { display:flex; gap:14px; }
 .footer-lang { font-size:12px; color:rgba(255,255,255,0.45); cursor:pointer; }
 .footer-lang:hover { color:white; }
@@ -159,6 +160,18 @@ body { font-family:'Segoe UI','Malgun Gothic',sans-serif; color:#1E3A5F; backgro
   .nav,.hero,.section,.users-section,.stats-section,.cta-section { padding-left:20px; padding-right:20px; }
   .banner-section { padding:28px 20px; }
   .hero { padding-top:80px; }
+}
+
+@media(max-width:760px) {
+  .nav { position:sticky !important; height:auto !important; min-height:0 !important; align-items:flex-start !important; padding:10px 16px !important; }
+  .nav-logo { width:100% !important; font-size:18px !important; }
+  .nav-right { display:grid !important; grid-template-columns:auto minmax(0, 1fr) minmax(0, 1fr) !important; width:100% !important; gap:6px !important; }
+  .lang-sw { margin-right:0 !important; }
+  .nav-login, .nav-signup { min-width:0 !important; padding:9px 8px !important; white-space:nowrap !important; }
+  .hero { padding-top:32px !important; }
+  .footer { align-items:flex-start; }
+  .footer-text { flex-basis:auto; min-width:0; }
+  .footer-langs { margin-left:0; }
 }
 
 /* Large screen layout guard */
@@ -3332,6 +3345,7 @@ body { scroll-behavior:smooth; }
 <footer class="footer">
   <div class="footer-brand">Career Bridge</div>
   <div class="footer-text" data-i18n="footerText">외국인 유학생 커리어 &amp; 이력 관리 플랫폼 · 2026</div>
+  <div class="footer-credit">[KCHERI / 관리자 정사랑]</div>
   <div class="footer-langs">
     <span class="footer-lang">한국어</span>
     <span class="footer-lang">English</span>
@@ -4134,9 +4148,6 @@ function renderPreviewPlayer(){
 <script src="work-tool-i18n.js" defer></script>
 </body>
 </html>
-
-
-
 
 
 
