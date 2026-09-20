@@ -588,10 +588,30 @@
       if (el.tagName === 'A') el.setAttribute('href', wtIndexPath());
     });
   }
+
+  function bindFooterCredits() {
+    document.querySelectorAll('.wt-statusbar').forEach(function (footer) {
+      if (footer.querySelector('.wt-footer-credit')) return;
+      var credit = document.createElement('span');
+      credit.className = 'wt-footer-credit';
+      credit.textContent = '[KCHERI / 관리자 정사랑]';
+      footer.appendChild(credit);
+    });
+
+    document.querySelectorAll('.sb-bottom').forEach(function (bottom) {
+      if (bottom.querySelector('.sb-footer-credit')) return;
+      var credit = document.createElement('div');
+      credit.className = 'sb-footer-credit';
+      credit.textContent = '[KCHERI / 관리자 정사랑]';
+      credit.style.cssText = 'margin-top:10px;text-align:center;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;line-height:1.4;';
+      bottom.appendChild(credit);
+    });
+  }
   function init() {
     bindMessageInteractions();
     bindTableRowClicks();
     bindLogoutButtons();
+    bindFooterCredits();
   }
 
   if (document.readyState === 'loading') {
@@ -604,6 +624,7 @@
     bindMessageInteractions();
     bindTableRowClicks();
     bindLogoutButtons();
+    bindFooterCredits();
   });
   observer.observe(document.body, { childList: true, subtree: true });
 })();
