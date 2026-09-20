@@ -3159,6 +3159,46 @@ body { scroll-behavior:smooth; }
     padding:12px 18px !important;
   }
 }
+/* Final mobile header guard: keep controls inside the header after all theme rules load. */
+@media (max-width:760px) {
+  .nav {
+    position:sticky !important;
+    height:auto !important;
+    min-height:0 !important;
+    display:block !important;
+    padding:10px 16px !important;
+  }
+  .nav-logo {
+    display:block !important;
+    width:100% !important;
+    font-size:18px !important;
+  }
+  .nav-right {
+    display:grid !important;
+    grid-template-columns:92px minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items:center !important;
+    width:100% !important;
+    margin-top:8px !important;
+    gap:6px !important;
+  }
+  .lang-sw {
+    width:92px !important;
+    margin:0 !important;
+  }
+  .lang-sw span { padding:5px 6px !important; }
+  .nav-login, .nav-signup {
+    width:100% !important;
+    min-width:0 !important;
+    padding:9px 4px !important;
+    font-size:12px !important;
+    white-space:nowrap !important;
+  }
+}
+.footer.reveal-scale {
+  opacity:1 !important;
+  transform:none !important;
+  filter:none !important;
+}
 </style>
 </head>
 <body>
@@ -3831,7 +3871,7 @@ if (track && total) {
   document.querySelectorAll('.hero h1, .hero p, .hero-btns').forEach(function(el){ el.classList.add('reveal-up'); revealTargets.push(el); });
   document.querySelectorAll('.section-title, .section-desc, .cta-section h2, .cta-section p').forEach(function(el){ el.classList.add('reveal-up'); revealTargets.push(el); });
   document.querySelectorAll('.feat-card, .user-card, .stat-item').forEach(function(el){ el.classList.add('reveal-up','reveal-item','motion-card'); revealTargets.push(el); });
-  document.querySelectorAll('.cta-btns, .footer').forEach(function(el){ el.classList.add('reveal-scale'); revealTargets.push(el); });
+  document.querySelectorAll('.cta-btns').forEach(function(el){ el.classList.add('reveal-scale'); revealTargets.push(el); });
 
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries){
@@ -4148,9 +4188,6 @@ function renderPreviewPlayer(){
 <script src="work-tool-i18n.js" defer></script>
 </body>
 </html>
-
-
-
 
 
 
